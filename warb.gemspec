@@ -5,19 +5,19 @@ require_relative "lib/warb/version"
 Gem::Specification.new do |spec|
   spec.name = "warb"
   spec.version = Warb::VERSION
-  spec.authors = ["Rosemilson"]
-  spec.email = ["rosemilson.ribeiro@rebase.com.br"]
+  spec.authors = ["Rebase"]
+  spec.email = ["devs@rebase.com.br"]
 
-  spec.summary = "TODO: Write a short summary, because RubyGems requires one."
-  spec.description = "TODO: Write a longer description or delete this line."
-  spec.homepage = "TODO: Put your gem's website or public repo URL here."
+  spec.summary = "A simple yet powerfull whatsapp api wrapper"
+  spec.description = "A simple yet powerfull whatsapp api wrapper"
+  spec.homepage = "https://git.campuscode.com.br/core-team/warb"
   spec.required_ruby_version = ">= 3.1.0"
 
   spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 
-  spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  spec.metadata["homepage_uri"] = "https://rebase.com.br"
+  spec.metadata["source_code_uri"] = "https://git.campuscode.com.br/core-team/warb"
+  spec.metadata["changelog_uri"] = "https://git.campuscode.com.br/core-team/warb/-/blob/main/CHANGELOG.md?ref_type=heads"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
