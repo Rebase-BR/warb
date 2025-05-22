@@ -1,27 +1,37 @@
 # frozen_string_literal: true
 
+require_relative "connection"
 module Warb
   class Client
-    attr_reader :access_token, :sender_id, :headers
+    attr_reader :access_token, :sender_id, :business_id, :adapter
 
-    def initialize(access_token:, sender_id:)
+    def initialize(access_token:, sender_id:, business_id:, adapter: nil)
       @access_token = access_token
       @sender_id = sender_id
+      @business_id = business_id
+      @adapter = adapter
     end
 
-    def conn(url: nil, user_related: true, as_json: true)
-      if url.nil?
-        url = "https://graph.facebook.com/v22.0"
-        url = "#{url}/#{@sender_id}" if user_related
-      end
+    def get(endpoint, data = {}, **args)
+      conn.send_request(http_method: "get", endpoint: endpoint, data: data, **args)
+    end
 
-      Faraday.new(url) do |conn|
-        conn.headers["Authorization"] = "Bearer #{@access_token}"
-        conn.headers["Content-Type"] = "application/json" if as_json
+    def post(endpoint, data = {}, **args)
+      conn.send_request(http_method: "post", endpoint: endpoint, data: data, **args)
+    end
 
-        conn.request :multipart unless as_json
-        conn.request :url_encoded unless as_json
-      end
+    def put(endpoint, data = {}, **args)
+      conn.send_request(http_method: "put", endpoint: endpoint, data: data, **args)
+    end
+
+    def delete(endpoint, data = {}, **args)
+      conn.send_request(http_method: "delete", endpoint: endpoint, data: data, **args)
+    end
+
+    private
+
+    def conn
+      @conn ||= Warb::Connection.new(client: self, adapter: @adapter)
     end
   end
 end

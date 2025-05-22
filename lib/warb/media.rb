@@ -13,27 +13,25 @@ module Warb
 
       data = { file:, messaging_product: Warb::MESSAGING_PRODUCT }
 
-      response = @client.conn(as_json: false).post("media", data)
-
-      JSON.parse(response.body)["id"]
+      @client.post("media", data, multipart: true).body["id"]
     end
 
     def delete_media(media_id)
-      response = @client.conn(user_related: false).delete(media_id)
+      response_body = @client.delete(media_id, endpoint_prefix: nil).body
 
-      JSON.parse(response.body)["success"]
+      return response_body["success"] if response_body["success"]
+
+      response_body["error"]["message"]
     end
 
     def retrieve_media(media_id)
-      response = @client.conn(user_related: false).get(media_id)
-
-      JSON.parse(response.body)
+      @client.get(media_id, endpoint_prefix: nil).body
     end
 
     def download_media(media_url)
-      raise NotImplementedError
+      # raise NotImplementedError
 
-      # media = @client.conn(url: media_url, as_json: false)
+      media = @client.get(url: media_url)
 
       # do something with the media here.
     end
