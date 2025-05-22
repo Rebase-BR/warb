@@ -5,11 +5,12 @@ module Warb
   class Client
     attr_reader :access_token, :sender_id, :business_id, :adapter
 
-    def initialize(access_token:, sender_id:, business_id:, adapter: nil)
-      @access_token = access_token
-      @sender_id = sender_id
-      @business_id = business_id
-      @adapter = adapter
+    def initialize(access_token: nil, sender_id: nil, business_id: nil, adapter: nil)
+      configure(**{ access_token:, sender_id:, business_id:, adapter: }.merge(Warb.configuration))
+    end
+
+    def self.setup(**args)
+      yield Client.new(**args)
     end
 
     def get(endpoint, data = {}, **args)
@@ -32,6 +33,13 @@ module Warb
 
     def conn
       @conn ||= Warb::Connection.new(client: self, adapter: @adapter)
+    end
+
+    def configure(access_token:, sender_id:, business_id:, adapter:)
+      @access_token = access_token
+      @sender_id = sender_id
+      @business_id = business_id
+      @adapter = adapter
     end
   end
 end
