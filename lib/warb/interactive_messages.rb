@@ -11,7 +11,7 @@ module Warb
       @client = client
     end
 
-    def send_list(recipient_number:, body:, header: nil, footer: nil, action:)
+    def send_list(recipient_number:, body:, action:, header: nil, footer: nil)
       data = {
         messaging_product: Warb::MESSAGING_PRODUCT,
         recipient_type: "individual",
@@ -24,9 +24,9 @@ module Warb
           footer: footer&.to_h,
           action: action.to_h
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
 
     def send_reply_button(recipient_number:, body:, header: nil, footer: nil, action: nil)
@@ -42,9 +42,9 @@ module Warb
           footer: footer&.to_h,
           action: action.to_h
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
 
     def send_call_to_action_url(recipient_number:, body:, header: nil, footer: nil, action: nil)
@@ -60,9 +60,9 @@ module Warb
           footer: footer&.to_h,
           action: action.to_h
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
   end
 end

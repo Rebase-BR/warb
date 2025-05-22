@@ -23,9 +23,9 @@ module Warb
           preview_url: false,
           body: message
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
 
     def send_image(recipient_number:, media_id:, caption: nil)
@@ -38,9 +38,9 @@ module Warb
           id: media_id,
           caption: caption
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
 
     def send_audio(recipient_number:, media_id:)
@@ -52,9 +52,9 @@ module Warb
         audio: {
           id: media_id
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
 
     def send_document(recipient_number:, media_id:, caption: nil, filename: nil)
@@ -68,9 +68,9 @@ module Warb
           caption: caption,
           filename: filename
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
 
     def send_video(recipient_number:, media_id:, caption: nil)
@@ -83,9 +83,9 @@ module Warb
           id: media_id,
           caption: caption
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
   end
 end

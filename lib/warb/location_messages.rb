@@ -16,9 +16,9 @@ module Warb
           name: name,
           address: address
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
 
     def send_location_request(recipient_number:, body:)
@@ -36,9 +36,9 @@ module Warb
             name: "send_location"
           }
         }
-      }.to_json
+      }
 
-      @client.conn.post("messages", data)
+      @client.post("messages", data)
     end
   end
 end
