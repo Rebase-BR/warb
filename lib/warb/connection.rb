@@ -13,6 +13,9 @@ module Warb
                      endpoint_prefix: :sender_id)
       conn = set_connection(url:, multipart:)
       conn.send(http_method, handle_endpoint(endpoint:, endpoint_prefix:), data, headers)
+    rescue StandardError => e
+      Warb.logger.error e.inspect
+      e.response
     end
 
     private
@@ -26,6 +29,7 @@ module Warb
         conn.response(:json)
         conn.headers["Authorization"] = "Bearer #{@client.access_token}" unless @client.access_token.nil?
         conn.adapter(@adapter)
+        conn.response :raise_error
       end
     end
 

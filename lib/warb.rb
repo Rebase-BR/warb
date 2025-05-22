@@ -15,4 +15,21 @@ module Warb
 
   class Error < StandardError; end
   # Your code goes here...
+
+  class << self
+    def logger
+      @logger ||= Logger.new($stdout)
+    end
+
+    def configuration
+      @configuration ||= {}
+    end
+
+    def setup(sender_id:, business_id:, access_token:, logger: nil)
+      @logger ||= logger
+      @configuration ||= { sender_id:, business_id:, access_token: }
+
+      yield(@configuration) if block_given?
+    end
+  end
 end
