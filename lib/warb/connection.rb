@@ -2,11 +2,10 @@
 
 module Warb
   class Connection
-    attr_reader :client, :adapter
+    attr_reader :client
 
-    def initialize(client:, adapter:)
+    def initialize(client)
       @client = client
-      @adapter = adapter || Faraday.default_adapter
     end
 
     def send_request(http_method:, endpoint:, url: nil, data: {}, headers: {}, multipart: false,
@@ -14,7 +13,7 @@ module Warb
       conn = set_connection(url:, multipart:)
       conn.send(http_method, handle_endpoint(endpoint:, endpoint_prefix:), data, headers)
     rescue StandardError => e
-      Warb.logger.error e.inspect
+      @client.logger.error e.inspect
       e.response
     end
 
@@ -25,10 +24,11 @@ module Warb
 
       Faraday.new(url) do |conn|
         conn.request(:multipart) if multipart
-        conn.request(:url_encoded)
+        conn.request(:url_encoded) if multipart
+        conn.request(:json)
         conn.response(:json)
         conn.headers["Authorization"] = "Bearer #{@client.access_token}" unless @client.access_token.nil?
-        conn.adapter(@adapter)
+        conn.adapter(@client.adapter)
         conn.response :raise_error
       end
     end
