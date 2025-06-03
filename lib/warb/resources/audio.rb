@@ -3,12 +3,14 @@
 module Warb
   module Resources
     class Audio < Resource
+      attr_accessor :media_id, :link
+
       def build_payload
         {
           type: "audio",
           audio: {
-            id: @params[:media_id],
-            link: @params[:link]
+            id: media_id || @params[:media_id],
+            link: link || @params[:link]
           }
         }
       end

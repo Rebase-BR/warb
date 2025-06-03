@@ -3,13 +3,15 @@
 module Warb
   module Resources
     class Video < Resource
+      attr_accessor :media_id, :link, :caption
+
       def build_header
         common_video_params
       end
 
       def build_payload
         params = common_video_params
-        params[:video][:caption] = @params[:caption]
+        params[:video][:caption] = caption || @params[:caption]
         params
       end
 
@@ -19,8 +21,8 @@ module Warb
         {
           type: "video",
           video: {
-            id: @params[:media_id],
-            link: @params[:link]
+            id: media_id || @params[:media_id],
+            link: link || @params[:link]
           }
         }
       end

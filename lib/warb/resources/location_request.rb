@@ -3,13 +3,15 @@
 module Warb
   module Resources
     class LocationRequest < Resource
+      attr_accessor :body_text
+
       def build_payload
         {
           type: "interactive",
           interactive: {
             type: "location_request_message",
             body: {
-              text: @params[:body_text]
+              text: body_text || @params[:body_text]
             },
             action: {
               name: "send_location"

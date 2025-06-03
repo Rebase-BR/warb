@@ -15,7 +15,23 @@ module Warb
         raise NotImplementedError
       end
 
-      def build_payload(recipient_number)
+      def build_payload
+        raise NotImplementedError
+      end
+
+      def set_text_header
+        raise NotImplementedError
+      end
+
+      def set_image_header
+        raise NotImplementedError
+      end
+
+      def set_video_header
+        raise NotImplementedError
+      end
+
+      def set_document_header
         raise NotImplementedError
       end
 

@@ -3,29 +3,26 @@
 module Warb
   module Resources
     class Text < Resource
-      def initialize(content = nil, **args)
-        args[:content] ||= content
-        super(**args)
-      end
+      attr_accessor :content, :text, :message, :preview_url
 
       def build_header
-        { type: "text", text: content }
+        { type: "text", text: message_per_priority }
       end
 
       def build_payload
         {
           type: "text",
           text: {
-            preview_url: @params[:preview_url],
-            body: content
+            preview_url: preview_url || @params[:preview_url],
+            body: message_per_priority
           }
         }
       end
 
       private
 
-      def content
-        @params[:content] || @params[:text] || @params[:message]
+      def message_per_priority
+        content || text || message || @params[:content] || @params[:text] || @params[:message]
       end
     end
   end
