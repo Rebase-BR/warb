@@ -7,8 +7,8 @@ module Warb
         @params = params
       end
 
-      def call(recipient_number)
-        common_resources_params(recipient_number).merge build_payload
+      def call(recipient_number, reply_to: nil)
+        common_resources_params(recipient_number, reply_to).merge build_payload
       end
 
       def build_header
@@ -37,12 +37,14 @@ module Warb
 
       protected
 
-      def common_resources_params(recipient_number)
+      def common_resources_params(recipient_number, reply_to)
         {
           messaging_product: Warb::MESSAGING_PRODUCT,
           recipient_type: Warb::RECIPIENT_TYPE,
           to: recipient_number
-        }
+        }.tap do |params|
+          params[:context] = { message_id: reply_to } if reply_to
+        end
       end
     end
   end
