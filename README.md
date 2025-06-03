@@ -94,6 +94,19 @@ end
 
 We suggest heading to the `examples/` directory, where you'll find documentation files with plenty of usage examples, organized by **Resources** (**Resources** are the types of messages you can send via WhatsApp using Warb).
 
+### Webhook Support
+
+You might want to take action in response to messages users send. For example:
+
+1. A user sends a message like: “generate an image based on...”
+2. You receive the message, so you mark it as read to let the user know their request was acknowledged.
+3. Since the operation might take some time, you send a typing indicator to show that the request is being processed.
+
+To enable this kind of flow, you’ll need to know **when** a message is received. For that, you’ll need to run your own server to listen for incoming webhook events and respond accordingly.
+
+> ⚠️ **Note:** This gem **does not** provide built-in support for webhooks.
+> However, you can look at [`examples/webhook.rb`](examples/webhook.rb) for a starting point on how to implement it. Also, check the [official documentation](https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples) for more details if you get stuck.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
