@@ -3,13 +3,15 @@
 module Warb
   module Resources
     class Image < Resource
+      attr_accessor :media_id, :link, :caption
+
       def build_header
         common_image_params
       end
 
       def build_payload
         params = common_image_params
-        params[:image][:caption] = @params[:caption]
+        params[:image][:caption] = caption || @params[:caption]
         params
       end
 
@@ -19,8 +21,8 @@ module Warb
         {
           type: "image",
           image: {
-            id: @params[:id],
-            link: @params[:link]
+            id: media_id || @params[:media_id],
+            link: link || @params[:link]
           }
         }
       end

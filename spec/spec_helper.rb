@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+require_relative "simple_cov_helper"
 require "warb"
+require "faker"
+require "byebug"
+require_relative "factory_bot_helper"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -8,6 +12,9 @@ RSpec.configure do |config|
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
+
+  config.order = :random
+  Kernel.srand config.seed
 
   config.expect_with :rspec do |c|
     c.syntax = :expect

@@ -3,13 +3,15 @@
 module Warb
   module Resources
     class Document < Resource
+      attr_accessor :media_id, :link, :filename, :caption
+
       def build_header
         common_document_params
       end
 
       def build_payload
         params = common_document_params
-        params[:document][:caption] = @params[:caption]
+        params[:document][:caption] = caption || @params[:caption]
         params
       end
 
@@ -19,8 +21,9 @@ module Warb
         {
           type: "document",
           document: {
-            id: @params[:media_id],
-            filename: @params[:filename]
+            id: media_id || @params[:media_id],
+            filename: filename || @params[:filename],
+            link: link || @params[:link]
           }
         }
       end

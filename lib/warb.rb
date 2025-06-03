@@ -20,9 +20,6 @@ require_relative "warb/resources/interactive_call_to_action_url"
 require_relative "warb/dispatcher"
 require_relative "warb/media_dispatcher"
 require_relative "warb/utils"
-require_relative "warb/components/header"
-require_relative "warb/components/body"
-require_relative "warb/components/footer"
 require_relative "warb/components/action"
 
 module Warb
@@ -47,10 +44,10 @@ module Warb
       @configuration ||= Configuration.new
     end
 
-    def setup(&block)
+    def setup
       yield(configuration)
 
-      Client.new(configuration)
+      client
     end
   end
 end

@@ -1,7 +1,9 @@
 module Warb
   module Components
     class Row
-      def initialize(title:, description:)
+      attr_accessor :title, :description
+
+      def initialize(title: nil, description: nil)
         @title = title
         @description = description
       end
@@ -15,28 +17,41 @@ module Warb
     end
 
     class Section
-      def initialize(title:, rows:)
-        @title = title
-        @rows = rows.map(&:to_h)
-        @rows.each_with_index do |row, index|
-          title = row[:title].normalize.gsub(/\s/, "").downcase
+      attr_accessor :title, :rows
 
-          "#{title}_#{index}"
-        end
+      def initialize(title: nil, rows: [])
+        @title = title
+        @rows = rows
+      end
+
+      def add_row(**args)
+        Row.new(**args).tap { |row| @rows << row }
       end
 
       def to_h
         {
           title: @title,
-          rows: @rows
+          rows: @rows.map.with_index do |row, index|
+            row_title = row.title.slice(0, 10)
+            title = row_title.normalize.gsub(/\s/, "").downcase
+            id = "#{title}_#{index}"
+
+            row.to_h.merge(id: id)
+          end
         }
       end
     end
 
     class ListAction
-      def initialize(button_text:, sections:)
+      attr_accessor :button_text, :sections
+
+      def initialize(button_text: nil, sections: [])
         @button_text = button_text
         @sections = sections
+      end
+
+      def add_section(**args)
+        Section.new(**args).tap { |section| @sections << section }
       end
 
       def to_h
@@ -48,7 +63,9 @@ module Warb
     end
 
     class ReplyButtonAction
-      def initialize(buttons_texts:)
+      attr_accessor :buttons_texts
+
+      def initialize(buttons_texts: nil)
         @buttons_texts = buttons_texts
       end
 
@@ -71,7 +88,9 @@ module Warb
     end
 
     class CTAAction
-      def initialize(button_text:, url:)
+      attr_accessor :button_text, :url
+
+      def initialize(button_text: nil, url: nil)
         @button_text = button_text
         @url = url
       end

@@ -10,15 +10,15 @@ module Warb
 
     def_delegators :@configuration, :access_token, :sender_id, :business_id, :adapter, :logger
 
-    def initialize(configuration = Warb.configuration.dup, access_token: nil, sender_id: nil, business_id: nil,
+    def initialize(configuration = nil, access_token: nil, sender_id: nil, business_id: nil,
                    adapter: nil, logger: nil)
-      @configuration = configuration
+      @configuration = (configuration || Warb.configuration).dup
 
-      configuration.access_token = access_token || configuration.access_token
-      configuration.sender_id = sender_id || configuration.sender_id
-      configuration.business_id = business_id || configuration.business_id
-      configuration.adapter = adapter || configuration.adapter
-      configuration.logger = logger || configuration.logger
+      @configuration.access_token = access_token || @configuration.access_token
+      @configuration.sender_id = sender_id || @configuration.sender_id
+      @configuration.business_id = business_id || @configuration.business_id
+      @configuration.adapter = adapter || @configuration.adapter
+      @configuration.logger = logger || @configuration.logger
     end
 
     def get(endpoint, data = {}, **args)
