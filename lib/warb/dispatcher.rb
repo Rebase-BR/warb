@@ -5,10 +5,10 @@ module Warb
       @client = client
     end
 
-    def dispatch(recipient_number, **args, &block)
+    def dispatch(recipient_number, reply_to: nil, **args, &block)
       resource = block_given? ? @klass.new.tap(&block) : @klass.new(**args)
 
-      data = resource.call(recipient_number)
+      data = resource.call(recipient_number, reply_to:)
 
       @client.post("messages", data)
     end
