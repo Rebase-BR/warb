@@ -19,6 +19,7 @@ require_relative "warb/resources/interactive_list"
 require_relative "warb/resources/interactive_call_to_action_url"
 require_relative "warb/dispatcher"
 require_relative "warb/media_dispatcher"
+require_relative "warb/indicator_dispatcher"
 require_relative "warb/utils"
 require_relative "warb/components/action"
 
