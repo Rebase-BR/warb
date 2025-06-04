@@ -40,6 +40,10 @@ module Warb
       @interactive_call_to_action_url ||= Dispatcher.new Resources::InteractiveCallToActionUrl, dispatcher
     end
 
+    def sticker
+      @sticker ||= Dispatcher.new Resources::Sticker, dispatcher
+    end
+
     def reaction
       @reaction ||= Dispatcher.new Resources::Reaction, dispatcher
     end

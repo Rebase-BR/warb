@@ -79,19 +79,12 @@ class Webhook < Sinatra::Base
 
       Warb.indicator.mark_as_read(message_id)
 
-      conn.post(
-        "#{sender_id}/messages",
-        {
-          messaging_product: Warb::MESSAGING_PRODUCT,
-          to: message["from"],
-          type: "sticker",
-          sticker: {
-            id: message["sticker"]["id"],
-            link: message["sticker"]["link"]
-          },
-          context: { message_id: }
-        }
-      )
+      sticker = {
+        media_id: message["sticker"]["id"],
+        link: message["sticker"]["link"]
+      }
+
+      Warb.sticker.dispatch(message["from"], reply_to: message_id, **sticker)
       # you could keep adding verifications for different types of messages...
       # elsif message && message["type"] == "image"
       # elsif message && message["type"] == "video"
