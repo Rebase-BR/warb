@@ -23,19 +23,12 @@ class Webhook < Sinatra::Base
 
       Warb.message.dispatch(message["from"], reply_to: message_id, message: "Echo #{message["text"]["body"]}")
 
-      # send reaction
-      conn.post(
-        "#{sender_id}/messages",
-        {
-          messaging_product: Warb::MESSAGING_PRODUCT,
-          to: message["from"],
-          type: "reaction",
-          reaction: {
-            message_id:,
-            emoji: "✅"
-          }
-        }
-      )
+      reaction = {
+        message_id:,
+        emoji: "✅"
+      }
+
+      Warb.reaction.dispatch(message["from"], **reaction)
     elsif message && message["type"] == "location"
       message_id = message["id"]
 

@@ -224,6 +224,28 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
+  describe "#reaction" do
+    context "without a previous call, from within Warb module" do
+      it do
+        expect(Warb).to receive(:client).and_call_original
+        expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::Reaction, global_client)
+
+        global_client.reaction
+      end
+    end
+
+    context "with a previous call, from within a client instance" do
+      before { local_client_dispatcher.reaction }
+
+      it do
+        expect(Warb).not_to receive(:client)
+        expect(Warb::Dispatcher).not_to receive(:new)
+
+        local_client_dispatcher.reaction
+      end
+    end
+  end
+
   describe "#indicator" do
     context "without a previous call, from within a client instance" do
       it do
