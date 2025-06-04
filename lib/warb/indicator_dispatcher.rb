@@ -6,6 +6,12 @@ module Warb
       @client = client
     end
 
+    def send_typing_indicator(message_id)
+      data = common_indicator_params(message_id).merge(typing_indicator: { type: "text" })
+
+      @client.post("messages", data)
+    end
+
     def mark_as_read(message_id)
       data = common_indicator_params(message_id)
 

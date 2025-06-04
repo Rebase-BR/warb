@@ -41,6 +41,12 @@ class Webhook < Sinatra::Base
 
       Warb.indicator.mark_as_read(message_id)
 
+      # indicate the response is being processed
+      Warb.indicator.send_typing_indicator(message_id)
+
+      # wait a little before send the actual response, so the user can see the typing indicator
+      sleep 2
+
       location = {
         latitude: message["location"]["latitude"],
         longitude: message["location"]["longitude"],
