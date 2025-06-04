@@ -13,13 +13,13 @@ class Webhook < Sinatra::Base
 
     puts "\n🪝 Incoming webhook message: #{request_body}"
 
-      message = request_body.dig("entry", 0, "changes", 0, "value", "messages", 0)
+    message = request_body.dig("entry", 0, "changes", 0, "value", "messages", 0)
 
     if message && message["type"] == "text"
       sender_id = request_body.dig("entry", 0, "changes", 0, "value", "metadata", "phone_number_id")
       message_id = message["id"]
 
-      mark_as_read(message_id:, sender_id:)
+      Warb.indicator.mark_as_read(message_id)
 
       Warb.message.dispatch(message["from"], reply_to: message_id, message: "Echo #{message["text"]["body"]}")
 
@@ -37,10 +37,9 @@ class Webhook < Sinatra::Base
         }
       )
     elsif message && message["type"] == "location"
-      sender_id = request_body.dig("entry", 0, "changes", 0, "value", "metadata", "phone_number_id")
       message_id = message["id"]
 
-      mark_as_read(message_id:, sender_id:)
+      Warb.indicator.mark_as_read(message_id)
 
       location = {
         latitude: message["location"]["latitude"],
@@ -51,10 +50,9 @@ class Webhook < Sinatra::Base
 
       Warb.location.dispatch(message["from"], reply_to: message_id, **location)
     elsif message && message["type"] == "image"
-      sender_id = request_body.dig("entry", 0, "changes", 0, "value", "metadata", "phone_number_id")
       message_id = message["id"]
 
-      mark_as_read(message_id:, sender_id:)
+      Warb.indicator.mark_as_read(message_id)
 
       image = {
         id: message["image"]["id"],
@@ -64,10 +62,9 @@ class Webhook < Sinatra::Base
 
       Warb.image.dispatch(message["from"], reply_to: message_id, **image)
     elsif message && message["type"] == "document"
-      sender_id = request_body.dig("entry", 0, "changes", 0, "value", "metadata", "phone_number_id")
       message_id = message["id"]
 
-      mark_as_read(message_id:, sender_id:)
+      Warb.indicator.mark_as_read(message_id)
 
       document = {
         id: message["document"]["id"],
@@ -81,7 +78,7 @@ class Webhook < Sinatra::Base
       sender_id = request_body.dig("entry", 0, "changes", 0, "value", "metadata", "phone_number_id")
       message_id = message["id"]
 
-      mark_as_read(message_id:, sender_id:)
+      Warb.indicator.mark_as_read(message_id)
 
       conn.post(
         "#{sender_id}/messages",
@@ -136,16 +133,5 @@ class Webhook < Sinatra::Base
       conn.request(:json)
       conn.response(:json)
     end
-  end
-
-  def mark_as_read(message_id:, sender_id:)
-    conn.post(
-      "#{sender_id}/messages",
-      {
-        messaging_product: Warb::MESSAGING_PRODUCT,
-        status: "read",
-        message_id: message_id
-      }
-    )
   end
 end

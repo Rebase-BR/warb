@@ -40,6 +40,10 @@ module Warb
       @interactive_call_to_action_url ||= Dispatcher.new Resources::InteractiveCallToActionUrl, dispatcher
     end
 
+    def indicator
+      @indicator ||= IndicatorDispatcher.new dispatcher
+    end
+
     private
 
     def dispatcher
