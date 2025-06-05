@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "i18n"
 require "faraday"
 require "faraday/multipart"
 require_relative "warb/version"
@@ -24,6 +25,8 @@ require_relative "warb/media_dispatcher"
 require_relative "warb/indicator_dispatcher"
 require_relative "warb/utils"
 require_relative "warb/components/action"
+
+I18n.load_path += Dir[File.expand_path("config/locales") + "/*.yml"]
 
 module Warb
   MESSAGING_PRODUCT = "whatsapp"

@@ -16,6 +16,8 @@ gem "faraday", "~> 2.13"
 
 gem "faraday-multipart", "~> 1.1"
 
+gem "i18n", "~> 1.14"
+
 group :development, :test do
   gem "byebug", "~> 12.0"
   gem "factory_bot", "~> 6.5"
