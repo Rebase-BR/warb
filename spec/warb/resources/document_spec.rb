@@ -21,6 +21,18 @@ RSpec.describe Warb::Resources::Document do
         }
       )
     end
+
+    context "errors" do
+      subject { described_class.new }
+
+      it do
+        expect { subject.build_header }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Link or Media ID is required"
+          )
+        end
+      end
+    end
   end
 
   describe "#build_payload" do
@@ -38,6 +50,18 @@ RSpec.describe Warb::Resources::Document do
           }
         }
       )
+    end
+
+    context "errors" do
+      subject { described_class.new }
+
+      it do
+        expect { subject.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Link or Media ID is required"
+          )
+        end
+      end
     end
   end
 
