@@ -54,6 +54,8 @@ module Warb
       end
 
       def to_h
+        check_for_errors
+
         {
           title: @title,
           rows: @rows.map.with_index do |row, index|
@@ -64,6 +66,34 @@ module Warb
             row.to_h.merge(id: id)
           end
         }
+      end
+
+      private
+
+      def check_for_errors
+        errors = []
+
+        check_title_errors(errors)
+        check_rows_errors(errors)
+
+        raise Warb::Error.new(errors: errors) unless errors.empty?
+      end
+
+      def check_title_errors(errors)
+        return if title.nil? || title.empty?
+
+        errors << I18n.t("errors.too_long", attr: "Title", length: 24) if title.length > 24
+      end
+
+      def check_rows_errors(errors)
+        if rows.empty?
+          errors << I18n.t("errors.too_few", attr: "Rows", count: 1)
+        else
+          rows_count = rows.count
+
+          errors << I18n.t("errors.too_many", attr: "Rows", count: 10) if rows_count > 10
+          errors << I18n.t("errors.not_unique", attr: "Rows title") if rows_count != rows.uniq(&:title).count
+        end
       end
     end
 

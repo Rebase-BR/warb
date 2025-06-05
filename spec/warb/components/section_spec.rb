@@ -28,20 +28,20 @@ RSpec.describe Warb::Components::Section do
     let(:row) { build :row, title: "Título" }
     let(:section) { build :section, rows: [row] }
 
-    subject { section.to_h }
+    subject { section }
 
     context "title" do
-      it { expect(subject[:title]).to eq section.title }
+      it { expect(subject.to_h[:title]).to eq section.title }
     end
 
     context "rows" do
       context "count" do
-        it { expect(subject[:rows].count).to eq section.rows.count }
+        it { expect(subject.to_h[:rows].count).to eq section.rows.count }
       end
 
       context "first row" do
         it do
-          expect(subject[:rows].first).to eq(
+          expect(subject.to_h[:rows].first).to eq(
             {
               id: "titulo_0",
               title: row.title,
@@ -65,6 +65,32 @@ RSpec.describe Warb::Components::Section do
         expect(row).to receive(:to_h)
 
         section.to_h
+      end
+    end
+
+    context "errors" do
+      it do
+        section.title = nil
+        section.rows = []
+
+        expect { subject.to_h }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Rows should have at least 1 item(s)"
+          )
+        end
+      end
+
+      it do
+        section.title = "#" * 25
+        section.rows = build_list(:row, 11, title: "Title")
+
+        expect { subject.to_h }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Title length should be no longer than 24 characters",
+            "Rows should have at most 10 item(s)",
+            "Rows title should be unique"
+          )
+        end
       end
     end
   end

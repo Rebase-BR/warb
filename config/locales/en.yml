@@ -2,3 +2,6 @@ en:
   errors:
     required: "%{attr} is required"
     too_long: "%{attr} length should be no longer than %{length} characters"
+    too_few: "%{attr} should have at least %{count} item(s)"
+    too_many: "%{attr} should have at most %{count} item(s)"
+    not_unique: "%{attr} should be unique"
