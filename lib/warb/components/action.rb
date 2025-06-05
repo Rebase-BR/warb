@@ -163,6 +163,8 @@ module Warb
       end
 
       def to_h
+        check_errors
+
         {
           buttons: @buttons_texts.map.with_index do |button_text, index|
             text = button_text.normalize.gsub(/\s/, "").downcase
@@ -177,6 +179,28 @@ module Warb
             }
           end
         }
+      end
+
+      private
+
+      def check_errors
+        errors = []
+
+        check_buttons_texts_errors(errors)
+
+        raise Warb::Error.new(errors: errors) unless errors.empty?
+      end
+
+      def check_buttons_texts_errors(errors)
+        if buttons_texts.empty?
+          errors << I18n.t("errors.too_few", attr: "Buttons Texts", count: 1)
+        else
+          buttons_count = buttons_texts.count
+          unique_buttons_count = buttons_texts.uniq.count
+
+          errors << I18n.t("errors.too_many", attr: "Buttons Texts", count: 3) if buttons_count > 3
+          errors << I18n.t("errors.not_unique", attr: "Button Text") if buttons_count != unique_buttons_count
+        end
       end
     end
 

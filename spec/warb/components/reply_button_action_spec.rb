@@ -12,5 +12,30 @@ RSpec.describe Warb::Components::ReplyButtonAction do
       it { expect(subject[:buttons][0]).to eq({ type: "reply", reply: { id: "botao#1_0", title: "Botão #1" } }) }
       it { expect(subject[:buttons][1]).to eq({ type: "reply", reply: { id: "botao#2_1", title: "Botão #2" } }) }
     end
+
+    context "errors" do
+      subject { reply_button_action }
+
+      it do
+        subject.buttons_texts = []
+
+        expect { subject.to_h }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Buttons Texts should have at least 1 item(s)"
+          )
+        end
+      end
+
+      it do
+        subject.buttons_texts = ["Text"] * 4
+
+        expect { subject.to_h }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Buttons Texts should have at most 3 item(s)",
+            "Button Text should be unique"
+          )
+        end
+      end
+    end
   end
 end
