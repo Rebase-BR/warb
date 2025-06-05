@@ -32,7 +32,15 @@ module Warb
   MESSAGING_PRODUCT = "whatsapp"
   RECIPIENT_TYPE = "individual"
 
-  class Error < StandardError; end
+  class Error < StandardError
+    attr_reader :errors
+
+    def initialize(errors: [])
+      super("Errors were found: #{errors.join(", ")}")
+
+      @errors = errors
+    end
+  end
   # Your code goes here...
 
   class << self

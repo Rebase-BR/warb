@@ -9,10 +9,35 @@ module Warb
       end
 
       def to_h
+        check_for_errors
+
         {
           title: @title,
           description: @description
         }
+      end
+
+      private
+
+      def check_for_errors
+        errors = []
+
+        check_title_errors(errors)
+        check_description_errors(errors)
+
+        raise Warb::Error.new(errors: errors) unless errors.empty?
+      end
+
+      def check_title_errors(errors)
+        if title.nil? || title.empty?
+          errors << I18n.t("errors.required", attr: "Title")
+        elsif title.length > 24
+          errors << I18n.t("errors.too_long", attr: "Title", length: 24)
+        end
+      end
+
+      def check_description_errors(errors)
+        errors << I18n.t("errors.too_long", attr: "Description", length: 72) if description && description.length > 72
       end
     end
 

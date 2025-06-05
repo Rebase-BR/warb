@@ -1,0 +1,4 @@
+en:
+  errors:
+    required: "%{attr} is required"
+    too_long: "%{attr} length should be no longer than %{length} characters"
