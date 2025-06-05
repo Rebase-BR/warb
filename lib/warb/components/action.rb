@@ -110,10 +110,48 @@ module Warb
       end
 
       def to_h
+        check_for_errors
+
         {
           button: @button_text,
           sections: @sections.map(&:to_h)
         }
+      end
+
+      private
+
+      def check_for_errors
+        errors = []
+
+        check_button_text_errors(errors)
+        check_sections_errors(errors)
+
+        raise Warb::Error.new(errors: errors) unless errors.empty?
+      end
+
+      def check_button_text_errors(errors)
+        if button_text.nil? || button_text.empty?
+          errors << I18n.t("errors.required", attr: "Button Text")
+        elsif button_text.length > 20
+          errors << I18n.t("errors.too_long", attr: "Button Text", length: 20)
+        end
+      end
+
+      def check_sections_errors(errors)
+        if sections.empty?
+          errors << I18n.t("errors.too_few", attr: "Sections", count: 1)
+        else
+          errors << I18n.t("errors.too_many", attr: "Sections", count: 10) if sections.count > 10
+
+          check_sections_titles_errors(errors)
+        end
+      end
+
+      def check_sections_titles_errors(errors)
+        return unless sections.count > 1
+        return unless sections.any? { |section| section.title.nil? || section.title.empty? }
+
+        errors << I18n.t("errors.required_if_multiple_sections", attr: "Section Title")
       end
     end
 
