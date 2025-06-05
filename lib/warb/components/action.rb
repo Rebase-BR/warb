@@ -213,6 +213,8 @@ module Warb
       end
 
       def to_h
+        check_errors
+
         {
           name: "cta_url",
           parameters: {
@@ -220,6 +222,31 @@ module Warb
             url: @url
           }
         }
+      end
+
+      private
+
+      def check_errors
+        errors = []
+
+        check_display_text_errors(errors)
+        check_url_errors(errors)
+
+        raise Warb::Error.new(errors: errors) unless errors.empty?
+      end
+
+      def check_display_text_errors(errors)
+        if button_text.nil? || button_text.empty?
+          errors << I18n.t("errors.required", attr: "Button Text")
+        elsif button_text.length > 20
+          errors << I18n.t("errors.too_long", attr: "Button Text", length: 20)
+        end
+      end
+
+      def check_url_errors(errors)
+        return unless url.nil? || url.empty?
+
+        errors << I18n.t("errors.required", attr: "URL")
       end
     end
   end
