@@ -2,17 +2,13 @@
 
 module Warb
   module Resources
-    class Video < Resource
-      attr_accessor :media_id, :link, :caption
-
+    class Video < MediaResource
       def build_header
-        common_video_params
+        common_media_params(:video)
       end
 
       def build_payload
-        params = common_video_params
-        params[:video][:caption] = caption || @params[:caption]
-        params
+        common_media_params(:video, with_caption: true)
       end
 
       private

@@ -2,30 +2,13 @@
 
 module Warb
   module Resources
-    class Document < Resource
-      attr_accessor :media_id, :link, :filename, :caption
-
+    class Document < MediaResource
       def build_header
-        common_document_params
+        common_media_params(:document, with_filename: true)
       end
 
       def build_payload
-        params = common_document_params
-        params[:document][:caption] = caption || @params[:caption]
-        params
-      end
-
-      private
-
-      def common_document_params
-        {
-          type: "document",
-          document: {
-            id: media_id || @params[:media_id],
-            filename: filename || @params[:filename],
-            link: link || @params[:link]
-          }
-        }
+        common_media_params(:document, with_filename: true, with_caption: true)
       end
     end
   end

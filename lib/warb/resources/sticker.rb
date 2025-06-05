@@ -2,17 +2,9 @@
 
 module Warb
   module Resources
-    class Sticker < Resource
-      attr_accessor :media_id, :link
-
+    class Sticker < MediaResource
       def build_payload
-        {
-          type: "sticker",
-          sticker: {
-            id: media_id || @params[:media_id],
-            link: link || @params[:link]
-          }
-        }
+        common_media_params(:sticker)
       end
     end
   end
