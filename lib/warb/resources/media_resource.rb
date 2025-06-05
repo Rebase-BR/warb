@@ -18,6 +18,21 @@ module Warb
           params[media_type][:filename] = filename || @params[:filename] if with_filename
         end
       end
+
+      def check_errors
+        errors = []
+
+        check_media_errors(errors)
+
+        raise Warb::Error.new(errors: errors) unless errors.empty?
+      end
+
+      def check_media_errors(errors)
+        return if !media_id.nil? || !@params[:media_id].nil?
+        return if !link.nil? || !@params[:link].nil?
+
+        errors << I18n.t("errors.required", attr: "Link or Media ID")
+      end
     end
   end
 end
