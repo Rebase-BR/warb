@@ -43,9 +43,9 @@ module Warb
 
       def check_text_errors(errors, max_length:)
         if message_per_priority.nil? || message_per_priority.empty?
-          errors << I18n.t("errors.required", attr: "Text")
+          errors << "Text is required"
         elsif message_per_priority.length > max_length
-          errors << I18n.t("errors.too_long", attr: "Text", length: max_length)
+          errors << "Text length should be no longer than #{max_length} characters"
         end
       end
 

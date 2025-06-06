@@ -31,7 +31,7 @@ module Warb
         return if !media_id.nil? || !@params[:media_id].nil?
         return if !link.nil? || !@params[:link].nil?
 
-        errors << I18n.t("errors.required", attr: "Link or Media ID")
+        errors << "Link or Media ID is required"
       end
     end
   end

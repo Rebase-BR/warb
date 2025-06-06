@@ -44,8 +44,8 @@ module Warb
       def check_header_errors(errors)
         return if header.nil?
 
-        return errors << I18n.t("errors.cannot_be_empty", attr: "Header") if header.empty?
-        return errors << I18n.t("errors.required", attr: "Header Type") if header[:type].nil? || header[:type].empty?
+        return errors << "Header cannot be empty" if header.empty?
+        return errors << "Header Type is required" if header[:type].nil? || header[:type].empty?
 
         check_header_data_errors(errors)
       end
@@ -54,25 +54,25 @@ module Warb
         return check_text_header_errors(errors) if header[:type] == "text"
         return check_media_header_errors(errors) if %w[image video document].include? header[:type]
 
-        errors << I18n.t("errors.invalid_value_for", attr: "Header Type", value: header[:type])
+        errors << "#{header[:type]} is not a valid value for Header Type"
       end
 
       def check_text_header_errors(errors)
-        return errors << I18n.t("errors.required", attr: "Header Text") if header[:text].nil?
+        return errors << "Header Text is required" if header[:text].nil?
 
-        errors << I18n.t("errors.too_long", attr: "Header Text", length: 60) if header[:text].length > 60
+        errors << "Header Text length should be no longer than 60 characters" if header[:text].length > 60
       end
 
       def check_media_header_errors(errors)
         media_type = header[:type].to_sym
         attr = media_type.to_s.capitalize
 
-        return errors << I18n.t("errors.required", attr: "Header #{attr}") if header[media_type].nil?
-        return errors << I18n.t("errors.required", attr: "Header #{attr} Link") if header[media_type][:link].nil?
+        return errors << "Header #{attr} is required" if header[media_type].nil?
+        return errors << "Header #{attr} Link is required" if header[media_type][:link].nil?
 
         return if URI::DEFAULT_PARSER.make_regexp.match(header[media_type][:link])
 
-        errors << I18n.t("errors.invalid_url", attr: "Header #{attr} Link")
+        errors << "Header #{attr} Link must be a valid URL"
       end
     end
   end
