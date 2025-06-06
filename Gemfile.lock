@@ -129,7 +129,6 @@ DEPENDENCIES
   faker (~> 3.5)
   faraday (~> 2.13)
   faraday-multipart (~> 1.1)
-  i18n (~> 1.14)
   irb
   rake (~> 13.0)
   rspec (~> 3.0)
