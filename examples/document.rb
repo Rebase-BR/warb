@@ -9,7 +9,6 @@ business_id = ""
 sender_id = ""
 recipient_number = ""
 
-document_id = ""
 document_link = ""
 
 # We recommend testing one section at a time, as it can be overwhelming to see all the messages at once.
@@ -24,6 +23,16 @@ warb_from_setup = Warb.setup do |config|
   config.business_id = business_id
   config.sender_id = sender_id
 end
+
+# To send document using its ID, you may need to retrieve it first, which can be retrieved this way
+file_path = "" # fill this in with the file path pointing to wherever the document is located
+file_type = "" # fill this in with the mimetype of the document to be uploaded
+# allow values for file_type:
+# text/plain, application/vnd.ms-excel, application/msword
+# application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint,
+# application/vnd.openxmlformats-officedocument.presentationml.presentation or application/pdf
+document_id = warb_from_setup.document.upload(file_path: file_path, file_type: file_type)
+# if you already have a document id, you can simply replace the above line with such id
 
 warb_from_setup.document.dispatch(recipient_number, media_id: document_id)
 warb_from_setup.document.dispatch(recipient_number, media_id: document_id, filename: "optional_name.pdf")
@@ -53,6 +62,16 @@ warb_from_new = Warb.new(
   business_id: business_id,
   sender_id: sender_id
 )
+
+# Same as stated above, if you need a document id, you can upload it this way
+file_path = "" # fill this in with the file path pointing to wherever the document is located
+file_type = "" # fill this in with the mimetype of the document to be uploaded
+# allow values for file_type:
+# text/plain, application/vnd.ms-excel, application/msword
+# application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint,
+# application/vnd.openxmlformats-officedocument.presentationml.presentation or application/pdf
+document_id = warb_from_setup.document.upload(file_path: file_path, file_type: file_type)
+# if you already have a document id, you can simply replace the above line with such id
 
 warb_from_new.document.dispatch(recipient_number, media_id: document_id)
 warb_from_new.document.dispatch(recipient_number, media_id: document_id, filename: "optional_name.pdf")
