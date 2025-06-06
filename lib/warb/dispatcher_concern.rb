@@ -52,6 +52,10 @@ module Warb
       @indicator ||= IndicatorDispatcher.new dispatcher
     end
 
+    def contact
+      @contact ||= Dispatcher.new Resources::Contact, dispatcher
+    end
+
     private
 
     def dispatcher
