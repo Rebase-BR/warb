@@ -6,3 +6,6 @@ en:
     too_few: "%{attr} should have at least %{count} item(s)"
     too_many: "%{attr} should have at most %{count} item(s)"
     not_unique: "%{attr} should be unique"
+    cannot_be_empty: "%{attr} cannot be empty"
+    invalid_url: "%{attr} must be a valid URL"
+    invalid_value_for: "%{value} is not a valid value for %{attr}"

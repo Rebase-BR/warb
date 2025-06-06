@@ -35,6 +35,148 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         }
       )
     end
+
+    context "errors" do
+      it do
+        cta.header = {}
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header cannot be empty"
+          )
+        end
+      end
+
+      it do
+        cta.header = { text: "Text" }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Type is required"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "text", text: nil }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Text is required"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "text", text: "#" * 61 }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Text length should be no longer than 60 characters"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "image", image: nil }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Image is required"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "image", image: { link: nil } }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Image Link is required"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "image", image: { link: "not_a_valid_url" } }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Image Link must be a valid URL"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "video", video: nil }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Video is required"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "video", video: { link: nil } }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Video Link is required"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "video", video: { link: "not_a_valid_url" } }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Video Link must be a valid URL"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "document", document: nil }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Document is required"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "document", document: { link: nil } }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Document Link is required"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "document", document: { link: "not_a_valid_url" } }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "Header Document Link must be a valid URL"
+          )
+        end
+      end
+
+      it do
+        cta.header = { type: "unknown type" }
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to include(
+            "unknown type is not a valid value for Header Type"
+          )
+        end
+      end
+    end
   end
 
   context "headers" do
