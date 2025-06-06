@@ -41,7 +41,7 @@ module Warb
     end
 
     def sticker
-      @sticker ||= Dispatcher.new Resources::Sticker, dispatcher
+      @sticker ||= MediaDispatcher.new Resources::Sticker, dispatcher
     end
 
     def reaction

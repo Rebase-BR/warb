@@ -16,7 +16,6 @@ class Webhook < Sinatra::Base
     message = request_body.dig("entry", 0, "changes", 0, "value", "messages", 0)
 
     if message && message["type"] == "text"
-      sender_id = request_body.dig("entry", 0, "changes", 0, "value", "metadata", "phone_number_id")
       message_id = message["id"]
 
       Warb.indicator.mark_as_read(message_id)
@@ -53,13 +52,30 @@ class Webhook < Sinatra::Base
 
       Warb.indicator.mark_as_read(message_id)
 
+      # for images, documents, videos, audios and stickers, you may need to keep the respective field id
+      # the respective ids are:
+      #   message["image"]["id"]
+      #   message["sticker"]["id"]
+      #   message["audio"]["id"]
+      #   message["document"]["id"]
+      #   message["video"]["id"]
+      #
+      # and only one of them is presented within the webhook response data
+      #
+      # with the media id in hands, you can re-send it and/or download it
+      #
+      # below, we resend the received image, using its id.
+
       image = {
-        id: message["image"]["id"],
+        media_id: message["image"]["id"],
         link: message["image"]["link"],
         caption: message["image"]["caption"]
       }
 
       Warb.image.dispatch(message["from"], reply_to: message_id, **image)
+
+      # and here, we download the received image
+      Warb.image.download(media_id: image[:media_id], file_path: "#{Time.now}.jpg")
     elsif message && message["type"] == "document"
       message_id = message["id"]
 
@@ -74,7 +90,6 @@ class Webhook < Sinatra::Base
 
       Warb.document.dispatch(message["from"], reply_to: message_id, **document)
     elsif message && message["type"] == "sticker"
-      sender_id = request_body.dig("entry", 0, "changes", 0, "value", "metadata", "phone_number_id")
       message_id = message["id"]
 
       Warb.indicator.mark_as_read(message_id)
