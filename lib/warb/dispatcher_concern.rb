@@ -41,7 +41,7 @@ module Warb
     end
 
     def sticker
-      @sticker ||= Dispatcher.new Resources::Sticker, dispatcher
+      @sticker ||= MediaDispatcher.new Resources::Sticker, dispatcher
     end
 
     def reaction
@@ -50,6 +50,10 @@ module Warb
 
     def indicator
       @indicator ||= IndicatorDispatcher.new dispatcher
+    end
+
+    def contact
+      @contact ||= Dispatcher.new Resources::Contact, dispatcher
     end
 
     private
