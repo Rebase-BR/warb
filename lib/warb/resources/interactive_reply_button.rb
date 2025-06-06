@@ -2,24 +2,9 @@
 
 module Warb
   module Resources
-    class InteractiveReplyButton < Resource
-      attr_accessor :header, :body, :footer, :action
-
+    class InteractiveReplyButton < InteractiveMessageResource
       def build_payload
-        {
-          type: "interactive",
-          interactive: {
-            type: "button",
-            header: header || @params[:header]&.to_h,
-            body: {
-              text: body || @params[:body]
-            },
-            footer: {
-              text: footer || @params[:footer]
-            },
-            action: (action || @params[:action])&.to_h
-          }
-        }
+        common_interactive_message_params(:button)
       end
 
       def set_text_header(text)

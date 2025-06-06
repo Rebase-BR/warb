@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :location_request, class: Warb::Resources::LocationRequest do
-    body_text { Faker::Lorem.sentence }
+    body { Faker::Lorem.sentence }
 
     initialize_with { new(**attributes) }
   end

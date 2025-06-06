@@ -2,7 +2,7 @@
 
 RSpec.describe Warb::Resources::LocationRequest do
   let(:location_request_resource) do
-    build :location_request, body_text: "Share your location, please?"
+    build :location_request, body: "Share your location, please?"
   end
 
   describe "#build_header" do
@@ -38,7 +38,7 @@ RSpec.describe Warb::Resources::LocationRequest do
     before do
       allow(location_request_resource).to receive_messages(
         {
-          body_text: "Send your location"
+          body: "Send your location"
         }
       )
     end

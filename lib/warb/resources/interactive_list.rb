@@ -2,24 +2,9 @@
 
 module Warb
   module Resources
-    class InteractiveList < Resource
-      attr_accessor :header, :body, :footer, :action
-
+    class InteractiveList < InteractiveMessageResource
       def build_payload
-        {
-          type: "interactive",
-          interactive: {
-            type: "list",
-            header: header || @params[:header]&.to_h,
-            body: {
-              text: body || @params[:body]
-            },
-            footer: {
-              text: footer || @params[:footer]
-            },
-            action: (action || @params[:action])&.to_h
-          }
-        }
+        common_interactive_message_params(:list)
       end
 
       def set_text_header(text)
