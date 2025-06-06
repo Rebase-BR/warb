@@ -279,13 +279,35 @@ RSpec.describe Warb::DispatcherConcern do
     end
 
     context "with a previous call, from within Warb instance" do
-      before { Warb.indicator }
+      before { global_client.indicator }
 
       it do
         expect(Warb).not_to receive(:client)
         expect(Warb::IndicatorDispatcher).not_to receive(:new)
 
-        Warb.indicator
+        global_client.indicator
+      end
+    end
+  end
+
+  describe "#contact" do
+    context "without a previous call, from within Warb module" do
+      it do
+        expect(Warb).to receive(:client).and_call_original
+        expect(Warb::Dispatcher).to receive(:new)
+
+        global_client.contact
+      end
+    end
+
+    context "with a previous call, from within a client instance" do
+      before { local_client_dispatcher.contact }
+
+      it do
+        expect(Warb).not_to receive(:client)
+        expect(Warb::Dispatcher).not_to receive(:new)
+
+        local_client_dispatcher.contact
       end
     end
   end
