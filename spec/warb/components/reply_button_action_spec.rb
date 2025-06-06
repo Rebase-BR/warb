@@ -20,8 +20,10 @@ RSpec.describe Warb::Components::ReplyButtonAction do
         subject.buttons_texts = []
 
         expect { subject.to_h }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Buttons Texts should have at least 1 item(s)"
+          expect(error.errors).to eq(
+            {
+              buttons_texts: :at_least_1_item
+            }
           )
         end
       end
@@ -30,9 +32,11 @@ RSpec.describe Warb::Components::ReplyButtonAction do
         subject.buttons_texts = ["Text"] * 4
 
         expect { subject.to_h }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Buttons Texts should have at most 3 item(s)",
-            "Button Text should be unique"
+          expect(error.errors).to eq(
+            {
+              button_text: :not_unique,
+              buttons_texts: :at_most_3_items
+            }
           )
         end
       end

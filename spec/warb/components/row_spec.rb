@@ -12,9 +12,11 @@ RSpec.describe Warb::Components::Row do
         subject.description = "#" * 73
 
         expect { subject.to_h }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Title length should be no longer than 24 characters",
-            "Description length should be no longer than 72 characters"
+          expect(error.errors).to eq(
+            {
+              title: :no_longer_than_24_characters,
+              description: :no_longer_than_72_characters
+            }
           )
         end
       end
@@ -24,8 +26,10 @@ RSpec.describe Warb::Components::Row do
         subject.description = nil
 
         expect { subject.to_h }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Title is required"
+          expect(error.errors).to eq(
+            {
+              title: :required
+            }
           )
         end
       end

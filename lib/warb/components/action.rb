@@ -20,7 +20,7 @@ module Warb
       private
 
       def check_for_errors
-        errors = []
+        errors = {}
 
         check_title_errors(errors)
         check_description_errors(errors)
@@ -30,14 +30,14 @@ module Warb
 
       def check_title_errors(errors)
         if title.nil? || title.empty?
-          errors << "Title is required"
+          errors[:title] = Error.required
         elsif title.length > 24
-          errors << "Title length should be no longer than 24 characters"
+          errors[:title] = Error.too_long 24
         end
       end
 
       def check_description_errors(errors)
-        errors << "Description length should be no longer than 72 characters" if description && description.length > 72
+        errors[:description] = Error.too_long 72 if description && description.length > 72
       end
     end
 
@@ -121,7 +121,7 @@ module Warb
       private
 
       def check_for_errors
-        errors = []
+        errors = {}
 
         check_button_text_errors(errors)
         check_sections_errors(errors)
@@ -131,17 +131,17 @@ module Warb
 
       def check_button_text_errors(errors)
         if button_text.nil? || button_text.empty?
-          errors << "Button Text is required"
+          errors[:button_text] = Error.required
         elsif button_text.length > 20
-          errors << "Button Text length should be no longer than 20 characters"
+          errors[:button_text] = Error.too_long 20
         end
       end
 
       def check_sections_errors(errors)
         if sections.empty?
-          errors << "Sections should have at least 1 item(s)"
+          errors[:sections] = Error.at_least 1
         else
-          errors << "Sections should have at most 10 item(s)" if sections.count > 10
+          errors[:sections] = Error.at_most 10 if sections.count > 10
 
           check_sections_titles_errors(errors)
         end
@@ -151,7 +151,7 @@ module Warb
         return unless sections.count > 1
         return unless sections.any? { |section| section.title.nil? || section.title.empty? }
 
-        errors << "Section Title is required when there is more than one section"
+        errors[:section_title] = Error.required_if_multiple_sections
       end
     end
 
@@ -184,7 +184,7 @@ module Warb
       private
 
       def check_errors
-        errors = []
+        errors = {}
 
         check_buttons_texts_errors(errors)
 
@@ -193,13 +193,13 @@ module Warb
 
       def check_buttons_texts_errors(errors)
         if buttons_texts.empty?
-          errors << "Buttons Texts should have at least 1 item(s)"
+          errors[:buttons_texts] = Error.at_least 1
         else
           buttons_count = buttons_texts.count
           unique_buttons_count = buttons_texts.uniq.count
 
-          errors << "Buttons Texts should have at most 3 item(s)" if buttons_count > 3
-          errors << "Button Text should be unique" if buttons_count != unique_buttons_count
+          errors[:buttons_texts] = Error.at_most 3 if buttons_count > 3
+          errors[:button_text] = Error.not_unique if buttons_count != unique_buttons_count
         end
       end
     end
@@ -227,7 +227,7 @@ module Warb
       private
 
       def check_errors
-        errors = []
+        errors = {}
 
         check_display_text_errors(errors)
         check_url_errors(errors)
@@ -237,16 +237,16 @@ module Warb
 
       def check_display_text_errors(errors)
         if button_text.nil? || button_text.empty?
-          errors << "Button Text is required"
+          errors[:display_text] = Error.required
         elsif button_text.length > 20
-          errors << "Button Text length should be no longer than 20 characters"
+          errors[:display_text] = Error.too_long 20
         end
       end
 
       def check_url_errors(errors)
         return unless url.nil? || url.empty?
 
-        errors << "URL is required"
+        errors[:url] = Error.required
       end
     end
   end

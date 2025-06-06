@@ -3,6 +3,7 @@
 require "faraday"
 require "faraday/multipart"
 require_relative "warb/version"
+require_relative "warb/error"
 require_relative "warb/configuration"
 require_relative "warb/dispatcher_concern"
 require_relative "warb/client"
@@ -32,16 +33,6 @@ module Warb
   MESSAGING_PRODUCT = "whatsapp"
   RECIPIENT_TYPE = "individual"
 
-  class Error < StandardError
-    attr_reader :errors
-
-    def initialize(errors: [])
-      super("Errors were found: #{errors.join(", ")}")
-
-      @errors = errors
-    end
-  end
-  # Your code goes here...
 
   class << self
     include DispatcherConcern

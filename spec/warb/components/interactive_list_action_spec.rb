@@ -61,9 +61,11 @@ RSpec.describe Warb::Components::ListAction do
         subject.sections = []
 
         expect { subject.to_h }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Button Text is required",
-            "Sections should have at least 1 item(s)"
+          expect(error.errors).to eq(
+            {
+              button_text: :required,
+              sections: :at_least_1_item
+            }
           )
         end
       end
@@ -73,9 +75,11 @@ RSpec.describe Warb::Components::ListAction do
         subject.sections = build_list :section, 11
 
         expect { subject.to_h }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Button Text length should be no longer than 20 characters",
-            "Sections should have at most 10 item(s)"
+          expect(error.errors).to eq(
+            {
+              button_text: :no_longer_than_20_characters,
+              sections: :at_most_10_items
+            }
           )
         end
       end
@@ -85,7 +89,7 @@ RSpec.describe Warb::Components::ListAction do
 
         expect { subject.to_h }.to raise_error(Warb::Error) do |error|
           expect(error.errors).to include(
-            "Section Title is required when there is more than one section"
+            section_title: :required_if_multiple_sections
           )
         end
       end
