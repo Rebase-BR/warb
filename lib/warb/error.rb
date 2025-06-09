@@ -5,7 +5,7 @@ module Warb
     attr_reader :errors
 
     def initialize(errors: nil)
-      super("Errors were found")
+      super("Errors were found: #{errors.inspect}")
 
       @errors = errors
     end
