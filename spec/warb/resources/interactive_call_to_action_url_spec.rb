@@ -228,6 +228,18 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
           )
         end
       end
+
+      it do
+        cta.footer = "#" * 61
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              footer: :no_longer_than_60_characters
+            }
+          )
+        end
+      end
     end
   end
 

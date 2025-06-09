@@ -8,6 +8,7 @@ module Warb
 
         @header = params[:header]
         @body = params[:body]
+        @footer = params[:footer]
       end
 
       def build_payload
@@ -45,6 +46,7 @@ module Warb
 
         check_header_errors(errors)
         check_body_errors(errors)
+        check_footer_errors(errors)
 
         raise Warb::Error.new(errors: errors) unless errors.empty?
       end
@@ -88,6 +90,10 @@ module Warb
         return errors[:body] = Error.required if body.nil?
 
         errors[:body] = Error.too_long(4096) if body.length > 4096
+      end
+
+      def check_footer_errors(errors)
+        errors[:footer] = Error.too_long(60) if footer.length > 60
       end
     end
   end
