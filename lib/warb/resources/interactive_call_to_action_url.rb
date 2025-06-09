@@ -3,6 +3,13 @@
 module Warb
   module Resources
     class InteractiveCallToActionUrl < InteractiveMessageResource
+      def initialize(**params)
+        super(**params)
+
+        @header = params[:header]
+        @body = params[:body]
+      end
+
       def build_payload
         check_errors
 
@@ -37,6 +44,7 @@ module Warb
         errors = {}
 
         check_header_errors(errors)
+        check_body_errors(errors)
 
         raise Warb::Error.new(errors: errors) unless errors.empty?
       end
@@ -74,6 +82,12 @@ module Warb
         return if URI::DEFAULT_PARSER.make_regexp.match(header[media_type][:link])
 
         errors[link_attr] = Error.invalid_value
+      end
+
+      def check_body_errors(errors)
+        return errors[:body] = Error.required if body.nil?
+
+        errors[:body] = Error.too_long(4096) if body.length > 4096
       end
     end
   end

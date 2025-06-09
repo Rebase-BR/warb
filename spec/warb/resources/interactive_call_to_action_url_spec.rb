@@ -204,6 +204,30 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
           )
         end
       end
+
+      it do
+        cta.body = nil
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              body: :required
+            }
+          )
+        end
+      end
+
+      it do
+        cta.body = "#" * 4097
+
+        expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              body: :no_longer_than_4096_characters
+            }
+          )
+        end
+      end
     end
   end
 
