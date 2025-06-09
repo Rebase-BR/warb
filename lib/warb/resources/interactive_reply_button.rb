@@ -4,6 +4,8 @@ module Warb
   module Resources
     class InteractiveReplyButton < InteractiveMessageResource
       def build_payload
+        check_errors
+
         common_interactive_message_params(:button)
       end
 

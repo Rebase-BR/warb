@@ -35,6 +35,212 @@ RSpec.describe Warb::Resources::InteractiveReplyButton do
         }
       )
     end
+
+    context "errors" do
+      it do
+        reply_button.header = {}
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header: :cannot_be_empty
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { text: "Text" }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_type: :required
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "text", text: nil }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_text: :required
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "text", text: "#" * 61 }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_text: :no_longer_than_60_characters
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "image", image: nil }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_image: :required
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "image", image: { link: nil } }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_image_link: :required
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "image", image: { link: "not_a_valid_url" } }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_image_link: :invalid_value
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "video", video: nil }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_video: :required
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "video", video: { link: nil } }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_video_link: :required
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "video", video: { link: "not_a_valid_url" } }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_video_link: :invalid_value
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "document", document: nil }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_document: :required
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "document", document: { link: nil } }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_document_link: :required
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "document", document: { link: "not_a_valid_url" } }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_document_link: :invalid_value
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.header = { type: "unknown type" }
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_type: :invalid_value
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.body = nil
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              body: :required
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.body = "#" * 4097
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              body: :no_longer_than_4096_characters
+            }
+          )
+        end
+      end
+
+      it do
+        reply_button.footer = "#" * 61
+
+        expect { reply_button.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              footer: :no_longer_than_60_characters
+            }
+          )
+        end
+      end
+    end
   end
 
   context "headers" do

@@ -35,6 +35,140 @@ RSpec.describe Warb::Resources::InteractiveList do
         }
       )
     end
+
+    context "errors" do
+      it do
+        interactive_list.header = {}
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header: :cannot_be_empty
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.header = { text: "Text" }
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_type: :required
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.header = { type: "text", text: nil }
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_text: :required
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.header = { type: "text", text: "#" * 61 }
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_text: :no_longer_than_60_characters
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.header = { type: "image" }
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_type: :invalid_value
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.header = { type: "video" }
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_type: :invalid_value
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.header = { type: "document" }
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_type: :invalid_value
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.header = { type: "unknown type" }
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              header_type: :invalid_value
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.body = nil
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              body: :required
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.body = "#" * 4097
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              body: :no_longer_than_4096_characters
+            }
+          )
+        end
+      end
+
+      it do
+        interactive_list.footer = "#" * 61
+
+        expect { interactive_list.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              footer: :no_longer_than_60_characters
+            }
+          )
+        end
+      end
+    end
   end
 
   context "headers" do
