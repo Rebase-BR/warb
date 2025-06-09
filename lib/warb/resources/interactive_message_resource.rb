@@ -79,7 +79,7 @@ module Warb
       def check_text_header_errors(errors)
         return errors[:header_text] = Error.required if header[:text].nil?
 
-        errors[:header_text] = Error.too_long(60) if header[:text].length > 60
+        errors[:header_text] = Error.too_long(max_header_text_length) if header[:text].length > max_header_text_length
       end
 
       def check_media_header_errors(errors)
@@ -98,11 +98,25 @@ module Warb
       def check_body_errors(errors)
         return errors[:body] = Error.required if body.nil?
 
-        errors[:body] = Error.too_long(4096) if body.length > 4096
+        errors[:body] = Error.too_long(max_body_text_length) if body.length > max_body_text_length
       end
 
       def check_footer_errors(errors)
-        errors[:footer] = Error.too_long(60) if footer.length > 60
+        return if footer.nil?
+
+        errors[:footer] = Error.too_long(max_footer_text_length) if footer.length > max_footer_text_length
+      end
+
+      def max_header_text_length
+        60
+      end
+
+      def max_body_text_length
+        4096
+      end
+
+      def max_footer_text_length
+        60
       end
 
       def valid_media_header_types

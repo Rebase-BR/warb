@@ -32,6 +32,20 @@ RSpec.describe Warb::Resources::LocationRequest do
     end
   end
 
+  context "errors" do
+    it do
+      location_request_resource.body = "#" * 1025
+
+      expect { location_request_resource.build_payload }.to raise_error(Warb::Error) do |error|
+        expect(error.errors).to eq(
+          {
+            body: :no_longer_than_1024_characters
+          }
+        )
+      end
+    end
+  end
+
   context "priorities" do
     subject { location_request_resource.build_payload }
 
