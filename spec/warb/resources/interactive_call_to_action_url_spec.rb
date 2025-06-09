@@ -41,8 +41,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = {}
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header cannot be empty"
+          expect(error.errors).to eq(
+            {
+              header: :cannot_be_empty
+            }
           )
         end
       end
@@ -51,8 +53,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { text: "Text" }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Type is required"
+          expect(error.errors).to eq(
+            {
+              header_type: :required
+            }
           )
         end
       end
@@ -61,8 +65,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "text", text: nil }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Text is required"
+          expect(error.errors).to eq(
+            {
+              header_text: :required
+            }
           )
         end
       end
@@ -71,8 +77,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "text", text: "#" * 61 }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Text length should be no longer than 60 characters"
+          expect(error.errors).to eq(
+            {
+              header_text: :no_longer_than_60_characters
+            }
           )
         end
       end
@@ -81,8 +89,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "image", image: nil }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Image is required"
+          expect(error.errors).to eq(
+            {
+              header_image: :required
+            }
           )
         end
       end
@@ -91,8 +101,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "image", image: { link: nil } }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Image Link is required"
+          expect(error.errors).to eq(
+            {
+              header_image_link: :required
+            }
           )
         end
       end
@@ -101,8 +113,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "image", image: { link: "not_a_valid_url" } }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Image Link must be a valid URL"
+          expect(error.errors).to eq(
+            {
+              header_image_link: :invalid_value
+            }
           )
         end
       end
@@ -111,8 +125,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "video", video: nil }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Video is required"
+          expect(error.errors).to eq(
+            {
+              header_video: :required
+            }
           )
         end
       end
@@ -121,8 +137,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "video", video: { link: nil } }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Video Link is required"
+          expect(error.errors).to eq(
+            {
+              header_video_link: :required
+            }
           )
         end
       end
@@ -131,8 +149,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "video", video: { link: "not_a_valid_url" } }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Video Link must be a valid URL"
+          expect(error.errors).to eq(
+            {
+              header_video_link: :invalid_value
+            }
           )
         end
       end
@@ -141,8 +161,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "document", document: nil }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Document is required"
+          expect(error.errors).to eq(
+            {
+              header_document: :required
+            }
           )
         end
       end
@@ -151,8 +173,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "document", document: { link: nil } }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Document Link is required"
+          expect(error.errors).to eq(
+            {
+              header_document_link: :required
+            }
           )
         end
       end
@@ -161,8 +185,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "document", document: { link: "not_a_valid_url" } }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Header Document Link must be a valid URL"
+          expect(error.errors).to eq(
+            {
+              header_document_link: :invalid_value
+            }
           )
         end
       end
@@ -171,8 +197,10 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
         cta.header = { type: "unknown type" }
 
         expect { cta.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "unknown type is not a valid value for Header Type"
+          expect(error.errors).to eq(
+            {
+              header_type: :invalid_value
+            }
           )
         end
       end

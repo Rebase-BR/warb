@@ -74,8 +74,10 @@ RSpec.describe Warb::Components::Section do
         section.rows = []
 
         expect { subject.to_h }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Rows should have at least 1 item(s)"
+          expect(error.errors).to eq(
+            {
+              rows: :at_least_1_item
+            }
           )
         end
       end
@@ -85,10 +87,12 @@ RSpec.describe Warb::Components::Section do
         section.rows = build_list(:row, 11, title: "Title")
 
         expect { subject.to_h }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Title length should be no longer than 24 characters",
-            "Rows should have at most 10 item(s)",
-            "Rows title should be unique"
+          expect(error.errors).to eq(
+            {
+              title: :no_longer_than_24_characters,
+              rows: :at_most_10_items,
+              row_title: :not_unique
+            }
           )
         end
       end

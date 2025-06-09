@@ -20,7 +20,7 @@ module Warb
       end
 
       def check_errors
-        errors = []
+        errors = {}
 
         check_media_errors(errors)
 
@@ -31,7 +31,7 @@ module Warb
         return if !media_id.nil? || !@params[:media_id].nil?
         return if !link.nil? || !@params[:link].nil?
 
-        errors << "Link or Media ID is required"
+        errors[:link_or_media_id] = Error.required
       end
     end
   end

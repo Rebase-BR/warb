@@ -26,7 +26,7 @@ module Warb
       private
 
       def check_header_errors
-        errors = []
+        errors = {}
 
         check_text_errors(errors, max_length: 60)
 
@@ -34,7 +34,7 @@ module Warb
       end
 
       def check_payload_errors
-        errors = []
+        errors = {}
 
         check_text_errors(errors, max_length: 4096)
 
@@ -43,9 +43,9 @@ module Warb
 
       def check_text_errors(errors, max_length:)
         if message_per_priority.nil? || message_per_priority.empty?
-          errors << "Text is required"
+          errors[:text] = Error.required
         elsif message_per_priority.length > max_length
-          errors << "Text length should be no longer than #{max_length} characters"
+          errors[:text] = Error.too_long(max_length)
         end
       end
 

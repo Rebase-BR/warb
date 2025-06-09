@@ -71,7 +71,7 @@ module Warb
       private
 
       def check_for_errors
-        errors = []
+        errors = {}
 
         check_title_errors(errors)
         check_rows_errors(errors)
@@ -82,17 +82,17 @@ module Warb
       def check_title_errors(errors)
         return if title.nil? || title.empty?
 
-        errors << "Title length should be no longer than 24 characters" if title.length > 24
+        errors[:title] = Error.too_long(24) if title.length > 24
       end
 
       def check_rows_errors(errors)
         if rows.empty?
-          errors << "Rows should have at least 1 item(s)"
+          errors[:rows] = Error.at_least(1)
         else
           rows_count = rows.count
 
-          errors << "Rows should have at most 10 item(s)" if rows_count > 10
-          errors << "Rows title should be unique" if rows_count != rows.uniq(&:title).count
+          errors[:rows] = Error.at_most(10) if rows_count > 10
+          errors[:row_title] = Error.not_unique if rows_count != rows.uniq(&:title).count
         end
       end
     end

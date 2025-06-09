@@ -34,7 +34,7 @@ module Warb
       private
 
       def check_errors
-        errors = []
+        errors = {}
 
         check_header_errors(errors)
 
@@ -44,8 +44,8 @@ module Warb
       def check_header_errors(errors)
         return if header.nil?
 
-        return errors << "Header cannot be empty" if header.empty?
-        return errors << "Header Type is required" if header[:type].nil? || header[:type].empty?
+        return errors[:header] = Error.cannot_be_empty if header.empty?
+        return errors[:header_type] = Error.required if header[:type].nil? || header[:type].empty?
 
         check_header_data_errors(errors)
       end
@@ -54,25 +54,26 @@ module Warb
         return check_text_header_errors(errors) if header[:type] == "text"
         return check_media_header_errors(errors) if %w[image video document].include? header[:type]
 
-        errors << "#{header[:type]} is not a valid value for Header Type"
+        errors[:header_type] = :invalid_value
       end
 
       def check_text_header_errors(errors)
-        return errors << "Header Text is required" if header[:text].nil?
+        return errors[:header_text] = :required if header[:text].nil?
 
-        errors << "Header Text length should be no longer than 60 characters" if header[:text].length > 60
+        errors[:header_text] = :no_longer_than_60_characters if header[:text].length > 60
       end
 
       def check_media_header_errors(errors)
         media_type = header[:type].to_sym
-        attr = media_type.to_s.capitalize
+        attr = "header_#{media_type}".to_sym
+        link_attr = "#{attr}_link".to_sym
 
-        return errors << "Header #{attr} is required" if header[media_type].nil?
-        return errors << "Header #{attr} Link is required" if header[media_type][:link].nil?
+        return errors[attr] = Error.required if header[media_type].nil?
+        return errors[link_attr] = Error.required if header[media_type][:link].nil?
 
         return if URI::DEFAULT_PARSER.make_regexp.match(header[media_type][:link])
 
-        errors << "Header #{attr} Link must be a valid URL"
+        errors[link_attr] = Error.invalid_value
       end
     end
   end

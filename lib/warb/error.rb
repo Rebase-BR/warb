@@ -23,16 +23,24 @@ module Warb
         "at_most_#{count}_#{noun}".to_sym
       end
 
+      def cannot_be_empty
+        :cannot_be_empty
+      end
+
+      def invalid_value
+        :invalid_value
+      end
+
+      def not_unique
+        :not_unique
+      end
+
       def required
         :required
       end
 
       def required_if_multiple_sections
         :required_if_multiple_sections
-      end
-
-      def not_unique
-        :not_unique
       end
 
       def too_long(max_length)

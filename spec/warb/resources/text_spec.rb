@@ -21,18 +21,22 @@ RSpec.describe Warb::Resources::Text do
 
       it do
         expect { subject.build_header }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Text is required"
+          expect(error.errors).to eq(
+            {
+              text: :required
+            }
           )
         end
       end
 
       it do
-        subject.content = "#" * 4097
+        subject.content = "#" * 61
 
         expect { subject.build_header }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Text length should be no longer than 60 characters"
+          expect(error.errors).to eq(
+            {
+              text: :no_longer_than_60_characters
+            }
           )
         end
       end
@@ -57,8 +61,10 @@ RSpec.describe Warb::Resources::Text do
 
       it do
         expect { subject.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Text is required"
+          expect(error.errors).to eq(
+            {
+              text: :required
+            }
           )
         end
       end
@@ -67,8 +73,10 @@ RSpec.describe Warb::Resources::Text do
         subject.text = "#" * 4097
 
         expect { subject.build_payload }.to raise_error(Warb::Error) do |error|
-          expect(error.errors).to include(
-            "Text length should be no longer than 4096 characters"
+          expect(error.errors).to eq(
+            {
+              text: :no_longer_than_4096_characters
+            }
           )
         end
       end
