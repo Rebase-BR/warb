@@ -27,6 +27,21 @@ RSpec.describe Warb::Resources::Location do
         }
       )
     end
+
+    context "errors" do
+      it do
+        location = build(:location, latitude: nil, longitude: nil)
+
+        expect { location.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              latitude: :required,
+              longitude: :required
+            }
+          )
+        end
+      end
+    end
   end
 
   context "priorities" do

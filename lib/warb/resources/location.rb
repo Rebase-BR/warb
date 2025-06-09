@@ -6,6 +6,8 @@ module Warb
       attr_accessor :latitude, :longitude, :name, :address
 
       def build_payload
+        check_errors
+
         {
           type: "location",
           location: {
@@ -15,6 +17,17 @@ module Warb
             address: address || @params[:address]
           }
         }
+      end
+
+      private
+
+      def check_errors
+        errors = {}
+
+        errors[:latitude] = Error.required if latitude.nil? && @params[:latitude].nil?
+        errors[:longitude] = Error.required if longitude.nil? && @params[:longitude].nil?
+
+        raise Warb::Error.new(errors: errors) unless errors.empty?
       end
     end
   end
