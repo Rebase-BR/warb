@@ -15,6 +15,8 @@ module Warb
       end
 
       def to_h
+        check_errors
+
         {
           formatted_name: formatted_name,
           first_name: first_name,
@@ -23,6 +25,38 @@ module Warb
           suffix: suffix,
           prefix: prefix
         }
+      end
+
+      private
+
+      def check_errors
+        errors = {}
+
+        check_formatted_name_errors(errors)
+        check_required_optional_names_errors(errors)
+
+        raise Warb::Error.new(errors: errors) unless errors.empty?
+      end
+
+      def check_formatted_name_errors(errors)
+        return unless formatted_name.nil? || formatted_name.empty?
+
+        errors[:formatted_name] = Error.required
+      end
+
+      def check_required_optional_names_errors(errors)
+        return unless errors[:formatted_name].nil?
+        return if names_values.any? { |part| !part.nil? && !part.strip.empty? }
+
+        errors[:formatted_name] = Error.required_at_least(count: 1, from: names)
+      end
+
+      def names
+        %i[prefix first_name middle_name last_name suffix]
+      end
+
+      def names_values
+        names.map { |name| send(name) }
       end
     end
   end

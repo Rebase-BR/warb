@@ -39,6 +39,10 @@ module Warb
         :required
       end
 
+      def required_at_least(count:, from:)
+        "required_at_least_#{count}_from_#{from.join("__")}".to_sym
+      end
+
       def required_if_multiple_sections
         :required_if_multiple_sections
       end
