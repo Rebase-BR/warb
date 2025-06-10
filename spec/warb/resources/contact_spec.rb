@@ -172,5 +172,21 @@ RSpec.describe Warb::Resources::Contact do
         :urls, :emails, :emails, :phones, :addresses, :org, :name, :birthday
       )
     end
+
+    context "errors" do
+      it do
+        subject.name = nil
+        subject.birthday = "invalid date format"
+
+        expect { subject.build_payload }.to raise_error(Warb::Error) do |error|
+          expect(error.errors).to eq(
+            {
+              name: :required,
+              birthday: :"format_must_be_yyyy-mm-dd"
+            }
+          )
+        end
+      end
+    end
   end
 end

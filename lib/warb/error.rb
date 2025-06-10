@@ -27,6 +27,10 @@ module Warb
         :cannot_be_empty
       end
 
+      def invalid_format(format)
+        "format_must_be_#{format}".to_sym
+      end
+
       def invalid_value
         :invalid_value
       end

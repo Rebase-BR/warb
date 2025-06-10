@@ -25,6 +25,8 @@ module Warb
       end
 
       def build_payload
+        check_errors
+
         {
           type: "contacts",
           contacts: [
@@ -83,6 +85,27 @@ module Warb
         @org = Warb::Components::Org.new(**params)
 
         block_given? ? @org.tap(&block) : @org
+      end
+
+      private
+
+      def check_errors
+        errors = {}
+
+        check_name_errors(errors)
+        check_birthday_errors(errors)
+
+        raise Warb::Error.new(errors: errors) unless errors.empty?
+      end
+
+      def check_name_errors(errors)
+        errors[:name] = Error.required if name.nil?
+      end
+
+      def check_birthday_errors(errors)
+        return if birthday.nil? || birthday.strip.empty? || /\d{4}-\d{2}-\d{2}/.match?(birthday)
+
+        errors[:birthday] = Error.invalid_format("yyyy-mm-dd")
       end
     end
   end
