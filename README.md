@@ -94,6 +94,8 @@ end
 
 We suggest heading to the `examples/` directory, where you'll find documentation files with plenty of usage examples, organized by **Resources** (**Resources** are the types of messages you can send via WhatsApp using Warb).
 
+You can also check the [`docs`](docs/index.md) for a more structured overview of the available resources and their usage.
+
 ### Webhook Support
 
 You might want to take action in response to messages users send. For example:
