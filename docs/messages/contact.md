@@ -1,23 +1,15 @@
-## Contact
+# Contact
 
-To send a contact, you can simply call `.contact.dispatch` from either `Warb` module or any `Warb::Client` instance as follow (please, check the [setup](./setup.md) page for more info):
+Send a contact using the `contact` wrapper:
 
 ```ruby
 recipient_number = "..."
 Warb.contact.dispatch(recipient_number, ...)
 ```
 
-or
-
-```ruby
-recipient_number = "..."
-client = Warb::Client.new
-client.contact.dispatch(recipient_number, ...)
-```
-
 **Note**: For the examples below, take into account `Warb.setup` was called to configure the global client instance, and that the variable `recipient_number` is already set.
 
-For starters, you can send a contact like this:
+You can send a simple contact like this:
 ```ruby
 name = Warb::Components::Name.new formatted_name: "Full Name", preffix: "Mr"
 
@@ -128,3 +120,15 @@ Warb.contact.dispatch(recipient_number) do |contact|
   end
 end
 ```
+
+Here are the specific params which can be passed to the `dispatch` method using the `contact` wrapper:
+
+| Field       | Type / Description                               | Required | Documentation                       |
+| ----------- | ------------------------------------------------ | -------- | ----------------------------------- |
+| `name`      | A `Warb::Components::Name` instance              | YES      | [Name](../components/name.md)       |
+| `birthday`  | A `String` in the format `YYYY-MM-DD`.           | NO       | —                                   |
+| `org`       | A `Warb::Components::Org` instance               | NO       | [Org](../components/org.md)         |
+| `addresses` | A list of `Warb::Components::Address` instances  | NO       | [Address](../components/address.md) |
+| `emails`    | A list of `Warb::Components::Email` instances    | NO       | [Email](../components/email.md)     |
+| `urls`      | A list of `Warb::Components::URL` instances      | NO       | [URL](../components/url.md)         |
+| `phones`    | A list of `Warb::Components::Phone` instances    | NO       | [Phone](../components/phone.md)     |
