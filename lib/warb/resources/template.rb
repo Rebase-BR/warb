@@ -2,8 +2,16 @@
 
 module Warb
   module Resources
-    class Template
+    class Template < Resource
       attr_accessor :name, :language, :parameters
+
+      def initialize(**params)
+        super(**params)
+
+        @name = params[:name]
+        @language = params[:language]
+        @parameters = params[:parameters]
+      end
 
       def build_payload
         {
