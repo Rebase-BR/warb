@@ -26,8 +26,8 @@ module Warb
         @header = Warb::Resources::Text.new(text:).build_header
       end
 
-      def build_action(&block)
-        @action = Warb::Components::ListAction.new
+      def build_action(**params, &block)
+        @action = Warb::Components::ListAction.new(**params)
 
         block_given? ? @action.tap(&block) : @action
       end
