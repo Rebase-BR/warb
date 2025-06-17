@@ -38,8 +38,8 @@ module Warb
         @header = Warb::Resources::Document.new(link:, filename:).build_header
       end
 
-      def build_action(&block)
-        @action = Warb::Components::CTAAction.new
+      def build_action(**params, &block)
+        @action = Warb::Components::CTAAction.new(**params)
 
         block_given? ? @action.tap(&block) : @action
       end

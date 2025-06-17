@@ -72,17 +72,19 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
   describe "#build_action" do
     context "returned value" do
       it do
-        action = cta.build_action
+        action = cta.build_action(button_text: "Button Text")
         expect(action).to be cta.action
         expect(action).to be_a Warb::Components::CTAAction
+        expect(action.button_text).to eq "Button Text"
       end
     end
 
     context "returned block instance" do
       it do
-        cta.build_action do |action|
+        cta.build_action(button_text: "Button Text") do |action|
           expect(action).to be cta.action
           expect(action).to be_a Warb::Components::CTAAction
+          expect(action.button_text).to eq "Button Text"
         end
       end
     end
