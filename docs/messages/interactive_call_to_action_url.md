@@ -30,10 +30,9 @@ Warb.interactive_call_to_action_url.dispatch(recipient_number) do |message|
   # for header, there's a helper method to create a text header
   message.set_text_header("Check this out!")
 
-  # and for action, can use the build_action method to create a CTA action`
-  message.build_action do |action|
+  # and for action, you can use the build_action method to create a CTA action`
+  message.build_action(button_text: "Click Here") do |action|
     action.url = "https://example.com"
-    action.button_text = "Click here"
   end
 end
 ```
@@ -71,10 +70,7 @@ Warb.interactive_call_to_action_url.dispatch(recipient_number) do |message|
   # for documents, you can also pass a filename. its extension will be used to determine the MIME type
   message.set_document_header(link: "https://example.com/document.pdf", filename: "document.pdf")
 
-  message.build_action do |action|
-    action.url = "https://example.com"
-    action.button_text = "Click here"
-  end
+  message.build_action(url: "https://example.com", button_text: "Click here")
 end
 ```
 

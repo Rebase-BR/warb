@@ -34,6 +34,17 @@ Warb.interactive_reply_button.dispatch(recipient_number) do |message|
 end
 ```
 
+or you can build the action with the buttons texts directly, passing them to the `build_action` method, without using the block:
+
+```ruby
+Warb.interactive_reply_button.dispatch(recipient_number, action: action) do |message|
+  message.set_text_header(content: "Options")
+  message.body = "Select a Language:"
+  message.footer = nil
+  message.build_action(buttons_texts: ["Português", "English", "Español"])
+end
+```
+
 Aside from text and image headers, you can also set a video or document as header using the respective methods, `set_video_header` and `set_document_header`.
 
 For text header, `set_text_header` receives a string, while for image, video, and document headers, you can pass a `media_id` or a `link` to the media file.

@@ -63,17 +63,19 @@ RSpec.describe Warb::Resources::InteractiveList do
   describe "#build_action" do
     context "returned value" do
       it do
-        action = interactive_list.build_action
+        action = interactive_list.build_action(button_text: "Button Text")
         expect(action).to be interactive_list.action
         expect(action).to be_a Warb::Components::ListAction
+        expect(action.button_text).to eq "Button Text"
       end
     end
 
     context "returned block instance" do
       it do
-        interactive_list.build_action do |action|
+        interactive_list.build_action(button_text: "Button Text") do |action|
           expect(action).to be interactive_list.action
           expect(action).to be_a Warb::Components::ListAction
+          expect(action.button_text).to eq "Button Text"
         end
       end
     end

@@ -22,6 +22,18 @@ RSpec.describe Warb::Components::ListAction do
       it { expect(subject.title).to eq "Open Options" }
       it { expect(subject.rows).to eq [] }
     end
+
+    context "using a block" do
+      it do
+        section = list_action.add_section(title: "Added Section") do |section|
+          expect(section).to be_a Warb::Components::Section
+          expect(section.title).to eq "Added Section"
+        end
+
+        expect(section).to eq list_action.sections.last
+        expect(section).to be_a Warb::Components::Section
+      end
+    end
   end
 
   describe "#to_h" do

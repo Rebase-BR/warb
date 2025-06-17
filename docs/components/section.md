@@ -17,7 +17,12 @@ section = Warb::Components::Section.new(title: "Languages")
 
 section.add_row(title: "Português")
 section.add_row(title: "English")
-section.add_row(title: "Español")
+
+# or using a block
+section.add_row do |row|
+  row.title = "Español"
+  row.description = "Spanish language"
+end
 ```
 
 Under the hood, it will create a [`Warb::Components::Row`](./row.md) for each item added to the section.
