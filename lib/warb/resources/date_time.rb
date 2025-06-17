@@ -8,7 +8,7 @@ module Warb
       def initialize(date_time = nil, **params)
         super(**params)
 
-        @date_time = date_time
+        @date_time = date_time || params[:date_time]
       end
 
       def build_template_named_parameter(parameter_name)

@@ -3,6 +3,107 @@
 RSpec.describe Warb::Resources::Template do
   subject { described_class.new }
 
+  describe "#add_currency_paramater" do
+    context "positional" do
+      it do
+        expect do
+          subject.add_currency_parameter
+        end.to change(subject, :resources).from(NilClass).to(Array)
+
+        expect(subject.resources.last).to be_a Warb::Resources::Currency
+      end
+
+      it do
+        subject.add_currency_parameter(code: "USD") do |currency|
+          expect(currency.code).to eq "USD"
+          expect(currency).to eq subject.resources.last
+          expect(currency).to be_a Warb::Resources::Currency
+        end
+
+        expect { subject.add_currency_parameter("useless_param_name") }.to change(subject.resources, :count).by(1)
+      end
+    end
+
+    context "named" do
+      it do
+        expect do
+          subject.add_currency_parameter(:purchase_value)
+        end.to change(subject, :resources).from(nil).to(Hash)
+
+        expect(subject.resources[:purchase_value]).to be_a Warb::Resources::Currency
+
+        expect { subject.add_currency_parameter }.to change(subject.resources, :count).by(1)
+      end
+    end
+  end
+
+  describe "#add_date_time_paramater" do
+    context "positional" do
+      it do
+        expect do
+          subject.add_date_time_parameter
+        end.to change(subject, :resources).from(NilClass).to(Array)
+
+        expect(subject.resources.last).to be_a Warb::Resources::DateTime
+      end
+
+      it do
+        subject.add_date_time_parameter(date_time: "Jan, 1st") do |purchase_date|
+          expect(purchase_date.date_time).to eq "Jan, 1st"
+          expect(purchase_date).to eq subject.resources.last
+          expect(purchase_date).to be_a Warb::Resources::DateTime
+        end
+
+        expect { subject.add_date_time_parameter("useless_param_name") }.to change(subject.resources, :count).by(1)
+      end
+    end
+
+    context "named" do
+      it do
+        expect do
+          subject.add_date_time_parameter(:purchase_date)
+        end.to change(subject, :resources).from(nil).to(Hash)
+
+        expect(subject.resources[:purchase_date]).to be_a Warb::Resources::DateTime
+
+        expect { subject.add_date_time_parameter }.to change(subject.resources, :count).by(1)
+      end
+    end
+  end
+
+  describe "#add_text_paramater" do
+    context "positional" do
+      it do
+        expect do
+          subject.add_text_parameter
+        end.to change(subject, :resources).from(NilClass).to(Array)
+
+        expect(subject.resources.last).to be_a Warb::Resources::Text
+      end
+
+      it do
+        subject.add_text_parameter do |text|
+          expect(text).to eq subject.resources.last
+          expect(text).to be_a Warb::Resources::Text
+        end
+
+        expect { subject.add_text_parameter("useless_param_name") }.to change(subject.resources, :count).by(1)
+      end
+    end
+
+    context "named" do
+      it do
+        expect do
+          subject.add_text_parameter(:text)
+        end.to change(subject, :resources).from(nil).to(Hash)
+
+        expect(subject.resources[:text]).to be_a Warb::Resources::Text
+
+        expect { subject.add_text_parameter }.to change(subject.resources, :count).by(1)
+      end
+    end
+  end
+
   describe "#build_payload" do
     context "with positional paremters" do
       before do

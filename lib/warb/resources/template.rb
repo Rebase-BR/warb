@@ -31,6 +31,18 @@ module Warb
         }
       end
 
+      def add_currency_parameter(parameter_name = nil, **params, &block)
+        add_parameter(parameter_name, Currency.new(**params), &block)
+      end
+
+      def add_date_time_parameter(parameter_name = nil, **params, &block)
+        add_parameter(parameter_name, DateTime.new(**params), &block)
+      end
+
+      def add_text_parameter(parameter_name = nil, **params, &block)
+        add_parameter(parameter_name, Text.new(**params), &block)
+      end
+
       private
 
       def build_parameters
@@ -50,6 +62,29 @@ module Warb
 
       def positional_parameters
         resources.map(&:build_template_positional_parameter)
+      end
+
+      def add_parameter(parameter_name, instance, &block)
+        case resources
+        when Hash
+          resources[parameter_name.to_s] = instance
+        when Array
+          resources << instance
+        else
+          initialize_resources(parameter_name, instance, &block)
+        end
+
+        block_given? ? instance.tap(&block) : instance
+      end
+
+      def initialize_resources(parameter_name, instance)
+        if parameter_name.nil?
+          @resources = []
+          @resources << instance
+        else
+          @resources = {}
+          @resources[parameter_name] = instance
+        end
       end
     end
   end
