@@ -88,17 +88,19 @@ RSpec.describe Warb::Resources::InteractiveReplyButton do
   describe "#build_action" do
     context "returned value" do
       it do
-        action = reply_button.build_action
+        action = reply_button.build_action(buttons_texts: ["Button 1"])
         expect(action).to be reply_button.action
         expect(action).to be_a Warb::Components::ReplyButtonAction
+        expect(action.buttons_texts).to eq ["Button 1"]
       end
     end
 
     context "returned block instance" do
       it do
-        reply_button.build_action do |action|
+        reply_button.build_action(buttons_texts: ["Button 1"]) do |action|
           expect(action).to be reply_button.action
           expect(action).to be_a Warb::Components::ReplyButtonAction
+          expect(action.buttons_texts).to eq ["Button 1"]
         end
       end
     end
