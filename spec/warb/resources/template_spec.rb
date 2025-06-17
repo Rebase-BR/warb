@@ -12,7 +12,8 @@ RSpec.describe Warb::Resources::Template do
           resources: [
             Warb::Resources::Text.new(content: "First Param"),
             Warb::Resources::Text.new(content: "Second Param"),
-            Warb::Resources::Currency.new(amount: 12.34, code: Warb::Resources::Currency::USD, fallback: "$ 12.34")
+            Warb::Resources::Currency.new(amount: 12.34, code: Warb::Resources::Currency::USD, fallback: "$ 12.34"),
+            Warb::Resources::DateTime.new("December, 25th")
           ]
         )
       end
@@ -41,9 +42,15 @@ RSpec.describe Warb::Resources::Template do
                     {
                       type: "currency",
                       currency: {
-                        amount_1000: 12340,
+                        amount_1000: 12_340,
                         code: "USD",
                         fallback_value: "$ 12.34"
+                      }
+                    },
+                    {
+                      type: "date_time",
+                      date_time: {
+                        fallback_value: "December, 25th"
                       }
                     }
                   ]
@@ -63,7 +70,8 @@ RSpec.describe Warb::Resources::Template do
           resources: {
             first_param: Warb::Resources::Text.new(content: "First Param"),
             second_param: Warb::Resources::Text.new(content: "Second Param"),
-            value: Warb::Resources::Currency.new(amount: 10, code: "BRL")
+            value: Warb::Resources::Currency.new(amount: 10, code: "BRL"),
+            purchase_date: Warb::Resources::DateTime.new("07/09")
           }
         )
       end
@@ -98,6 +106,13 @@ RSpec.describe Warb::Resources::Template do
                         code: "BRL",
                         fallback_value: "10 (BRL)",
                         amount_1000: 10_000
+                      }
+                    },
+                    {
+                      type: "date_time",
+                      parameter_name: "purchase_date",
+                      date_time: {
+                        fallback_value: "07/09"
                       }
                     }
                   ]
