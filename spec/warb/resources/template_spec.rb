@@ -11,7 +11,8 @@ RSpec.describe Warb::Resources::Template do
           language: Warb::Language::ENGLISH_US,
           resources: [
             Warb::Resources::Text.new(content: "First Param"),
-            Warb::Resources::Text.new(content: "Second Param")
+            Warb::Resources::Text.new(content: "Second Param"),
+            Warb::Resources::Currency.new(amount: 12.34, code: Warb::Resources::Currency::USD, fallback: "$ 12.34")
           ]
         )
       end
@@ -36,6 +37,14 @@ RSpec.describe Warb::Resources::Template do
                     {
                       type: "text",
                       text: "Second Param"
+                    },
+                    {
+                      type: "currency",
+                      currency: {
+                        amount_1000: 12340,
+                        code: "USD",
+                        fallback_value: "$ 12.34"
+                      }
                     }
                   ]
                 }
@@ -53,7 +62,8 @@ RSpec.describe Warb::Resources::Template do
           language: Warb::Language::PORTUGUESE_BR,
           resources: {
             first_param: Warb::Resources::Text.new(content: "First Param"),
-            second_param: Warb::Resources::Text.new(content: "Second Param")
+            second_param: Warb::Resources::Text.new(content: "Second Param"),
+            value: Warb::Resources::Currency.new(amount: 10, code: "BRL")
           }
         )
       end
@@ -80,6 +90,15 @@ RSpec.describe Warb::Resources::Template do
                       type: "text",
                       text: "Second Param",
                       parameter_name: "second_param"
+                    },
+                    {
+                      type: "currency",
+                      parameter_name: "value",
+                      currency: {
+                        code: "BRL",
+                        fallback_value: "10 (BRL)",
+                        amount_1000: 10_000
+                      }
                     }
                   ]
                 }
