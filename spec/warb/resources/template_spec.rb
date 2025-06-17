@@ -9,7 +9,10 @@ RSpec.describe Warb::Resources::Template do
         allow(subject).to receive_messages(
           name: "template_name",
           language: Warb::Language::ENGLISH_US,
-          parameters: ["First Param", "Second Param"]
+          resources: [
+            Warb::Resources::Text.new(content: "First Param"),
+            Warb::Resources::Text.new(content: "Second Param")
+          ]
         )
       end
 
@@ -48,9 +51,9 @@ RSpec.describe Warb::Resources::Template do
         allow(subject).to receive_messages(
           name: "template_name",
           language: Warb::Language::PORTUGUESE_BR,
-          parameters: {
-            first_param: "First Param",
-            second_param: "Second Param"
+          resources: {
+            first_param: Warb::Resources::Text.new(content: "First Param"),
+            second_param: Warb::Resources::Text.new(content: "Second Param")
           }
         )
       end

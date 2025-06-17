@@ -3,14 +3,14 @@
 module Warb
   module Resources
     class Template < Resource
-      attr_accessor :name, :language, :parameters
+      attr_accessor :name, :language, :resources
 
       def initialize(**params)
         super(**params)
 
         @name = params[:name]
         @language = params[:language]
-        @parameters = params[:parameters]
+        @resources = params[:resources]
       end
 
       def build_payload
@@ -34,7 +34,7 @@ module Warb
       private
 
       def build_parameters
-        case parameters
+        case resources
         when Hash
           named_parameters
         when Array
@@ -43,22 +43,13 @@ module Warb
       end
 
       def named_parameters
-        parameters.map do |parameter_name, parameter|
-          {
-            type: "text",
-            text: parameter,
-            parameter_name: parameter_name.to_s
-          }
+        resources.map do |parameter_name, resource|
+          resource.build_template_named_parameter(parameter_name.to_s)
         end
       end
 
       def positional_parameters
-        parameters.map do |parameter|
-          {
-            type: "text",
-            text: parameter
-          }
-        end
+        resources.map(&:build_template_positional_parameter)
       end
     end
   end

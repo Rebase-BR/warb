@@ -19,6 +19,21 @@ module Warb
         }
       end
 
+      def build_template_named_parameter(parameter_name)
+        {
+          type: "text",
+          text: message_per_priority,
+          parameter_name: parameter_name
+        }
+      end
+
+      def build_template_positional_parameter
+        {
+          type: "text",
+          text: message_per_priority
+        }
+      end
+
       private
 
       def message_per_priority
