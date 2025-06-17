@@ -65,7 +65,7 @@ module Warb
     class ReplyButtonAction
       attr_accessor :buttons_texts
 
-      def initialize(buttons_texts: nil)
+      def initialize(buttons_texts: [])
         @buttons_texts = buttons_texts
       end
 
@@ -84,6 +84,10 @@ module Warb
             }
           end
         }
+      end
+
+      def add_button_text(button_text)
+        @buttons_texts << button_text
       end
     end
 

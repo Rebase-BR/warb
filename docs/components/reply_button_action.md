@@ -18,4 +18,15 @@ Warb.interactive_reply_button.dispatch(recipient_number, action: action) do |mes
 end
 ```
 
+You can also use the `add_button_text` method to add buttons one by one:
+
+```ruby
+action = Warb::Components::ReplyButtonAction.new
+action.add_button_text("Português")
+action.add_button_text("English")
+action.add_button_text("Español")
+```
+
+Also, note that you can only add up to 3 buttons in a single action
+
 Check the [Interactive Reply Button Message](../messages/interactive_reply_button.md) documentation for more details on how to use this action in a message.
