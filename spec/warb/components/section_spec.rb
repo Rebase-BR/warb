@@ -22,6 +22,18 @@ RSpec.describe Warb::Components::Section do
       it { expect(subject.title).to eq "Title" }
       it { expect(subject.description).to eq "Description" }
     end
+
+    context "using a block" do
+      it do
+        row = section.add_row(title: "Added Row") do |row|
+          expect(row).to be_a Warb::Components::Row
+          expect(row.title).to eq "Added Row"
+        end
+
+        expect(row).to be_a Warb::Components::Row
+        expect(row).to eq section.rows.last
+      end
+    end
   end
 
   describe "#to_h" do

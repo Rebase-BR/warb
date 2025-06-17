@@ -16,4 +16,14 @@ action = Warb::Components::ListAction.new(button_text: "Select")
 section = action.add_section(title: "Languages") # returns a Warb::Components::Section instance
 ```
 
+You can also use a block with the `add_section` method to build the section, which is useful for setting its options:
+
+```ruby
+action = Warb::Components::ListAction.new(button_text: "Select")
+section = action.add_section do |section|
+  section.title = "Languages"
+  section.add_row(...) # add options here
+end
+```
+
 Check its complete usage in the [interactive list message documentation](../messages/interactive_list.md).

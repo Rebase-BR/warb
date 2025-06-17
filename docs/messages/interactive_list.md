@@ -79,9 +79,7 @@ Warb.interactive_list.dispatch(recipient_number) do |message|
 
   message.set_text_header("Language Selection")
 
-  message.build_action do |action|
-    action.button_text = "Select"
-
+  message.build_action(button_text: "Select") do |action|
     section = action.add_section(title: nil)
     section.add_row(title: "Português")
     section.add_row(title: "English")
@@ -112,24 +110,25 @@ Warb.interactive_list.dispatch(recipient_number) do |message|
 
   message.set_text_header("Language Selection")
 
-  message.build_action do |action|
-    action.button_text = "Select"
+  message.build_action(button_text: "Select") do |action|
+    action.add_section(title: "American Languages") do |american_section|
+      american_section.add_row(title: "English (USA)")
+      american_section.add_row(title: "Português (Brasil)")
+    end
 
-    american_section = action.add_section(title: "American Languages")
-    american_section.add_row(title: "English (USA)")
-    american_section.add_row(title: "Português (Brasil)")
+    action.add_section(title: "European Languages") do |european_section|
+      european_section.add_row(title: "English (UK)")
+      european_section.add_row(title: "Português (Portugal)")
+      european_section.add_row(title: "Français")
+      european_section.add_row(title: "Deutsch")
+      european_section.add_row(title: "Italiano")
+    end
 
-    european_section = action.add_section(title: "European Languages")
-    european_section.add_row(title: "English (UK)")
-    european_section.add_row(title: "Português (Portugal)")
-    european_section.add_row(title: "Français")
-    european_section.add_row(title: "Deutsch")
-    european_section.add_row(title: "Italiano")
-
-    asian_section = action.add_section(title: "Asian Languages")
-    asian_section.add_row(title: "中文 (Chinese)")
-    asian_section.add_row(title: "日本語 (Japanese)")
-    asian_section.add_row(title: "Русский (Central Asia)")
+    action.add_section(title: "Asian Languages") do |asian_section|
+      asian_section.add_row(title: "中文 (Chinese)")
+      asian_section.add_row(title: "日本語 (Japanese)")
+      asian_section.add_row(title: "Русский (Central Asia)")
+    end
   end
 end
 ```

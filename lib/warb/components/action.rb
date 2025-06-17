@@ -24,8 +24,12 @@ module Warb
         @rows = rows
       end
 
-      def add_row(**args)
-        Row.new(**args).tap { |row| @rows << row }
+      def add_row(**args, &block)
+        row = Row.new(**args)
+
+        @rows << row
+
+        block_given? ? row.tap(&block) : row
       end
 
       def to_h
@@ -50,8 +54,12 @@ module Warb
         @sections = sections
       end
 
-      def add_section(**args)
-        Section.new(**args).tap { |section| @sections << section }
+      def add_section(**args, &block)
+        section = Section.new(**args)
+
+        @sections << section
+
+        block_given? ? section.tap(&block) : section
       end
 
       def to_h
