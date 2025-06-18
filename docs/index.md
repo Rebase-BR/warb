@@ -11,3 +11,6 @@ Refer to [messages](./messages/index.md) for more details on how to send message
 
 ## Components
 Refer to [components](./components/index.md) for more details on how Warb components work.
+
+## Resources
+Refer to [resources](./resources/index.md) for more details on resources.
