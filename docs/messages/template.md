@@ -141,11 +141,12 @@ end
 ```
 
 If your template has any media header, you can set it as follow:
-| Header Type    | Template Instance Method    | Params                           |
-|----------------|-----------------------------|----------------------------------|
-| `image`        | `set_image_header`          | `media_id` or `link`             |
-| `video`        | `set_video_header`          | `media_id` or `link`             |
-| `document`     | `set_document_header`       | `media_id` or `link`, `filename` |
+| Header Type    | Template Instance Method    | Params                                         |
+|----------------|-----------------------------|------------------------------------------------|
+| `image`        | `set_image_header`          | `media_id` or `link`                           |
+| `video`        | `set_video_header`          | `media_id` or `link`                           |
+| `document`     | `set_document_header`       | `media_id` or `link`, `filename`               |
+| `location`     | `set_location_header`       | `latitude`, `longitude`, `name`, and `address` |
 
 Every time a call is made to any `set_header` method, a new header will be set, overwriting the previous one.
 
@@ -164,6 +165,10 @@ The `media_id` must be the id of media uploaded previously to WhatsApp Business 
 
 Check the `upload` section for each media related message, like [`image`](./image.md) or [`document`](./document.md), for more info on how to upload and the supported formats.
 
-`set_header` methods will simply instatiate the corresponding resource class with the given parameters, and then, set the it as header attribute.
+For the `document` header, `filename` is important because its extension will determine the preview capability on the recipient's device.
+
+For the `location` header, at least `latitude` and `longitude` must be provided.
+
+`set_header` methods will simply instatiate the corresponding resource class with the given parameters, and then, set it as the header attribute.
 
 When the template instance's `build_payload` method is called (which happens when the message is about to be dispatched), the header param will be created using the `header`'s `build_header` method.

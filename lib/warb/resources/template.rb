@@ -53,6 +53,10 @@ module Warb
         set_header(Video.new(media_id:, link:), &block)
       end
 
+      def set_location_header(latitude: nil, longitude: nil, address: nil, name: nil, &block)
+        set_header(Location.new(latitude:, longitude:, address:, name:), &block)
+      end
+
       private
 
       def set_header(instance, &block)

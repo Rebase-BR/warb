@@ -176,6 +176,30 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
+  describe "#set_location_header" do
+    context "with id, using block" do
+      it do
+        expect do
+          subject.set_location_header do |location|
+            expect(location).to be_a Warb::Resources::Location
+            expect(location).to eq subject.header
+          end
+        end.to change(subject, :header).from(NilClass).to(Warb::Resources::Location)
+      end
+    end
+
+    context "with link, without using block" do
+      it do
+        expect do
+          location = subject.set_location_header
+
+          expect(location).to be_a Warb::Resources::Location
+          expect(location).to eq subject.header
+        end.to change(subject, :header).from(NilClass).to(Warb::Resources::Location)
+      end
+    end
+  end
+
   describe "#build_payload" do
     context "with positional paremters" do
       before do
@@ -407,6 +431,48 @@ RSpec.describe Warb::Resources::Template do
                       video: {
                         id: "media_id",
                         link: nil
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        )
+      end
+    end
+
+    context "with location header" do
+      let(:location) { Warb::Resources::Location.new(latitude: "latitude", longitude: "longitude") }
+
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "pt_BR",
+          header: location
+        )
+      end
+
+      it do
+        expect(location).to receive(:build_header).and_call_original
+
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "pt_BR" },
+              components: [
+                {
+                  type: "header",
+                  parameters: [
+                    {
+                      type: "location",
+                      location: {
+                        latitude: "latitude",
+                        longitude: "longitude",
+                        address: nil,
+                        name: nil
                       }
                     }
                   ]
