@@ -7,7 +7,7 @@ This is useful for sending messages that have a predefined structure, such as no
 To send  a template message, you need to provide the template name and the parameters for the template, if any.
 
 ```ruby
-Warb.template.dispatch(recipient_number, "template_name", **params)
+Warb.template.dispatch(recipient_number, **params)
 ```
 
 Here, `**params` is a named hash parameters that will be passed to the template, as follow:
@@ -21,7 +21,7 @@ Here, `**params` is a named hash parameters that will be passed to the template,
 
 `language` must be a valid language code, such as `en_US` for English (United States) or `fr_FR` for French (France). Also, the specified template must support the specified language.
 
-> You can check `Warb::Langeuage` for a list of supported languages.
+> You can check `Warb::Language` for a list of supported languages.
 > If yours isn't there, you can refer to this [list with all supported languages](https://developers.facebook.com/docs/whatsapp/business-management-api/message-templates/supported-languages) by WhatsApp.
 > Just use the value in the `code` column, and it will work.
 
@@ -61,49 +61,66 @@ Warb.template.dispatch(recipient_number) do |template|
 end
 ```
 
-Here, `add_text_parameter`, `add_currency_parameter` will build the resource for you with the given named parameters and add it to the template.
+Here, `add_text_parameter` and `add_currency_parameter` will build the resources for you with the given named parameters and add them to the template.
 
-So here's a table with all the helper methods you can use to add resources to the template:
+Here's a table with all the helper methods you can use to add resources/paramters to the template message:
 | Method Name                     | Resource Type               | Description                                      |
 |---------------------------------|-----------------------------|--------------------------------------------------|
 | `add_text_parameter`            | `Warb::Resources::Text`     | Adds a text parameter to the template            |
 | `add_date_time_parameter`       | `Warb::Resources::DateTime` | Adds a date time parameter to the template       |
 | `add_currency_parameter`        | `Warb::Resources::Currency` | Adds a currency parameter to the template        |
 
-In the example above, notice we only used named parameters (no positional parameters) as arguments to the add parameters. So, the parameters will be built as positional parameters, and the `resources` will be an array.
+In the example above, notice we only used named parameters (no positional parameters) as arguments to the add parameter methods.
 
-To use named parameters, you have to pass the parameter name (as defined in your template) as the first argument to the helper method, as follow:
+So, the parameters will be built as positional parameters, and the `resources` will be an array.
+
+Also, the resources will be used to substitute the corresponding parameters in your template, in the same order they were added to the parameters/resources list.
+
+If you don't want to worry about the order of the parameters, you may use named parameters.
+
+For that, you have to pass the parameter name (as defined in your template) as the first argument to the helper method, as follow:
 ```ruby
 Warb.template.dispatch(recipient_number, name: "testing", language: "pt_BR") do |template|
   template.add_text_parameter("customer_name", content: "Name")
-  template.add_date_time_parameter("purchase_date", "January 1, 2023")
+  template.add_date_time_parameter("purchase_date", date_time: "January 1, 2023")
 end
 ```
+
+This way, the order of the parameters names in the template and the order they were added with the `add_parameter` methods may be entirely different.
 
 One **IMPORTANT** thing to note is that, once defined, the type of the parameters won't be changed.
 
 So, in the following code:
-```
+```ruby
 Warb.template.dispatch(recipient_number, name: "testing", language: "pt_BR") do |template|
   template.add_date_time_parameter(date_time: "January 1, 2023")
   template.add_text_parameter("customer_name", content: "Name")
 end
 ```
-Your date_time parameter will be incorrect, and eventually, an error will be returned from the API.
+Your `customer_name` parameter won't behave the way you may expect.
 
-If the order of the calls were different:
-```
+Since the first call to an `add_parameter` method was using the positional parameters syntax, then the internal resources attribute was set to an array, so that means any posterior calls to any `add_parameter` method will simply ignore the named parameter syntax and append the built resource to the list of positional parameters
+
+If the order of the calls was different:
+```ruby
 Warb.template.dispatch(recipient_number, name: "testing", language: "pt_BR") do |template|
   template.add_text_parameter("customer_name", content: "Name")
   template.add_date_time_parameter(date_time: "January 1, 2023")
+  template.add_currency_parameter(code: "USD", amount: 10)
 end
 ```
 
-Then, the parameter name passed would just be ignored, and the resource would be added to the end of the parameters list, since it was defined as positional parameters due to the first call.
+1. The first call to `add_parameter` method would set the internal resources/parameter to a hash, with a initial key named `customer_name`, pointing to a text resource
 
-Anyway, make sure to always use the same parameters accordingly to your template (or you could overwrite the `resources` attributes direclty, with `template.resources = nil # [] or {}`).
+2. Then the `DateTime` resource (built in the second call to `add_parameter` method) would be set as value to the key `""` (empty string) in the named parameter hash.
 
-The add parameters method also supports block building as well:
+3. Eventually, the `Currency` resource (in the third call do `add_parameter` method) would be set as value to the same key `""` (empty string) as the previous call, which would overwrite the previous resource.
+
+In this case, the call to the api would result in an error, either due to the mismatch of the count of parameters, or due to not having all named parameters defined.
+
+So, make sure to always use the same parameter syntax accordingly to your template.
+
+The add parameter methods also support block building as well:
 ```ruby
 Warb.template.dispatch(recipient_number) do |template|
   template.name = "testing"
