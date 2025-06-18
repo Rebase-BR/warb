@@ -152,6 +152,30 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
+  describe "#set_video_header" do
+    context "with id, using block" do
+      it do
+        expect do
+          subject.set_video_header(media_id: "media_id") do |video|
+            expect(video).to be_a Warb::Resources::Video
+            expect(video).to eq subject.header
+          end
+        end.to change(subject, :header).from(NilClass).to(Warb::Resources::Video)
+      end
+    end
+
+    context "with link, without using block" do
+      it do
+        expect do
+          video = subject.set_video_header(link: "media_link")
+
+          expect(video).to be_a Warb::Resources::Video
+          expect(video).to eq subject.header
+        end.to change(subject, :header).from(NilClass).to(Warb::Resources::Video)
+      end
+    end
+  end
+
   describe "#build_payload" do
     context "with positional paremters" do
       before do
@@ -343,6 +367,46 @@ RSpec.describe Warb::Resources::Template do
                         id: "media_id",
                         link: nil,
                         filename: "document.pdf"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        )
+      end
+    end
+
+    context "with video header" do
+      let(:video) { Warb::Resources::Video.new(media_id: "media_id") }
+
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "pt_BR",
+          header: video
+        )
+      end
+
+      it do
+        expect(video).to receive(:build_header).and_call_original
+
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "pt_BR" },
+              components: [
+                {
+                  type: "header",
+                  parameters: [
+                    {
+                      type: "video",
+                      video: {
+                        id: "media_id",
+                        link: nil
                       }
                     }
                   ]

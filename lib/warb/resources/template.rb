@@ -49,6 +49,10 @@ module Warb
         set_header(Document.new(media_id:, link:, filename:), &block)
       end
 
+      def set_video_header(media_id: nil, link: nil, &block)
+        set_header(Video.new(media_id:, link:), &block)
+      end
+
       private
 
       def set_header(instance, &block)
@@ -58,7 +62,7 @@ module Warb
       end
 
       def component_header
-        return if !header.is_a? Resource
+        return unless header.is_a? Resource
 
         {
           type: "header",
