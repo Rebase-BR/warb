@@ -104,6 +104,30 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
+  describe "#set_image_header" do
+    context "with id, using block" do
+      it do
+        expect do
+          subject.set_image_header(media_id: "media_id") do |image|
+            expect(image).to be_a Warb::Resources::Image
+            expect(image).to eq subject.header
+          end
+        end.to change(subject, :header).from(NilClass).to(Warb::Resources::Image)
+      end
+    end
+
+    context "with link, without using block" do
+      it do
+        expect do
+          image = subject.set_image_header(link: "media_link")
+
+          expect(image).to be_a Warb::Resources::Image
+          expect(image).to eq subject.header
+        end.to change(subject, :header).from(NilClass).to(Warb::Resources::Image)
+      end
+    end
+  end
+
   describe "#build_payload" do
     context "with positional paremters" do
       before do
@@ -214,6 +238,46 @@ RSpec.describe Warb::Resources::Template do
                       parameter_name: "purchase_date",
                       date_time: {
                         fallback_value: "07/09"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        )
+      end
+    end
+
+    context "with image header" do
+      let(:image) { Warb::Resources::Image.new(media_id: "media_id") }
+
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "pt_BR",
+          header: image
+        )
+      end
+
+      it do
+        expect(image).to receive(:build_header).and_call_original
+
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "pt_BR" },
+              components: [
+                {
+                  type: "header",
+                  parameters: [
+                    {
+                      type: "image",
+                      image: {
+                        id: "media_id",
+                        link: nil
                       }
                     }
                   ]

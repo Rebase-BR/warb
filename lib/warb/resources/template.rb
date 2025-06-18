@@ -3,7 +3,7 @@
 module Warb
   module Resources
     class Template < Resource
-      attr_accessor :name, :language, :resources
+      attr_accessor :name, :language, :resources, :header
 
       def initialize(**params)
         super(**params)
@@ -22,11 +22,9 @@ module Warb
               code: language
             },
             components: [
-              {
-                type: "body",
-                parameters: build_parameters
-              }
-            ]
+              component_header,
+              component_body
+            ].compact
           }
         }
       end
@@ -43,7 +41,33 @@ module Warb
         add_parameter(parameter_name, Text.new(**params), &block)
       end
 
+      def set_image_header(media_id: nil, link: nil, &block)
+        @header = Image.new(media_id:, link:)
+
+        block_given? ? @header.tap(&block) : @header
+      end
+
       private
+
+      def component_header
+        return if !header.is_a? Resource
+
+        {
+          type: "header",
+          parameters: [
+            header.build_header
+          ]
+        }
+      end
+
+      def component_body
+        return if resources.nil? || resources.empty?
+
+        {
+          type: "body",
+          parameters: build_parameters
+        }
+      end
 
       def build_parameters
         case resources
