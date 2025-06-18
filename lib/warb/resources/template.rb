@@ -42,12 +42,20 @@ module Warb
       end
 
       def set_image_header(media_id: nil, link: nil, &block)
-        @header = Image.new(media_id:, link:)
+        set_header(Image.new(media_id:, link:), &block)
+      end
 
-        block_given? ? @header.tap(&block) : @header
+      def set_document_header(media_id: nil, link: nil, filename: nil, &block)
+        set_header(Document.new(media_id:, link:, filename:), &block)
       end
 
       private
+
+      def set_header(instance, &block)
+        @header = instance
+
+        block_given? ? @header.tap(&block) : @header
+      end
 
       def component_header
         return if !header.is_a? Resource

@@ -128,6 +128,30 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
+  describe "#set_document_header" do
+    context "with id, using block" do
+      it do
+        expect do
+          subject.set_document_header(media_id: "media_id") do |document|
+            expect(document).to be_a Warb::Resources::Document
+            expect(document).to eq subject.header
+          end
+        end.to change(subject, :header).from(NilClass).to(Warb::Resources::Document)
+      end
+    end
+
+    context "with link, without using block" do
+      it do
+        expect do
+          document = subject.set_document_header(link: "media_link")
+
+          expect(document).to be_a Warb::Resources::Document
+          expect(document).to eq subject.header
+        end.to change(subject, :header).from(NilClass).to(Warb::Resources::Document)
+      end
+    end
+  end
+
   describe "#build_payload" do
     context "with positional paremters" do
       before do
@@ -278,6 +302,47 @@ RSpec.describe Warb::Resources::Template do
                       image: {
                         id: "media_id",
                         link: nil
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        )
+      end
+    end
+
+    context "with document header" do
+      let(:document) { Warb::Resources::Document.new(media_id: "media_id", filename: "document.pdf") }
+
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "pt_BR",
+          header: document
+        )
+      end
+
+      it do
+        expect(document).to receive(:build_header).and_call_original
+
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "pt_BR" },
+              components: [
+                {
+                  type: "header",
+                  parameters: [
+                    {
+                      type: "document",
+                      document: {
+                        id: "media_id",
+                        link: nil,
+                        filename: "document.pdf"
                       }
                     }
                   ]

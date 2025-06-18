@@ -141,9 +141,10 @@ end
 ```
 
 If your template has any media header, you can set it as follow:
-| Header Type | Template Instance Method | Params               |
-|-------------|--------------------------|----------------------|
-| `image`     | `set_image_header`       | `media_id` or `link` |
+| Header Type    | Template Instance Method    | Params                           |
+|----------------|-----------------------------|----------------------------------|
+| `image`        | `set_image_header`          | `media_id` or `link`             |
+| `document`     | `set_document_header`       | `media_id` or `link`, `filename` |
 
 Every time a call is made to any `set_header` method, a new header will be set, overwriting the previous one.
 
