@@ -139,3 +139,29 @@ Warb.template.dispatch(recipient_number) do |template|
   end
 end
 ```
+
+If your template has any media header, you can set it as follow:
+| Header Type | Template Instance Method | Params               |
+|-------------|--------------------------|----------------------|
+| `image`     | `set_image_header`       | `media_id` or `link` |
+
+Every time a call is made to any `set_header` method, a new header will be set, overwriting the previous one.
+
+If you just want to change one attribute or another, `set_header` methods return the related resource, so it is possible to set the values if you keep a hold of such instance
+```ruby
+Warb.template.dispatch(recipient_number) do |template|
+  header = template.set_image_header(media_id: "wrong_media_id")
+
+  header.media_id = "correct_media_id"
+end
+```
+
+Also, either only one of `media_id` or `link` must be provided.
+
+The `media_id` must be the id of media uploaded previously to WhatsApp Business Platform, while the `link` must be a public acessible URL.
+
+Check the `upload` section for each media related message, like [`image`](./image.md) or [`document`](./document.md), for more info on how to upload and the supported formats.
+
+`set_header` methods will simply instatiate the corresponding resource class with the given parameters, and then, set the it as header attribute.
+
+When the template instance's `build_payload` method is called (which happens when the message is about to be dispatched), the header param will be created using the `header`'s `build_header` method.
