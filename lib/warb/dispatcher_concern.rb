@@ -56,6 +56,10 @@ module Warb
       @contact ||= Dispatcher.new Resources::Contact, dispatcher
     end
 
+    def template
+      @template ||= TemplateDispatcher.new Object, dispatcher
+    end
+
     private
 
     def dispatcher
