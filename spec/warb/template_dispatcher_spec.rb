@@ -10,10 +10,27 @@ RSpec.describe Warb::TemplateDispatcher do
   end
 
   describe "#list" do
-    it do
-      expect_any_instance_of(Warb::Client).to receive(:get).with("message_templates", endpoint_prefix: :business_id)
+    let(:response) { instance_double('Faraday::Response', body: nil) }
 
-      subject.list
+    context "basic" do
+      it do
+        expect_any_instance_of(Warb::Client).to receive(:get).with("message_templates", endpoint_prefix: :business_id,
+                                                                                        data: {}).and_return(response)
+
+        subject.list
+      end
+    end
+
+    context "filtering" do
+      it do
+        expect_any_instance_of(Warb::Client).to receive(:get).with("message_templates", endpoint_prefix: :business_id,
+                                                                                        data: {
+                                                                                          limit: 5,
+                                                                                          fields: "status,category"
+                                                                                        }).and_return(response)
+
+        subject.list(limit: 5, fields: %i[status category], invalid_field: "whatever")
+      end
     end
   end
 end
