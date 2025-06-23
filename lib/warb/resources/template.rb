@@ -41,6 +41,10 @@ module Warb
         add_parameter(parameter_name, Text.new(**params), &block)
       end
 
+      def set_text_header(content: nil, message: nil, text: nil, parameter_name: nil, &block)
+        set_header(Text.new(content:, message:, text:, parameter_name:), &block)
+      end
+
       def set_image_header(media_id: nil, link: nil, &block)
         set_header(Image.new(media_id:, link:), &block)
       end

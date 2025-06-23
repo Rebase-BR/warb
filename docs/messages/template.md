@@ -147,6 +147,7 @@ If your template has any media header, you can set it as follow:
 | `video`        | `set_video_header`          | `media_id` or `link`                           |
 | `document`     | `set_document_header`       | `media_id` or `link`, `filename`               |
 | `location`     | `set_location_header`       | `latitude`, `longitude`, `name`, and `address` |
+| `text`         | `set_text_header`           | `content`, `parameter_name`                    |
 
 Every time a call is made to any `set_header` method, a new header will be set, overwriting the previous one.
 
@@ -170,5 +171,18 @@ For the `document` header, `filename` is important because its extension will de
 For the `location` header, at least `latitude` and `longitude` must be provided.
 
 `set_header` methods will simply instatiate the corresponding resource class with the given parameters, and then, set it as the header attribute.
+
+For `text` header, note that, due to how the WhatsApp Business Platform works, you can't set the entire content for it (the same that happens with the body of the message).
+
+In this case, `set_text_header`, will simply use whatever was given to it as parameter to build the final header in the WhatsApp Business Platform.
+
+So, for example, if your tamplate header was created with `Hello, {{1}}!`, then the text passed to `set_text_header` will simply be substituted in that `{{1}}`.
+
+If your template was defined using named parameters instead (something like `Hello, {{customer_name}}!`), then you must pass the name of the paramter to `set_text_header` as follow:
+```ruby
+Warb.template.dispatch(recipient_number) do |template|
+  template.set_text_header(content: "John", parameter_name: "customer_name")
+end
+```
 
 When the template instance's `build_payload` method is called (which happens when the message is about to be dispatched), the header param will be created using the `header`'s `build_header` method.

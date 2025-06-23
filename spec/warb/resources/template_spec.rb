@@ -104,6 +104,14 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
+  describe "#set_text_header" do
+    it do
+      expect do
+        subject.set_text_header(content: "John", parameter_name: "part_of_the_day")
+      end.to change(subject, :header).from(NilClass).to(Warb::Resources::Text)
+    end
+  end
+
   describe "#set_image_header" do
     context "with id, using block" do
       it do
@@ -481,6 +489,71 @@ RSpec.describe Warb::Resources::Template do
             }
           }
         )
+      end
+    end
+
+    context "with text header" do
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: Warb::Language::PORTUGUESE_BR,
+          header: text
+        )
+      end
+
+      context "with positional parameter" do
+        let(:text) { Warb::Resources::Text.new(content: "John") }
+
+        it do
+          expect(subject.build_payload).to eq(
+            {
+              type: "template",
+              template: {
+                name: "template_name",
+                language: { code: "pt_BR" },
+                components: [
+                  {
+                    type: "header",
+                    parameters: [
+                      {
+                        type: "text",
+                        text: "John"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          )
+        end
+      end
+
+      context "with named parameter" do
+        let(:text) { Warb::Resources::Text.new(text: "John", parameter_name: "customer_name") }
+
+        it do
+          expect(subject.build_payload).to eq(
+            {
+              type: "template",
+              template: {
+                name: "template_name",
+                language: { code: "pt_BR" },
+                components: [
+                  {
+                    type: "header",
+                    parameters: [
+                      {
+                        type: "text",
+                        text: "John",
+                        parameter_name: "customer_name"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          )
+        end
       end
     end
   end
