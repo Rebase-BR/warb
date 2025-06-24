@@ -3,7 +3,7 @@
 module Warb
   module Resources
     class Text < Resource
-      attr_accessor :content, :text, :message, :preview_url, :parameter_name
+      attr_accessor :content, :text, :message, :preview_url, :parameter_name, :examples
 
       def build_header
         { type: "text", text: message_per_priority }.tap do |header|
@@ -35,6 +35,16 @@ module Warb
           type: "text",
           text: message_per_priority
         }
+      end
+
+      def build_template_example_parameter
+        { type: "body", text: message_per_priority }.tap do |param|
+          examples ||= @params[:examples]
+
+          next unless [Array].include?(examples.class)
+
+          param[:example] = { body_text: [examples] }
+        end
       end
 
       private

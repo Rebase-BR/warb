@@ -3,7 +3,7 @@
 module Warb
   module Resources
     class Template < Resource
-      attr_accessor :name, :language, :resources, :header
+      attr_accessor :name, :language, :resources, :header, :category, :body
 
       def initialize(**params)
         super(**params)
@@ -11,6 +11,8 @@ module Warb
         @name = params[:name]
         @language = params[:language]
         @resources = params[:resources]
+        @category = params[:category]
+        @body = params[:body]
       end
 
       def build_payload
@@ -26,6 +28,17 @@ module Warb
               component_body
             ].compact
           }
+        }
+      end
+
+      def creation_payload
+        {
+          name: name,
+          language: language,
+          category: category,
+          components: [
+            body&.build_template_example_parameter
+          ].compact
         }
       end
 

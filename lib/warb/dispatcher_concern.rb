@@ -57,7 +57,7 @@ module Warb
     end
 
     def template
-      @template ||= Dispatcher.new Resources::Template, dispatcher
+      @template ||= TemplateDispatcher.new Resources::Template, dispatcher
     end
 
     private
