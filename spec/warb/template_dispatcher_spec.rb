@@ -27,4 +27,18 @@ RSpec.describe Warb::TemplateDispatcher do
       end
     end
   end
+
+  describe "#delete" do
+    context "called endpoint" do
+      let(:response) { instance_double("Faraday::Response", body: nil) }
+
+      it do
+        expect_any_instance_of(Warb::Client).to receive(:delete).with(
+          "message_templates", { name: "template_name" }, endpoint_prefix: :business_id
+        ).and_return(response)
+
+        subject.delete("template_name")
+      end
+    end
+  end
 end
