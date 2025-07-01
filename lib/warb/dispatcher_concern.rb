@@ -56,6 +56,10 @@ module Warb
       @contact ||= Dispatcher.new Resources::Contact, dispatcher
     end
 
+    def flow
+      @flow ||= Dispatcher.new Resources::Flow, dispatcher
+    end
+
     private
 
     def dispatcher

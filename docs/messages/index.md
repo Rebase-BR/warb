@@ -58,6 +58,7 @@ Messages are sent using a helper dispatcher and its resource class. Here is a li
 | Interactive Call to Action URL | `Warb::Resources::InteractiveCalltoActionURL` | `interactive_call_to_action_url`    | [Interactive Call to Action URL Message](./interactive_call_to_action_url.md) |
 | Interactive List               | `Warb::Resources::InteractiveList`            | `interactive_list`                  | [Interactive List Message](./interactive_list.md)                             |
 | Interactive Reply Button       | `Warb::Resources::InteractiveReplyButton`     | `interactive_reply_button`          | [Interactive Reply Button Message](./interactive_reply_button.md)             |
+| Flow                           | `Warb::Resources::Flow`                       | `flow`                              | [Flow](./flow.md)                                                             |
 | Location                       | `Warb::Resources::Location`                   | `location`                          | [Location Message](./location.md)                                             |
 | Location Request               | `Warb::Resources::LocationRequest`            | `location_request`                  | [Location Request Message](./location_request.md)                             |
 | Reaction                       | `Warb::Resources::Reaction`                   | `reaction`                          | [Reaction Message](./reaction.md)                                             |
