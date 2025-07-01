@@ -10,14 +10,12 @@ Gem::Specification.new do |spec|
 
   spec.summary = "A simple yet powerfull whatsapp api wrapper"
   spec.description = "A simple yet powerfull whatsapp api wrapper"
-  spec.homepage = "https://git.campuscode.com.br/core-team/warb"
+  spec.homepage = "https://github.com/Rebase-BR/warb"
   spec.required_ruby_version = ">= 3.1.0"
 
-  spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
-
-  spec.metadata["homepage_uri"] = "https://rebase.com.br"
-  spec.metadata["source_code_uri"] = "https://git.campuscode.com.br/core-team/warb"
-  spec.metadata["changelog_uri"] = "https://git.campuscode.com.br/core-team/warb/-/blob/main/CHANGELOG.md?ref_type=heads"
+  spec.metadata["homepage_uri"] = "https://github.com/Rebase-BR/warb"
+  spec.metadata["source_code_uri"] = "https://github.com/Rebase-BR/warb"
+  spec.metadata["changelog_uri"] = "https://github.com/Rebase-BR/warb/blob/main/CHANGELOG.md?ref_type=heads"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
