@@ -60,6 +60,10 @@ module Warb
       @template ||= Dispatcher.new Resources::Template, dispatcher
     end
 
+    def flow
+      @flow ||= Dispatcher.new Resources::Flow, dispatcher
+    end
+
     private
 
     def dispatcher
