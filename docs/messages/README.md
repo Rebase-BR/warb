@@ -63,7 +63,6 @@ Messages are sent using a helper dispatcher and its resource class. Here is a li
 | Location Request               | `Warb::Resources::LocationRequest`            | `location_request`                  | [Location Request Message](./location_request.md)                             |
 | Reaction                       | `Warb::Resources::Reaction`                   | `reaction`                          | [Reaction Message](./reaction.md)                                             |
 | Text                           | `Warb::Resources::Text`                       | `message`                           | [Text Message](./text.md)                                                     |
-| Template                       | `Warb::Resources::Template`                   | `template`                          | [Template Message](./template.md)
 | Media Dispatchers                                                                                                                                                                                    |
 | Audio                          | `Warb::Resources::Audio`                      | `audio`                             | [Audio Message](./audio.md)                                                   |
 | Document                       | `Warb::Resources::Document`                   | `document`                          | [Document Message](./document.md)                                             |
@@ -72,6 +71,7 @@ Messages are sent using a helper dispatcher and its resource class. Here is a li
 | Video                          | `Warb::Resources::Video`                      | `video`                             | [Video Message](./video.md)                                                   |
 | Special Dispatchers                                                                                                                                                                                  |
 | Indicator                      | `Warb::Resources::Indicator`                  | `indicator`                         | [Indicator Message](./indicator.md)                                           |
+| Template                       | `Warb::Resources::Template`                   | `template`                          | [Template Message](./template.md)                                             |
 
 > Simple Dispatcher doesn't offer any additional functionality, they just send messages.
 

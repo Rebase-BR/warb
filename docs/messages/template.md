@@ -1,8 +1,28 @@
-# Template Message
+# Template
 
 Template messages are used to send a message with a specific template.
 
 This is useful for sending messages that have a predefined structure, such as notifications or alerts.
+
+#### Quick Examples
+
+**Note**: For the examples below, take into account `Warb.setup` was called to configure the global client instance.
+
+List available templates:
+```ruby
+# List templates (coming soon)
+```
+
+Sending template messages:
+```ruby
+Warb.template.dispatch(recipient_number, **params)
+```
+
+#### Listing Templates
+
+Coming soon
+
+#### Sending Template Messages
 
 To send  a template message, you need to provide the template name and the parameters for the template, if any.
 

@@ -3,7 +3,7 @@
 RSpec.describe Warb::Resources::Template do
   subject { described_class.new }
 
-  describe "#add_currency_paramater" do
+  describe "#add_currency_parameter" do
     context "positional" do
       it do
         expect do
@@ -209,7 +209,7 @@ RSpec.describe Warb::Resources::Template do
   end
 
   describe "#build_payload" do
-    context "with positional paremters" do
+    context "with positional parameters" do
       before do
         allow(subject).to receive_messages(
           name: "template_name",
