@@ -3,7 +3,7 @@
 RSpec.describe Warb::Resources::Template do
   subject { described_class.new }
 
-  describe "#add_currency_paramater" do
+  describe "#add_currency_parameter" do
     context "positional" do
       it do
         expect do
