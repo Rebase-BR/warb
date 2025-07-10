@@ -206,3 +206,41 @@ end
 ```
 
 When the template instance's `build_payload` method is called (which happens when the message is about to be dispatched), the header param will be created using the `header`'s `build_header` method.
+
+#### Creating Templates
+
+To create a template, you need to provide the template name, language, category and the body (components).
+
+```ruby
+Warb.template.create(
+  name: "my_template_001",
+  language: Warb::Language::ENGLISH_US,
+  category: Warb::Category::MARKETING,
+  body: Warb::Resources::Text.new(
+    text: "Hello {{1}}, welcome to our service!",
+    examples: ["John"]
+  )
+)
+```
+
+**Required Parameters:**
+| Parameter  | Type     | Description                                  |
+|------------|----------|----------------------------------------------|
+| `name`     | `String` | Unique template name (snake_case)            |
+| `language` | `String` | The language to use for the template         |
+| `category` | `String` | Template category (MARKETING, UTILITY, etc.) |
+
+**Template Categories:**
+- `Warb::Category::MARKETING` - Promotional content
+- `Warb::Category::UTILITY` - Transactional messages
+- `Warb::Category::AUTHENTICATION` - Security codes
+
+**Note**: Currently, the creation only supports body text, more resource types are coming soon.
+
+#### Deleting Templates
+
+To delete a template, you need to provide the template name.
+
+```ruby
+Warb.template.delete("my_template_001")
+```
