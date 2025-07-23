@@ -31,6 +31,29 @@ RSpec.describe Warb::Resources::Text do
     end
   end
 
+  describe "#build_template_named_parameter" do
+    it do
+      expect(text_resource.build_template_named_parameter("paramater_name")).to eq(
+        {
+          type: "text",
+          text: "content from params",
+          parameter_name: "paramater_name"
+        }
+      )
+    end
+  end
+
+  describe "#build_template_positional_parameter" do
+    it do
+      expect(text_resource.build_template_positional_parameter).to eq(
+        {
+          type: "text",
+          text: "content from params"
+        }
+      )
+    end
+  end
+
   describe "#message_per_priority" do
     subject { text_resource.build_header[:text] }
 

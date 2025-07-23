@@ -21,11 +21,11 @@ RSpec.describe Warb::Dispatcher do
 
     context "block call" do
       it do
-        expect(CustomResource).to receive(:new)
+        expect(CustomResource).to receive(:new).with(attr: "value")
         expect(resource).to receive(:call)
         expect(client).to receive(:post).with("messages", {})
 
-        subject.dispatch("recipient_number") do |resource_instance|
+        subject.dispatch("recipient_number", attr: "value") do |resource_instance|
           expect(resource_instance).to respond_to :call
         end
       end
