@@ -77,4 +77,4 @@ Messages are sent using a helper dispatcher and its resource class. Here is a li
 
 > Media Dispatchers, aside from sending messages, also provide methods to upload and download media files.
 
-> Special Dispatchers are used for specific purposes, such as sending indicators or reactions.
+> Special Dispatchers are used for specific purposes, such as sending indicators, reactions or templates.
