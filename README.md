@@ -9,18 +9,16 @@ A Ruby Gem focused on wrap all the functionalities and use cases of the WhatsApp
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add `warb` to your bundle
 
-Install the gem and add to the application's Gemfile by executing:
-
-```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```ruby
+bundle add warb
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+or add it manually to your Gemfile if you prefer.
 
-```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```ruby
+gem 'warb'
 ```
 
 ## Configuration
@@ -90,9 +88,26 @@ Warb.message.dispatch(recipient_number) do |builder|
 end
 ```
 
+### What types of messages can I send?
+
+Warb implements the main types of WhatsApp messages, you can follow the message types [`here`](docs/messages/README.md#messages-types)
+
+examples:
+
+```ruby
+
+warb = Warb.new(...)
+
+warb.message.dispatch(...)
+warb.audio.dispatch(...)
+warb.video.dispatch(...)
+warb.image.dispatch(...)
+...
+```
+
 ### Find all usage examples
 
-We suggest heading to the `examples/` directory, where you'll find documentation files with plenty of usage examples, organized by **Resources** (**Resources** are the types of messages you can send via WhatsApp using Warb).
+We suggest heading to the [`examples`](examples) directory, where you'll find documentation files with plenty of usage examples, organized by **Resources** (**Resources** are the types of messages you can send via WhatsApp using Warb).
 
 You can also check the [`docs`](docs/README.md) for a more structured overview of the available resources and their usage.
 

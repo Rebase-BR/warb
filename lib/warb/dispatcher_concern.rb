@@ -57,7 +57,7 @@ module Warb
     end
 
     def template
-      @template ||= TemplateDispatcher.new Object, dispatcher
+      @template ||= TemplateDispatcher.new Resources::Template, dispatcher
     end
 
     def flow

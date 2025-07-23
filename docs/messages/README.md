@@ -71,7 +71,7 @@ Messages are sent using a helper dispatcher and its resource class. Here is a li
 | Video                          | `Warb::Resources::Video`                      | `video`                             | [Video Message](./video.md)                                                   |
 | Special Dispatchers                                                                                                                                                                                  |
 | Indicator                      | `Warb::Resources::Indicator`                  | `indicator`                         | [Indicator Message](./indicator.md)                                           |
-| Template                       | Coming soon                                   | `template`                          | [Template](./template.md)                                                     |
+| Template                       | `Warb::Resources::Template`                   | `template`                          | [Template Message](./template.md)                                             |
 
 > Simple Dispatcher doesn't offer any additional functionality, they just send messages.
 
