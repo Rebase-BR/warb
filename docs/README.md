@@ -11,3 +11,6 @@ Refer to [messages](./messages/README.md) for more details on how to send messag
 
 ## Components
 Refer to [components](./components/README.md) for more details on how Warb components work.
+
+## Resources
+Refer to [resources](./resources/README.md) for more details on resources.

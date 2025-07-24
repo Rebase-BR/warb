@@ -19,6 +19,14 @@ module Warb
         raise NotImplementedError
       end
 
+      def build_template_positional_parameter
+        raise NotImplementedError
+      end
+
+      def build_template_named_parameter(paramater_name)
+        raise NotImplementedError
+      end
+
       def set_text_header
         raise NotImplementedError
       end

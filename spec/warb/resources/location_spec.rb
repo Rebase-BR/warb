@@ -5,12 +5,6 @@ RSpec.describe Warb::Resources::Location do
     build :location, latitude: 0, longitude: 0, name: "Null Island", address: "Null Island"
   end
 
-  describe "#build_header" do
-    it do
-      expect { location_resource.build_header }.to raise_error NotImplementedError
-    end
-  end
-
   describe "#build_payload" do
     subject { location_resource.build_payload }
 

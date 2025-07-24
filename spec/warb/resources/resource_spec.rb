@@ -37,6 +37,18 @@ RSpec.describe Warb::Resources::Resource do
     end
   end
 
+  describe "#build_template_positional_parameter" do
+    it do
+      expect { subject.build_template_positional_parameter }.to raise_error NotImplementedError
+    end
+  end
+
+  describe "#build_template_named_parameter" do
+    it do
+      expect { subject.build_template_named_parameter("paramater_name") }.to raise_error NotImplementedError
+    end
+  end
+
   describe "#set_text_header" do
     it do
       expect { subject.set_text_header }.to raise_error NotImplementedError

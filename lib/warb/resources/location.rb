@@ -5,7 +5,17 @@ module Warb
     class Location < Resource
       attr_accessor :latitude, :longitude, :name, :address
 
+      def build_header
+        common_location_params
+      end
+
       def build_payload
+        common_location_params
+      end
+
+      private
+
+      def common_location_params
         {
           type: "location",
           location: {

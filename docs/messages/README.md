@@ -71,9 +71,10 @@ Messages are sent using a helper dispatcher and its resource class. Here is a li
 | Video                          | `Warb::Resources::Video`                      | `video`                             | [Video Message](./video.md)                                                   |
 | Special Dispatchers                                                                                                                                                                                  |
 | Indicator                      | `Warb::Resources::Indicator`                  | `indicator`                         | [Indicator Message](./indicator.md)                                           |
+| Template                       | `Warb::Resources::Template`                   | `template`                          | [Template Message](./template.md)                                             |
 
 > Simple Dispatcher doesn't offer any additional functionality, they just send messages.
 
 > Media Dispatchers, aside from sending messages, also provide methods to upload and download media files.
 
-> Special Dispatchers are used for specific purposes, such as sending indicators or reactions.
+> Special Dispatchers are used for specific purposes, such as sending indicators, reactions or templates.
