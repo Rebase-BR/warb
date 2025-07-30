@@ -75,6 +75,10 @@ module Warb
         set_button(CopyCodeButton.new(index:, sub_type: "copy_code", coupon_code:), &block)
       end
 
+      def set_voice_call_button(index: nil, &block)
+        set_button(Button.new(index:, sub_type: "voice_call"), &block)
+      end
+
       private
 
       def set_header(instance, &block)
