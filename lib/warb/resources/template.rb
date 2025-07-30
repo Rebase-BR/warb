@@ -3,7 +3,7 @@
 module Warb
   module Resources
     class Template < Resource
-      attr_accessor :name, :language, :resources, :header
+      attr_accessor :name, :language, :resources, :header, :buttons
 
       def initialize(**params)
         super(**params)
@@ -11,6 +11,7 @@ module Warb
         @name = params[:name]
         @language = params[:language]
         @resources = params[:resources]
+        @buttons = []
       end
 
       def build_payload
@@ -23,7 +24,8 @@ module Warb
             },
             components: [
               component_header,
-              component_body
+              component_body,
+              *buttons
             ].compact
           }
         }
@@ -61,12 +63,30 @@ module Warb
         set_header(Location.new(latitude:, longitude:, address:, name:), &block)
       end
 
+      def set_quick_reply_button(index: nil, &block)
+        set_button(Button.new(index:, sub_type: "quick_reply"), &block)
+      end
+
+      def set_dynamic_url_button(index: nil, text: nil, &block)
+        set_button(UrlButton.new(index:, sub_type: "url", text:), &block)
+      end
+
+      def set_copy_code_button(index: nil, coupon_code: nil, &block)
+        set_button(CopyCodeButton.new(index:, sub_type: "copy_code", coupon_code:), &block)
+      end
+
       private
 
       def set_header(instance, &block)
         @header = instance
 
         block_given? ? @header.tap(&block) : @header
+      end
+
+      def set_button(instance, &block)
+        return @buttons << instance.build_payload unless block_given?
+
+        @buttons << instance.tap(&block).build_payload
       end
 
       def component_header
