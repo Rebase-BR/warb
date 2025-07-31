@@ -16,7 +16,7 @@ Since it is used in a template, you can check the methods to insert a button in 
 ## Examples
 ### with text parameter
 ```ruby
-url_button = Warb::Resources::UrlButton.new(index: 0, sub_type: "url", text: "https://example.com")
+url_button = Warb::Resources::UrlButton.new(index: 0, sub_type: "url", text: "/example")
 url_button.build_payload
 => {
      type: "button",
@@ -25,7 +25,7 @@ url_button.build_payload
      parameters: [
       {
         type: "text",
-        text: "https://example.com" 
+        text: "/example" 
       }
      ]
    }
