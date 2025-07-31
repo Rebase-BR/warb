@@ -184,6 +184,106 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
+  describe "#set_quick_reply_button" do
+    context "with block" do
+      it do
+        subject.set_quick_reply_button { |button| button.index = "0" }
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "quick_reply" })
+      end
+    end
+
+    context "without using block" do
+      it do
+        subject.set_quick_reply_button(index: "0")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "quick_reply" })
+      end
+    end
+  end
+
+  describe "#set_dynamic_url_button" do
+    context "with block" do
+      it do
+        subject.set_dynamic_url_button do |button|
+          button.index = "0"
+          button.text = "url_suffix"
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "url",
+                                        parameters: [{ type: "text", text: "url_suffix" }] })
+      end
+    end
+
+    context "without using block" do
+      it do
+        subject.set_dynamic_url_button(index: "0", text: "url_suffix")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "url",
+                                        parameters: [{ type: "text", text: "url_suffix" }] })
+      end
+    end
+  end
+
+  describe "#set_copy_code_button" do
+    context "with block" do
+      it do
+        subject.set_copy_code_button do |button|
+          button.index = "0"
+          button.coupon_code = "SAVE20"
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "copy_code",
+                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
+      end
+    end
+
+    context "without using block" do
+      it do
+        subject.set_copy_code_button(index: "0", coupon_code: "SAVE20")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "copy_code",
+                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
+      end
+    end
+  end
+
+  describe "#set_voice_call_button" do
+    context "with block" do
+      it do
+        subject.set_voice_call_button do |button|
+          button.index = "0"
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "voice_call" })
+      end
+    end
+
+    context "without using block" do
+      it do
+        subject.set_voice_call_button(index: "0")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "voice_call" })
+      end
+    end
+  end
+
   describe "#set_location_header" do
     context "with id, using block" do
       it do
@@ -554,6 +654,313 @@ RSpec.describe Warb::Resources::Template do
             }
           )
         end
+      end
+    end
+
+    context "with quick reply button" do
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "en_US",
+          buttons: [
+            {
+              type: "button",
+              sub_type: "quick_reply",
+              index: "0"
+            }
+          ]
+        )
+      end
+
+      it do
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "en_US" },
+              components: [
+                {
+                  type: "button",
+                  sub_type: "quick_reply",
+                  index: "0"
+                }
+              ]
+            }
+          }
+        )
+      end
+    end
+
+    context "with dynamic url button" do
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "en_US",
+          buttons: [
+            {
+              type: "button",
+              sub_type: "url",
+              index: "0",
+              parameters: [
+                {
+                  type: "text",
+                  text: "url_suffix"
+                }
+              ]
+            }
+          ]
+        )
+      end
+
+      it do
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "en_US" },
+              components: [
+                {
+                  type: "button",
+                  sub_type: "url",
+                  index: "0",
+                  parameters: [
+                    {
+                      type: "text",
+                      text: "url_suffix"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        )
+      end
+    end
+
+    context "with copy code button" do
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "en_US",
+          buttons: [
+            {
+              type: "button",
+              sub_type: "copy_code",
+              index: "0",
+              parameters: [
+                {
+                  type: "coupon_code",
+                  coupon_code: "SAVE20"
+                }
+              ]
+            }
+          ]
+        )
+      end
+
+      it do
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "en_US" },
+              components: [
+                {
+                  type: "button",
+                  sub_type: "copy_code",
+                  index: "0",
+                  parameters: [
+                    {
+                      type: "coupon_code",
+                      coupon_code: "SAVE20"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        )
+      end
+    end
+
+    context "with voice call button" do
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "en_US",
+          buttons: [
+            {
+              type: "button",
+              sub_type: "voice_call",
+              index: "0"
+            }
+          ]
+        )
+      end
+
+      it do
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "en_US" },
+              components: [
+                {
+                  type: "button",
+                  sub_type: "voice_call",
+                  index: "0"
+                }
+              ]
+            }
+          }
+        )
+      end
+    end
+
+    context "with multiple buttons" do
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "en_US",
+          buttons: [
+            {
+              type: "button",
+              sub_type: "quick_reply",
+              index: "0"
+            },
+            {
+              type: "button",
+              sub_type: "url",
+              index: "1",
+              parameters: [
+                {
+                  type: "text",
+                  text: "url_suffix"
+                }
+              ]
+            },
+            {
+              type: "button",
+              sub_type: "copy_code",
+              index: "2",
+              parameters: [
+                {
+                  type: "coupon_code",
+                  coupon_code: "SAVE20"
+                }
+              ]
+            }
+          ]
+        )
+      end
+
+      it do
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "en_US" },
+              components: [
+                {
+                  type: "button",
+                  sub_type: "quick_reply",
+                  index: "0"
+                },
+                {
+                  type: "button",
+                  sub_type: "url",
+                  index: "1",
+                  parameters: [
+                    {
+                      type: "text",
+                      text: "url_suffix"
+                    }
+                  ]
+                },
+                {
+                  type: "button",
+                  sub_type: "copy_code",
+                  index: "2",
+                  parameters: [
+                    {
+                      type: "coupon_code",
+                      coupon_code: "SAVE20"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        )
+      end
+    end
+
+    context "with header, body parameters and buttons" do
+      let(:image) { Warb::Resources::Image.new(media_id: "media_id") }
+
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: "en_US",
+          header: image,
+          resources: [
+            Warb::Resources::Text.new(content: "First Param")
+          ],
+          buttons: [
+            {
+              type: "button",
+              sub_type: "quick_reply",
+              index: "0"
+            }
+          ]
+        )
+      end
+
+      it do
+        expect(image).to receive(:build_header).and_call_original
+
+        expect(subject.build_payload).to eq(
+          {
+            type: "template",
+            template: {
+              name: "template_name",
+              language: { code: "en_US" },
+              components: [
+                {
+                  type: "header",
+                  parameters: [
+                    {
+                      type: "image",
+                      image: {
+                        id: "media_id",
+                        link: nil
+                      }
+                    }
+                  ]
+                },
+                {
+                  type: "body",
+                  parameters: [
+                    {
+                      type: "text",
+                      text: "First Param"
+                    }
+                  ]
+                },
+                {
+                  type: "button",
+                  sub_type: "quick_reply",
+                  index: "0"
+                }
+              ]
+            }
+          }
+        )
       end
     end
   end
