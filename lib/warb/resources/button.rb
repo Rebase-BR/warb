@@ -9,8 +9,7 @@ module Warb
         {
           type: "button",
           sub_type: sub_type || @params[:sub_type],
-          index: index || @params[:index],
-          parameters: []
+          index: index || @params[:index]
         }
       end
     end

@@ -9,7 +9,7 @@ module Warb
         button_payload = super
 
         if text || @params[:text]
-          button_payload[:parameters].push({
+          button_payload[:parameters] = Array.new(1, {
             type: "text",
             text: text || @params[:text]
           })

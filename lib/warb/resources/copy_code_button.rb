@@ -8,10 +8,12 @@ module Warb
       def build_payload
         button_payload = super
 
-        button_payload[:parameters].push({
-          type: "coupon_code",
-          coupon_code: coupon_code || @params[:coupon_code]
-        })
+        if coupon_code || @params[:coupon_code]
+          button_payload[:parameters] = Array.new(1, {
+            type: "coupon_code",
+            coupon_code: coupon_code || @params[:coupon_code]
+          })
+        end
 
         button_payload
       end
