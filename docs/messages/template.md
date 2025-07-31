@@ -259,3 +259,42 @@ end
 ```
 
 When the template instance's `build_payload` method is called (which happens when the message is about to be dispatched), the header param will be created using the `header`'s `build_header` method.
+
+#### Adding Buttons
+
+If your template supports buttons, you can add them using the following methods:
+
+| Button Type        | Template Instance Method      | Params                                    |
+|--------------------|-------------------------------|-------------------------------------------|
+| `quick_reply`      | `set_quick_reply_button`      | `index`                                   |
+| `url`              | `set_dynamic_url_button`      | `index`, `text`                           |
+| `copy_code`        | `set_copy_code_button`        | `index`, `coupon_code`                    |
+| `voice_call`       | `set_voice_call_button`       | `index`                                   |
+
+You can either use the keyword parameters or set the attributes using a block:
+
+```ruby
+Warb.template.dispatch(recipient_number) do |template|
+  template.name = "order_confirmation"
+  template.language = Warb::Language::ENGLISH_US
+
+  # Add a quick reply button
+  template.set_quick_reply_button(index:0)
+
+  # Add a dynamic URL button
+  template.set_dynamic_url_button do |button|
+    button.index = 1
+    button.text = "dynamic-url-suffix"
+  end
+
+  # Add a copy code button
+  template.set_copy_code_button(index: 2) do |button|
+    button.coupon_code = "SAVE20"
+  end
+
+  # Add a voice call button
+  template.set_voice_call_button(index: 3)
+end
+```
+
+**Note**: The `index` parameter determines the order of the buttons in the template. Make sure the indices match the button positions defined in your template.
