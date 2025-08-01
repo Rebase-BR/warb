@@ -3,6 +3,8 @@
 module Warb
   module Components
     class UrlButton < Button
+      BUTTON_TYPE = "url"
+
       attr_accessor :text
 
       def to_h
@@ -17,6 +19,12 @@ module Warb
 
         button_payload
       end
+
+      private
+
+      def button_type
+        BUTTON_TYPE
+      end
     end
   end
-end 
+end

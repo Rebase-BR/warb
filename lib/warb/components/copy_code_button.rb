@@ -3,6 +3,8 @@
 module Warb
   module Components
     class CopyCodeButton < Button
+      BUTTON_TYPE = "copy_code"
+
       attr_accessor :coupon_code
 
       def to_h
@@ -17,6 +19,12 @@ module Warb
 
         button_payload
       end
+
+      private
+
+      def button_type
+        BUTTON_TYPE
+      end
     end
   end
-end 
+end

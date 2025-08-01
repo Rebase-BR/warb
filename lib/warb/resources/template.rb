@@ -64,21 +64,21 @@ module Warb
       end
 
       def add_quick_reply_button(index: position, &block)
-        add_button(Warb::Components::Button.new(index:, sub_type: "quick_reply"), &block)
+        add_button(Warb::Components::QuickReplyButton.new(index:), &block)
       end
 
       def add_dynamic_url_button(index: position, text: nil, &block)
-        add_button(Warb::Components::UrlButton.new(index:, sub_type: "url", text:), &block)
+        add_button(Warb::Components::UrlButton.new(index:, text:), &block)
       end
 
       alias_method :add_auth_code_button, :add_dynamic_url_button
 
       def add_copy_code_button(index: position, coupon_code: nil, &block)
-        add_button(Warb::Components::CopyCodeButton.new(index:, sub_type: "copy_code", coupon_code:), &block)
+        add_button(Warb::Components::CopyCodeButton.new(index:, coupon_code:), &block)
       end
 
       def add_voice_call_button(index: position, &block)
-        add_button(Warb::Components::Button.new(index:, sub_type: "voice_call"), &block)
+        add_button(Warb::Components::VoiceCallButton.new(index:), &block)
       end
 
       private
