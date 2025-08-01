@@ -184,102 +184,278 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe "#set_quick_reply_button" do
+  describe "#add_quick_reply_button" do
     context "with block" do
-      it do
-        subject.set_quick_reply_button { |button| button.index = "0" }
+      it "sets custom index when provided" do
+        subject.add_quick_reply_button { |button| button.index = 1 }
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "quick_reply" })
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "quick_reply" })
+      end
+
+      it "uses default position when index not provided" do
+        subject.add_quick_reply_button { |button| }
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "quick_reply" })
       end
     end
 
     context "without using block" do
-      it do
-        subject.set_quick_reply_button(index: "0")
+      it "sets custom index when provided" do
+        subject.add_quick_reply_button(index: 1)
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "quick_reply" })
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "quick_reply" })
+      end
+
+      it "uses default position when index not provided" do
+        subject.add_quick_reply_button
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "quick_reply" })
+      end
+
+      it "increments position for multiple buttons" do
+        subject.add_quick_reply_button
+        subject.add_quick_reply_button
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 2
+        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "quick_reply" })
+        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "quick_reply" })
       end
     end
   end
 
-  describe "#set_dynamic_url_button" do
+  describe "#add_dynamic_url_button" do
     context "with block" do
-      it do
-        subject.set_dynamic_url_button do |button|
-          button.index = "0"
+      it "sets custom index when provided" do
+        subject.add_dynamic_url_button do |button|
+          button.index = 1
           button.text = "url_suffix"
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "url",
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "url",
+                                        parameters: [{ type: "text", text: "url_suffix" }] })
+      end
+
+      it "uses default position when index not provided" do
+        subject.add_dynamic_url_button do |button|
+          button.text = "url_suffix"
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "url",
                                         parameters: [{ type: "text", text: "url_suffix" }] })
       end
     end
 
     context "without using block" do
-      it do
-        subject.set_dynamic_url_button(index: "0", text: "url_suffix")
+      it "sets custom index when provided" do
+        subject.add_dynamic_url_button(index: 1, text: "url_suffix")
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "url",
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "url",
                                         parameters: [{ type: "text", text: "url_suffix" }] })
+      end
+
+      it "uses default position when index not provided" do
+        subject.add_dynamic_url_button(text: "url_suffix")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "url",
+                                        parameters: [{ type: "text", text: "url_suffix" }] })
+      end
+
+      it "increments position for multiple buttons" do
+        subject.add_dynamic_url_button(text: "url1")
+        subject.add_dynamic_url_button(text: "url2")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 2
+        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "url",
+                                      parameters: [{ type: "text", text: "url1" }] })
+        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "url",
+                                      parameters: [{ type: "text", text: "url2" }] })
       end
     end
   end
 
-  describe "#set_copy_code_button" do
+  describe "#add_copy_code_button" do
     context "with block" do
-      it do
-        subject.set_copy_code_button do |button|
-          button.index = "0"
+      it "sets custom index when provided" do
+        subject.add_copy_code_button do |button|
+          button.index = 1
           button.coupon_code = "SAVE20"
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "copy_code",
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "copy_code",
                                         parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
       end
-    end
 
-    context "without using block" do
-      it do
-        subject.set_copy_code_button(index: "0", coupon_code: "SAVE20")
-
-        buttons = subject.buttons
-        expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "copy_code",
-                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
-      end
-    end
-  end
-
-  describe "#set_voice_call_button" do
-    context "with block" do
-      it do
-        subject.set_voice_call_button do |button|
-          button.index = "0"
+      it "uses default position when index not provided" do
+        subject.add_copy_code_button do |button|
+          button.coupon_code = "SAVE20"
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "voice_call" })
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "copy_code",
+                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
       end
     end
 
     context "without using block" do
-      it do
-        subject.set_voice_call_button(index: "0")
+      it "sets custom index when provided" do
+        subject.add_copy_code_button(index: 1, coupon_code: "SAVE20")
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: "0", sub_type: "voice_call" })
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "copy_code",
+                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
+      end
+
+      it "uses default position when index not provided" do
+        subject.add_copy_code_button(coupon_code: "SAVE20")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "copy_code",
+                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
+      end
+
+      it "increments position for multiple buttons" do
+        subject.add_copy_code_button(coupon_code: "SAVE20")
+        subject.add_copy_code_button(coupon_code: "SAVE30")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 2
+        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "copy_code",
+                                      parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
+        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "copy_code",
+                                      parameters: [{ type: "coupon_code", coupon_code: "SAVE30" }] })
+      end
+    end
+  end
+
+  describe "#add_auth_code_button" do
+    context "with block" do
+      it "sets custom index when provided" do
+        subject.add_auth_code_button do |button|
+          button.index = 1
+          button.text = "auth_url"
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "url",
+                                        parameters: [{ type: "text", text: "auth_url" }] })
+      end
+
+      it "uses default position when index not provided" do
+        subject.add_auth_code_button do |button|
+          button.text = "auth_url"
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "url",
+                                        parameters: [{ type: "text", text: "auth_url" }] })
+      end
+    end
+
+    context "without using block" do
+      it "sets custom index when provided" do
+        subject.add_auth_code_button(index: 1, text: "auth_url")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "url",
+                                        parameters: [{ type: "text", text: "auth_url" }] })
+      end
+
+      it "uses default position when index not provided" do
+        subject.add_auth_code_button(text: "auth_url")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "url",
+                                        parameters: [{ type: "text", text: "auth_url" }] })
+      end
+
+      it "increments position for multiple buttons" do
+        subject.add_auth_code_button(text: "auth1")
+        subject.add_auth_code_button(text: "auth2")
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 2
+        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "url",
+                                      parameters: [{ type: "text", text: "auth1" }] })
+        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "url",
+                                      parameters: [{ type: "text", text: "auth2" }] })
+      end
+    end
+  end
+
+  describe "#add_voice_call_button" do
+    context "with block" do
+      it "sets custom index when provided" do
+        subject.add_voice_call_button do |button|
+          button.index = 1
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "voice_call" })
+      end
+
+      it "uses default position when index not provided" do
+        subject.add_voice_call_button do |button|
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "voice_call" })
+      end
+    end
+
+    context "without using block" do
+      it "sets custom index when provided" do
+        subject.add_voice_call_button(index: 1)
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "voice_call" })
+      end
+
+      it "uses default position when index not provided" do
+        subject.add_voice_call_button
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "voice_call" })
+      end
+
+      it "increments position for multiple buttons" do
+        subject.add_voice_call_button
+        subject.add_voice_call_button
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 2
+        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "voice_call" })
+        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "voice_call" })
       end
     end
   end

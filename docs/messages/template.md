@@ -266,10 +266,11 @@ If your template supports buttons, you can add them using the following methods:
 
 | Button Type        | Template Instance Method      | Params                                    |
 |--------------------|-------------------------------|-------------------------------------------|
-| `quick_reply`      | `set_quick_reply_button`      | `index`                                   |
-| `url`              | `set_dynamic_url_button`      | `index`, `text`                           |
-| `copy_code`        | `set_copy_code_button`        | `index`, `coupon_code`                    |
-| `voice_call`       | `set_voice_call_button`       | `index`                                   |
+| `quick_reply`      | `add_quick_reply_button`      | `index`                                   |
+| `url`              | `add_dynamic_url_button`      | `index`, `text`                           |
+| `url`              | `add_auth_code_button`        | `index`, `text`                           |
+| `copy_code`        | `add_copy_code_button`        | `index`, `coupon_code`                    |
+| `voice_call`       | `add_voice_call_button`       | `index`                                   |
 
 You can either use the keyword parameters or set the attributes using a block:
 
@@ -279,22 +280,30 @@ Warb.template.dispatch(recipient_number) do |template|
   template.language = Warb::Language::ENGLISH_US
 
   # Add a quick reply button
-  template.set_quick_reply_button(index:0)
+  template.add_quick_reply_button
 
   # Add a dynamic URL button
-  template.set_dynamic_url_button do |button|
-    button.index = 1
+  template.add_dynamic_url_button do |button|
     button.text = "dynamic-url-suffix"
   end
 
+  # Add a copy auth code button
+  template.add_auth_code_button do |button|
+    button.text = "4UTHC0D3"
+  end
+
   # Add a copy code button
-  template.set_copy_code_button(index: 2) do |button|
+  template.add_copy_code_button(index: 2) do |button|
     button.coupon_code = "SAVE20"
   end
 
   # Add a voice call button
-  template.set_voice_call_button(index: 3)
+  template.add_voice_call_button
 end
 ```
 
-**Note**: The `index` parameter determines the order of the buttons in the template. Make sure the indices match the button positions defined in your template.
+**Note**: The `index` parameter determines the order of the buttons in the template. Make sure the
+indices match the button positions defined in your template. The `index` is automaticaly set if you
+don't do it manually, but it is done based on the number of buttons added with the methods above,
+so if your template has a button that doesn't need configuration like the static url button you'll
+have provide the position of the other buttons.

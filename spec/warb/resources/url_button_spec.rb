@@ -2,7 +2,7 @@
 
 RSpec.describe Warb::Resources::UrlButton do
   let(:url_button_resource) do
-    build :url_button, index: 0, text: "https://example.com"
+    build :url_button, index: 0, text: "/example"
   end
 
   describe "#build_payload" do
@@ -15,7 +15,7 @@ RSpec.describe Warb::Resources::UrlButton do
           parameters: [
             {
               type: "text",
-              text: "https://example.com"
+              text: "/example"
             }
           ]
         }
