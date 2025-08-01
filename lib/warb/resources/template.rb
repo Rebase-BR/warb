@@ -3,7 +3,7 @@
 module Warb
   module Resources
     class Template < Resource
-      attr_accessor :name, :language, :resources, :header
+      attr_accessor :name, :language, :resources, :header, :buttons
 
       def initialize(**params)
         super(**params)
@@ -11,6 +11,7 @@ module Warb
         @name = params[:name]
         @language = params[:language]
         @resources = params[:resources]
+        @buttons = []
       end
 
       def build_payload
@@ -23,7 +24,8 @@ module Warb
             },
             components: [
               component_header,
-              component_body
+              component_body,
+              *buttons
             ].compact
           }
         }
@@ -61,12 +63,36 @@ module Warb
         set_header(Location.new(latitude:, longitude:, address:, name:), &block)
       end
 
+      def add_quick_reply_button(index: position, &block)
+        add_button(Warb::Components::QuickReplyButton.new(index:), &block)
+      end
+
+      def add_dynamic_url_button(index: position, text: nil, &block)
+        add_button(Warb::Components::UrlButton.new(index:, text:), &block)
+      end
+
+      alias_method :add_auth_code_button, :add_dynamic_url_button
+
+      def add_copy_code_button(index: position, coupon_code: nil, &block)
+        add_button(Warb::Components::CopyCodeButton.new(index:, coupon_code:), &block)
+      end
+
+      def add_voice_call_button(index: position, &block)
+        add_button(Warb::Components::VoiceCallButton.new(index:), &block)
+      end
+
       private
 
       def set_header(instance, &block)
         @header = instance
 
         block_given? ? @header.tap(&block) : @header
+      end
+
+      def add_button(instance, &block)
+        return @buttons << instance.to_h unless block_given?
+
+        @buttons << instance.tap(&block).to_h
       end
 
       def component_header
@@ -129,6 +155,10 @@ module Warb
           @resources = {}
           @resources[parameter_name] = instance
         end
+      end
+
+      def position
+        buttons.count
       end
     end
   end

@@ -30,6 +30,12 @@ require_relative "warb/media_dispatcher"
 require_relative "warb/template_dispatcher"
 require_relative "warb/indicator_dispatcher"
 require_relative "warb/utils"
+require_relative "warb/components/component"
+require_relative "warb/components/button"
+require_relative "warb/components/quick_reply_button"
+require_relative "warb/components/url_button"
+require_relative "warb/components/copy_code_button"
+require_relative "warb/components/voice_call_button"
 require_relative "warb/components/action"
 
 module Warb
