@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module Warb
-  module Resources
+  module Components
     class UrlButton < Button
       attr_accessor :text
 
-      def build_payload
+      def to_h
         button_payload = super
 
         if text || @params[:text]
@@ -19,4 +19,4 @@ module Warb
       end
     end
   end
-end
+end 

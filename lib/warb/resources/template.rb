@@ -64,21 +64,21 @@ module Warb
       end
 
       def add_quick_reply_button(index: position, &block)
-        add_button(Button.new(index:, sub_type: "quick_reply"), &block)
+        add_button(Warb::Components::Button.new(index:, sub_type: "quick_reply"), &block)
       end
 
       def add_dynamic_url_button(index: position, text: nil, &block)
-        add_button(UrlButton.new(index:, sub_type: "url", text:), &block)
+        add_button(Warb::Components::UrlButton.new(index:, sub_type: "url", text:), &block)
       end
 
       alias_method :add_auth_code_button, :add_dynamic_url_button
 
       def add_copy_code_button(index: position, coupon_code: nil, &block)
-        add_button(CopyCodeButton.new(index:, sub_type: "copy_code", coupon_code:), &block)
+        add_button(Warb::Components::CopyCodeButton.new(index:, sub_type: "copy_code", coupon_code:), &block)
       end
 
       def add_voice_call_button(index: position, &block)
-        add_button(Button.new(index:, sub_type: "voice_call"), &block)
+        add_button(Warb::Components::Button.new(index:, sub_type: "voice_call"), &block)
       end
 
       private
@@ -90,9 +90,9 @@ module Warb
       end
 
       def add_button(instance, &block)
-        return @buttons << instance.build_payload unless block_given?
+        return @buttons << instance.to_h unless block_given?
 
-        @buttons << instance.tap(&block).build_payload
+        @buttons << instance.tap(&block).to_h
       end
 
       def component_header

@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :button, class: Warb::Resources::Button do
+  factory :url_button, class: Warb::Components::UrlButton do
     index { rand(0..3) }
-    sub_type { %w[quick_reply url copy_code voice_call].sample }
+    sub_type { "url" }
+    text { Faker::Internet.slug }
 
     initialize_with { new(**attributes) }
   end

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module Warb
-  module Resources
-    class Button < Resource
+  module Components
+    class Button < Component
       attr_accessor :index, :sub_type
 
-      def build_payload
+      def to_h
         {
           type: "button",
           sub_type: sub_type || @params[:sub_type],
@@ -14,4 +14,4 @@ module Warb
       end
     end
   end
-end
+end 

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module Warb
-  module Resources
+  module Components
     class CopyCodeButton < Button
       attr_accessor :coupon_code
 
-      def build_payload
+      def to_h
         button_payload = super
 
         if coupon_code || @params[:coupon_code]
@@ -19,4 +19,4 @@ module Warb
       end
     end
   end
-end
+end 
