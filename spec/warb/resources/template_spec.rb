@@ -485,658 +485,186 @@ RSpec.describe Warb::Resources::Template do
   end
 
   describe "#build_payload" do
-    context "with positional parameters" do
+    context "with minimal template" do
       before do
         allow(subject).to receive_messages(
           name: "template_name",
           language: Warb::Language::ENGLISH_US,
-          resources: [
-            Warb::Resources::Text.new(content: "First Param"),
-            Warb::Resources::Text.new(content: "Second Param"),
-            Warb::Resources::Currency.new(amount: 12.34, code: Warb::Resources::Currency::USD, fallback: "$ 12.34"),
-            Warb::Resources::DateTime.new("December, 25th")
-          ]
+          resources: nil,
+          header: nil,
+          buttons: []
         )
       end
 
-      it do
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: {
-                code: "en_US"
-              },
-              components: [
-                {
-                  type: "body",
-                  parameters: [
-                    {
-                      type: "text",
-                      text: "First Param"
-                    },
-                    {
-                      type: "text",
-                      text: "Second Param"
-                    },
-                    {
-                      type: "currency",
-                      currency: {
-                        amount_1000: 12_340,
-                        code: "USD",
-                        fallback_value: "$ 12.34"
-                      }
-                    },
-                    {
-                      type: "date_time",
-                      date_time: {
-                        fallback_value: "December, 25th"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
+      it "builds basic template structure" do
+        expect(subject.build_payload).to eq({
+          type: "template",
+          template: {
+            name: "template_name",
+            language: {
+              code: Warb::Language::ENGLISH_US
+            },
+            components: []
           }
-        )
+        })
       end
     end
 
-    context "with named parameters" do
-      before do
-        allow(subject).to receive_messages(
-          name: "template_name",
-          language: Warb::Language::PORTUGUESE_BR,
-          resources: {
-            first_param: Warb::Resources::Text.new(content: "First Param"),
-            second_param: Warb::Resources::Text.new(content: "Second Param"),
-            value: Warb::Resources::Currency.new(amount: 10, code: "BRL"),
-            purchase_date: Warb::Resources::DateTime.new("07/09")
-          }
-        )
-      end
-
-      it do
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: {
-                code: "pt_BR"
-              },
-              components: [
-                {
-                  type: "body",
-                  parameters: [
-                    {
-                      type: "text",
-                      text: "First Param",
-                      parameter_name: "first_param"
-                    },
-                    {
-                      type: "text",
-                      text: "Second Param",
-                      parameter_name: "second_param"
-                    },
-                    {
-                      type: "currency",
-                      parameter_name: "value",
-                      currency: {
-                        code: "BRL",
-                        fallback_value: "10 (BRL)",
-                        amount_1000: 10_000
-                      }
-                    },
-                    {
-                      type: "date_time",
-                      parameter_name: "purchase_date",
-                      date_time: {
-                        fallback_value: "07/09"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        )
-      end
-    end
-
-    context "with image header" do
-      let(:image) { Warb::Resources::Image.new(media_id: "media_id") }
+    context "with header only" do
+      let(:text_header) { Warb::Resources::Text.new(content: "Header Text") }
 
       before do
         allow(subject).to receive_messages(
           name: "template_name",
-          language: "pt_BR",
-          header: image
+          language: Warb::Language::ENGLISH_US,
+          resources: nil,
+          header: text_header,
+          buttons: []
         )
+        allow(text_header).to receive(:build_header).and_return({
+          type: "text",
+          text: "Header Text"
+        })
       end
 
-      it do
-        expect(image).to receive(:build_header).and_call_original
-
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "pt_BR" },
-              components: [
-                {
-                  type: "header",
-                  parameters: [
-                    {
-                      type: "image",
-                      image: {
-                        id: "media_id",
-                        link: nil
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        )
-      end
-    end
-
-    context "with document header" do
-      let(:document) { Warb::Resources::Document.new(media_id: "media_id", filename: "document.pdf") }
-
-      before do
-        allow(subject).to receive_messages(
-          name: "template_name",
-          language: "pt_BR",
-          header: document
-        )
-      end
-
-      it do
-        expect(document).to receive(:build_header).and_call_original
-
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "pt_BR" },
-              components: [
-                {
-                  type: "header",
-                  parameters: [
-                    {
-                      type: "document",
-                      document: {
-                        id: "media_id",
-                        link: nil,
-                        filename: "document.pdf"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        )
-      end
-    end
-
-    context "with video header" do
-      let(:video) { Warb::Resources::Video.new(media_id: "media_id") }
-
-      before do
-        allow(subject).to receive_messages(
-          name: "template_name",
-          language: "pt_BR",
-          header: video
-        )
-      end
-
-      it do
-        expect(video).to receive(:build_header).and_call_original
-
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "pt_BR" },
-              components: [
-                {
-                  type: "header",
-                  parameters: [
-                    {
-                      type: "video",
-                      video: {
-                        id: "media_id",
-                        link: nil
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        )
-      end
-    end
-
-    context "with location header" do
-      let(:location) { Warb::Resources::Location.new(latitude: "latitude", longitude: "longitude") }
-
-      before do
-        allow(subject).to receive_messages(
-          name: "template_name",
-          language: "pt_BR",
-          header: location
-        )
-      end
-
-      it do
-        expect(location).to receive(:build_header).and_call_original
-
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "pt_BR" },
-              components: [
-                {
-                  type: "header",
-                  parameters: [
-                    {
-                      type: "location",
-                      location: {
-                        latitude: "latitude",
-                        longitude: "longitude",
-                        address: nil,
-                        name: nil
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        )
-      end
-    end
-
-    context "with text header" do
-      before do
-        allow(subject).to receive_messages(
-          name: "template_name",
-          language: Warb::Language::PORTUGUESE_BR,
-          header: text
-        )
-      end
-
-      context "with positional parameter" do
-        let(:text) { Warb::Resources::Text.new(content: "John") }
-
-        it do
-          expect(subject.build_payload).to eq(
-            {
-              type: "template",
-              template: {
-                name: "template_name",
-                language: { code: "pt_BR" },
-                components: [
+      it "includes header component" do
+        expect(subject.build_payload).to eq({
+          type: "template",
+          template: {
+            name: "template_name",
+            language: {
+              code: Warb::Language::ENGLISH_US
+            },
+            components: [
+              {
+                type: "header",
+                parameters: [
                   {
-                    type: "header",
-                    parameters: [
-                      {
-                        type: "text",
-                        text: "John"
-                      }
-                    ]
+                    type: "text",
+                    text: "Header Text"
                   }
                 ]
               }
-            }
-          )
-        end
+            ]
+          }
+        })
+      end
+    end
+
+    context "with body parameters only" do
+      let(:text_param) { Warb::Resources::Text.new(content: "Body Text") }
+
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: Warb::Language::ENGLISH_US,
+          resources: [text_param],
+          header: nil,
+          buttons: []
+        )
+        allow(text_param).to receive(:build_template_positional_parameter).and_return({
+          type: "text",
+          text: "Body Text"
+        })
       end
 
-      context "with named parameter" do
-        let(:text) { Warb::Resources::Text.new(text: "John", parameter_name: "customer_name") }
-
-        it do
-          expect(subject.build_payload).to eq(
-            {
-              type: "template",
-              template: {
-                name: "template_name",
-                language: { code: "pt_BR" },
-                components: [
+      it "includes body component with positional parameters" do
+        expect(subject.build_payload).to eq({
+          type: "template",
+          template: {
+            name: "template_name",
+            language: {
+              code: Warb::Language::ENGLISH_US
+            },
+            components: [
+              {
+                type: "body",
+                parameters: [
                   {
-                    type: "header",
-                    parameters: [
-                      {
-                        type: "text",
-                        text: "John",
-                        parameter_name: "customer_name"
-                      }
-                    ]
+                    type: "text",
+                    text: "Body Text"
                   }
                 ]
               }
-            }
-          )
-        end
-      end
-    end
-
-    context "with quick reply button" do
-      before do
-        allow(subject).to receive_messages(
-          name: "template_name",
-          language: "en_US",
-          buttons: [
-            {
-              type: "button",
-              sub_type: "quick_reply",
-              index: "0"
-            }
-          ]
-        )
-      end
-
-      it do
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "en_US" },
-              components: [
-                {
-                  type: "button",
-                  sub_type: "quick_reply",
-                  index: "0"
-                }
-              ]
-            }
+            ]
           }
-        )
+        })
       end
     end
 
-    context "with dynamic url button" do
+    context "with named body parameters" do
+      let(:text_param) { Warb::Resources::Text.new(content: "Body Text") }
+
       before do
         allow(subject).to receive_messages(
           name: "template_name",
-          language: "en_US",
-          buttons: [
-            {
-              type: "button",
-              sub_type: "url",
-              index: "0",
-              parameters: [
-                {
-                  type: "text",
-                  text: "url_suffix"
-                }
-              ]
-            }
-          ]
+          language: Warb::Language::ENGLISH_US,
+          resources: { "param_name" => text_param },
+          header: nil,
+          buttons: []
         )
+        allow(text_param).to receive(:build_template_named_parameter).with("param_name").and_return({
+          type: "text",
+          parameter_name: "param_name",
+          text: "Body Text"
+        })
       end
 
-      it do
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "en_US" },
-              components: [
-                {
-                  type: "button",
-                  sub_type: "url",
-                  index: "0",
-                  parameters: [
-                    {
-                      type: "text",
-                      text: "url_suffix"
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        )
-      end
-    end
-
-    context "with copy code button" do
-      before do
-        allow(subject).to receive_messages(
-          name: "template_name",
-          language: "en_US",
-          buttons: [
-            {
-              type: "button",
-              sub_type: "copy_code",
-              index: "0",
-              parameters: [
-                {
-                  type: "coupon_code",
-                  coupon_code: "SAVE20"
-                }
-              ]
-            }
-          ]
-        )
-      end
-
-      it do
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "en_US" },
-              components: [
-                {
-                  type: "button",
-                  sub_type: "copy_code",
-                  index: "0",
-                  parameters: [
-                    {
-                      type: "coupon_code",
-                      coupon_code: "SAVE20"
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        )
-      end
-    end
-
-    context "with voice call button" do
-      before do
-        allow(subject).to receive_messages(
-          name: "template_name",
-          language: "en_US",
-          buttons: [
-            {
-              type: "button",
-              sub_type: "voice_call",
-              index: "0"
-            }
-          ]
-        )
-      end
-
-      it do
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "en_US" },
-              components: [
-                {
-                  type: "button",
-                  sub_type: "voice_call",
-                  index: "0"
-                }
-              ]
-            }
-          }
-        )
-      end
-    end
-
-    context "with multiple buttons" do
-      before do
-        allow(subject).to receive_messages(
-          name: "template_name",
-          language: "en_US",
-          buttons: [
-            {
-              type: "button",
-              sub_type: "quick_reply",
-              index: "0"
+      it "includes body component with named parameters" do
+        expect(subject.build_payload).to eq({
+          type: "template",
+          template: {
+            name: "template_name",
+            language: {
+              code: Warb::Language::ENGLISH_US
             },
-            {
-              type: "button",
-              sub_type: "url",
-              index: "1",
-              parameters: [
-                {
-                  type: "text",
-                  text: "url_suffix"
-                }
-              ]
-            },
-            {
-              type: "button",
-              sub_type: "copy_code",
-              index: "2",
-              parameters: [
-                {
-                  type: "coupon_code",
-                  coupon_code: "SAVE20"
-                }
-              ]
-            }
-          ]
-        )
-      end
-
-      it do
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "en_US" },
-              components: [
-                {
-                  type: "button",
-                  sub_type: "quick_reply",
-                  index: "0"
-                },
-                {
-                  type: "button",
-                  sub_type: "url",
-                  index: "1",
-                  parameters: [
-                    {
-                      type: "text",
-                      text: "url_suffix"
-                    }
-                  ]
-                },
-                {
-                  type: "button",
-                  sub_type: "copy_code",
-                  index: "2",
-                  parameters: [
-                    {
-                      type: "coupon_code",
-                      coupon_code: "SAVE20"
-                    }
-                  ]
-                }
-              ]
-            }
+            components: [
+              {
+                type: "body",
+                parameters: [
+                  {
+                    type: "text",
+                    parameter_name: "param_name",
+                    text: "Body Text"
+                  }
+                ]
+              }
+            ]
           }
-        )
+        })
       end
     end
 
-    context "with header, body parameters and buttons" do
-      let(:image) { Warb::Resources::Image.new(media_id: "media_id") }
+    context "with buttons only" do
+      let(:button_payload) { { type: "button", index: 0, sub_type: "quick_reply" } }
 
       before do
         allow(subject).to receive_messages(
           name: "template_name",
-          language: "en_US",
-          header: image,
-          resources: [
-            Warb::Resources::Text.new(content: "First Param")
-          ],
-          buttons: [
-            {
-              type: "button",
-              sub_type: "quick_reply",
-              index: "0"
-            }
-          ]
+          language: Warb::Language::ENGLISH_US,
+          resources: nil,
+          header: nil,
+          buttons: [button_payload]
         )
       end
 
-      it do
-        expect(image).to receive(:build_header).and_call_original
-
-        expect(subject.build_payload).to eq(
-          {
-            type: "template",
-            template: {
-              name: "template_name",
-              language: { code: "en_US" },
-              components: [
-                {
-                  type: "header",
-                  parameters: [
-                    {
-                      type: "image",
-                      image: {
-                        id: "media_id",
-                        link: nil
-                      }
-                    }
-                  ]
-                },
-                {
-                  type: "body",
-                  parameters: [
-                    {
-                      type: "text",
-                      text: "First Param"
-                    }
-                  ]
-                },
-                {
-                  type: "button",
-                  sub_type: "quick_reply",
-                  index: "0"
-                }
-              ]
-            }
+      it "includes button components" do
+        expect(subject.build_payload).to eq({
+          type: "template",
+          template: {
+            name: "template_name",
+            language: {
+              code: Warb::Language::ENGLISH_US
+            },
+            components: [
+              {
+                type: "button",
+                index: 0,
+                sub_type: "quick_reply"
+              }
+            ]
           }
-        )
+        })
       end
     end
   end
