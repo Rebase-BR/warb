@@ -81,6 +81,12 @@ module Warb
         add_button(Warb::Components::VoiceCallButton.new(index:), &block)
       end
 
+      def add_button(instance, &block)
+        return @buttons << instance.to_h unless block_given?
+
+        @buttons << instance.tap(&block).to_h
+      end
+
       private
 
       def set_header(instance, &block)
@@ -89,11 +95,6 @@ module Warb
         block_given? ? @header.tap(&block) : @header
       end
 
-      def add_button(instance, &block)
-        return @buttons << instance.to_h unless block_given?
-
-        @buttons << instance.tap(&block).to_h
-      end
 
       def component_header
         return unless header.is_a? Resource

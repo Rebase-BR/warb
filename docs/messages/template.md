@@ -271,6 +271,7 @@ If your template supports buttons, you can add them using the following methods:
 | `url`              | `add_auth_code_button`        | `index`, `text`                           |
 | `copy_code`        | `add_copy_code_button`        | `index`, `coupon_code`                    |
 | `voice_call`       | `add_voice_call_button`       | `index`                                   |
+| `doesn't apply`    | `add_button`                  | `instance`, `&block`                      |
 
 You can either use the keyword parameters or set the attributes using a block:
 
@@ -299,6 +300,23 @@ Warb.template.dispatch(recipient_number) do |template|
 
   # Add a voice call button
   template.add_voice_call_button
+end
+```
+
+or if you'd rather to, you can add buttons using it's component and the `add_button` method:
+
+```ruby
+quick_reply_btn = Warb::Components::QuickReplyButton.new
+
+Warb.template.dispatch(recipient_number) do |template|
+  template.name = "order_confirmation"
+  template.language = Warb::Language::ENGLISH_US
+
+  # Add a quick reply button
+  template.add_button(quick_reply_btn)
+
+ # Add a quick reply button, passing a block.
+  template.add_button(quick_reply_btn) { |button| button.index = 1 }
 end
 ```
 

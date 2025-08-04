@@ -484,6 +484,28 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
+  describe "#add_button" do
+    context "with block" do
+      it do
+        instance = Warb::Components::QuickReplyButton.new
+        subject.add_button(instance) { |button| button.index = 0 }
+
+        expect(subject.buttons.count).to eq 1
+        expect(subject.buttons.last).to match(instance.to_h)
+      end
+    end
+
+    context "without using block" do
+      it do
+        instance = Warb::Components::QuickReplyButton.new(index: 0)
+        subject.add_button(instance)
+
+        expect(subject.buttons.count).to eq 1
+        expect(subject.buttons.last).to match(instance.to_h)
+      end
+    end
+  end
+
   describe "#build_payload" do
     context "with minimal template" do
       before do
