@@ -19,3 +19,6 @@ Here is a table of available components, and where they can be used:
 | `Warb::Components::Row`               | [Interactive List](../messages/interactive_list.md)                             | [Row](./row.md)                              |
 | `Warb::Components::ListAction`        | [Interactive List](../messages/interactive_list.md)                             | [List Action](./list_action.md)              |
 | `Warb::Components::Section`           | [Interactive List](../messages/interactive_list.md)                             | [Section](./section.md)                      |
+| `Warb::Components::Button`            | [Template](../messages/template.md)                                             | [Button](./button.md)                        |
+| `Warb::Components::UrlButton`         | [Template](../messages/template.md)                                             | [UrlButton](./url_button.md)                 |
+| `Warb::Components::CopyCodeButton`    | [Template](../messages/template.md)                                             | [CopyCodeButton](./copy_code_button.md)      |
