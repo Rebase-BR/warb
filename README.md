@@ -124,6 +124,14 @@ To enable this kind of flow, you’ll need to know **when** a message is receive
 > ⚠️ **Note:** This gem **does not** provide built-in support for webhooks.
 > However, you can look at [`examples/webhook.rb`](examples/webhook.rb) for a starting point on how to implement it. Also, check the [official documentation](https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples) for more details if you get stuck.
 
+## Deploy
+
+```
+git tag v0.0.2
+git push origin main --tags
+```
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
