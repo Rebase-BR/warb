@@ -30,10 +30,11 @@ RSpec.describe Warb::MediaDispatcher do
     let(:response) { instance_double(Net::HTTPOK, body: "file binary data") }
 
     before do
-      allow_any_instance_of(Net::HTTP).to receive(:request).and_return(response)
+      http = instance_double(Net::HTTP, request: response)
+      allow(Net::HTTP).to receive(:start).and_yield(http)
     end
 
-    after { File.unlink("downloaded_file") }
+    after { File.unlink("downloaded_file") if File.exist?("downloaded_file") }
 
     it do
       expect(File).not_to exist("downloaded_file")

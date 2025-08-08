@@ -9,12 +9,13 @@ module Warb
     end
 
     def send_request(http_method:, endpoint:, url: nil, data: {}, headers: {}, multipart: false,
-                     endpoint_prefix: :sender_id)
+                    endpoint_prefix: :sender_id)
       conn = set_connection(url:, multipart:)
       conn.send(http_method, handle_endpoint(endpoint:, endpoint_prefix:), data, headers)
-    rescue StandardError => e
-      @client.logger.error e.inspect
-      e.response
+    rescue Faraday::ClientError => e
+      response = e.response || {}
+      body     = response[:body].is_a?(String) ? JSON.parse(response[:body], symbolize_names: true) : (response[:body] || {})
+      raise RequestError.new(body.dig(:error, :message), status: response[:status], code: body.dig(:error, :code))
     end
 
     private
