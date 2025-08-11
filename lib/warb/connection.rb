@@ -14,11 +14,21 @@ module Warb
       conn.send(http_method, handle_endpoint(endpoint:, endpoint_prefix:), data, headers)
     rescue Faraday::ClientError => e
       response = e.response || {}
-      body     = response[:body].is_a?(String) ? JSON.parse(response[:body], symbolize_names: true) : (response[:body] || {})
-      raise RequestError.new(body.dig(:error, :message), status: response[:status], code: body.dig(:error, :code))
+      body     = response[:body] || {}
+      message = dig_error_field(body, :message)
+      code    = dig_error_field(body, :code)
+
+      raise RequestError.new(message, status: response[:status], code: code), cause: nil
     end
 
     private
+
+    def dig_error_field(body, key)
+      return nil unless body.is_a?(Hash)
+      error = body[:error] || body["error"]
+      return nil unless error.is_a?(Hash)
+      error[key] || error[key.to_s]
+    end
 
     def set_connection(url:, multipart:)
       url ||= "https://graph.facebook.com/v22.0"

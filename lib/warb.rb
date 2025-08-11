@@ -43,9 +43,6 @@ module Warb
   MESSAGING_PRODUCT = "whatsapp"
   RECIPIENT_TYPE = "individual"
 
-  class Error < StandardError; end
-  # Your code goes here...
-
   class << self
     include DispatcherConcern
 

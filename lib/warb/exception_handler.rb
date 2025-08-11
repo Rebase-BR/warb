@@ -21,15 +21,19 @@ module Warb
   class IntegrityError < Forbidden; end
   class InvalidBusinessNumber < BadRequest; end
 
+  HTTP_ERRORS = {
+    "400": BadRequest,
+    "401": Unauthorized,
+    "403": Forbidden,
+    "404": NotFound,
+    "500": InternalServerError,
+    "503": ServiceUnavailable
+  }.freeze
+
   class ErrorHandler
     def build
       {
         "400": bad_request,
-        "401": unauthorized,
-        "403": forbidden,
-        "404": not_found,
-        "500": internal_server_error,
-        "503": service_unavailable
       }
     end
 
@@ -37,21 +41,6 @@ module Warb
 
     def bad_request
       { "33": InvalidBusinessNumber }
-    end
-
-    def unauthorized
-    end
-
-    def forbidden
-    end
-
-    def not_found
-    end
-
-    def internal_server_error
-    end
-
-    def service_unavailable
     end
   end
 end

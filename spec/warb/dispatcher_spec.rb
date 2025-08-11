@@ -128,16 +128,22 @@ RSpec.describe Warb::Dispatcher do
       context "client.post returns nil" do
         let(:client) { double("Client", post: nil) }
 
-        it "does not raise" do
-          expect { subject.dispatch("recipient_number") }.not_to raise_error
+        it "raises RequestError, nil is treated as error" do
+          expect { subject.dispatch("recipient_number") }
+            .to raise_error(Warb::RequestError)
         end
       end
 
       context "status is nil" do
         let(:client) { double("Client", post: { status: nil, body: nil }) }
 
-        it "does not raise" do
-          expect { subject.dispatch("recipient_number") }.not_to raise_error
+        it "raises RequestError when status is missing" do
+          expect { subject.dispatch("recipient_number") }
+            .to raise_error(Warb::RequestError) { |e|
+              expect(e.status).to be_nil
+              expect(e.code).to be_nil
+              expect(e.message).to eq("Warb::RequestError")
+            }
         end
       end
     end

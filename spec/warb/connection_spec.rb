@@ -51,7 +51,7 @@ RSpec.describe Warb::Connection do
 
     context "error path (Faraday::ClientError -> Warb::RequestError)" do
       it "parses JSON string body and raises Warb::RequestError with message/status/code" do
-        error_body = { error: { message: "JSON", code: 123123 } }.to_json
+        error_body = { error: { message: "JSON", code: 123123 } }
         faraday_error = Faraday::ClientError.new("boom", { status: 400, body: error_body })
 
         allow_any_instance_of(Faraday::Connection)
