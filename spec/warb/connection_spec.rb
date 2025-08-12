@@ -18,13 +18,6 @@ RSpec.describe Warb::Connection do
   describe "#send_request" do
     let(:faraday_response) { instance_double("Faraday::Response", status: 200, body: { "ok" => true }, headers: {}) }
 
-    before do
-      allow_any_instance_of(Faraday::Connection).to receive(:post).and_return(faraday_response)
-      allow_any_instance_of(Faraday::Connection).to receive(:get).and_return(faraday_response)
-      allow_any_instance_of(Faraday::Connection).to receive(:put).and_return(faraday_response)
-      allow_any_instance_of(Faraday::Connection).to receive(:delete).and_return(faraday_response)
-    end
-
     context "success path" do
       it "calls Faraday with :sender_id prefix by default and returns the Faraday response" do
         expect_any_instance_of(Faraday::Connection)
