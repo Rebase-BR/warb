@@ -11,24 +11,19 @@ module Warb
     def send_request(http_method:, endpoint:, url: nil, data: {}, headers: {}, multipart: false,
                     endpoint_prefix: :sender_id)
       conn = set_connection(url:, multipart:)
-      conn.send(http_method, handle_endpoint(endpoint:, endpoint_prefix:), data, headers)
-    rescue Faraday::ClientError => e
-      response = e.response || {}
-      body     = response[:body] || {}
-      message = dig_error_field(body, :message)
-      code    = dig_error_field(body, :code)
-
-      raise RequestError.new(message, status: response[:status], code: code), cause: nil
+      response = conn.send(http_method, handle_endpoint(endpoint:, endpoint_prefix:), data, headers)
+      if response.success?
+        Warb::Response.new(response.body)
+      else
+        Warb::ResponseErrorHandler.new(response.body, response.status).handle
+      end
+    rescue Faraday::Error => e
+      body = e.respond_to?(:response) ? e.response&.dig(:body) : nil
+      msg  = body || e.message
+      raise RequestError, msg
     end
 
     private
-
-    def dig_error_field(body, key)
-      return nil unless body.is_a?(Hash)
-      error = body[:error] || body["error"]
-      return nil unless error.is_a?(Hash)
-      error[key] || error[key.to_s]
-    end
 
     def set_connection(url:, multipart:)
       url ||= "https://graph.facebook.com/v22.0"
@@ -40,7 +35,6 @@ module Warb
         conn.response(:json)
         conn.headers["Authorization"] = "Bearer #{@client.access_token}" unless @client.access_token.nil?
         conn.adapter(@client.adapter)
-        conn.response :raise_error
       end
     end
 
