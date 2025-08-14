@@ -94,14 +94,17 @@ RSpec.describe Warb::Client do
 
     before do
       allow(Warb::Connection).to receive(:new).and_call_original
-      allow_any_instance_of(Faraday::Connection).to receive(:send).and_return(nil)
+      ok = instance_double("Faraday::Response",
+                           status: 200, body: {}, headers: {}, success?: true)
+      allow_any_instance_of(Faraday::Connection).to receive(:send).and_return(ok)
     end
 
     describe "#get" do
       context "being the first connection" do
         it do
           expect(Warb::Connection).to receive(:new)
-          expect_any_instance_of(Faraday::Connection).to receive(:send).with("get", "/endpoint", {}, {})
+          expect_any_instance_of(Faraday::Connection)
+            .to receive(:send).with("get", "/endpoint", {}, {})
 
           subject.get("endpoint")
         end
@@ -112,7 +115,8 @@ RSpec.describe Warb::Client do
 
         it do
           expect(Warb::Connection).not_to receive(:new)
-          expect_any_instance_of(Faraday::Connection).to receive(:send).with("get", "/endpoint", { media_id: "id" }, {})
+          expect_any_instance_of(Faraday::Connection)
+            .to receive(:send).with("get", "/endpoint", { media_id: "id" }, {})
 
           subject.get("endpoint", { media_id: "id" })
         end
@@ -123,7 +127,8 @@ RSpec.describe Warb::Client do
       context "being the first connection" do
         it do
           expect(Warb::Connection).to receive(:new)
-          expect_any_instance_of(Faraday::Connection).to receive(:send).with("post", "/endpoint", {}, {})
+          expect_any_instance_of(Faraday::Connection)
+            .to receive(:send).with("post", "/endpoint", {}, {})
 
           subject.post("endpoint")
         end
@@ -134,7 +139,8 @@ RSpec.describe Warb::Client do
 
         it do
           expect(Warb::Connection).not_to receive(:new)
-          expect_any_instance_of(Faraday::Connection).to receive(:send).with("post", "/endpoint", { media_id: "id" }, {})
+          expect_any_instance_of(Faraday::Connection)
+            .to receive(:send).with("post", "/endpoint", { media_id: "id" }, {})
 
           subject.post("endpoint", { media_id: "id" })
         end
@@ -145,7 +151,8 @@ RSpec.describe Warb::Client do
       context "being the first connection" do
         it do
           expect(Warb::Connection).to receive(:new)
-          expect_any_instance_of(Faraday::Connection).to receive(:send).with("put", "/endpoint", {}, {})
+          expect_any_instance_of(Faraday::Connection)
+            .to receive(:send).with("put", "/endpoint", {}, {})
 
           subject.put("endpoint")
         end
@@ -156,7 +163,8 @@ RSpec.describe Warb::Client do
 
         it do
           expect(Warb::Connection).not_to receive(:new)
-          expect_any_instance_of(Faraday::Connection).to receive(:send).with("put", "/endpoint", { media_id: "id" }, {})
+          expect_any_instance_of(Faraday::Connection)
+            .to receive(:send).with("put", "/endpoint", { media_id: "id" }, {})
 
           subject.put("endpoint", { media_id: "id" })
         end
@@ -167,7 +175,8 @@ RSpec.describe Warb::Client do
       context "being the first connection" do
         it do
           expect(Warb::Connection).to receive(:new)
-          expect_any_instance_of(Faraday::Connection).to receive(:send).with("delete", "/endpoint", {}, {})
+          expect_any_instance_of(Faraday::Connection)
+            .to receive(:send).with("delete", "/endpoint", {}, {})
 
           subject.delete("endpoint")
         end
@@ -178,7 +187,8 @@ RSpec.describe Warb::Client do
 
         it do
           expect(Warb::Connection).not_to receive(:new)
-          expect_any_instance_of(Faraday::Connection).to receive(:send).with("delete", "/endpoint", { media_id: "id" }, {})
+          expect_any_instance_of(Faraday::Connection)
+            .to receive(:send).with("delete", "/endpoint", { media_id: "id" }, {})
 
           subject.delete("endpoint", { media_id: "id" })
         end

@@ -9,12 +9,17 @@ module Warb
     end
 
     def send_request(http_method:, endpoint:, url: nil, data: {}, headers: {}, multipart: false,
-                     endpoint_prefix: :sender_id)
+                    endpoint_prefix: :sender_id)
       conn = set_connection(url:, multipart:)
-      conn.send(http_method, handle_endpoint(endpoint:, endpoint_prefix:), data, headers)
-    rescue StandardError => e
-      @client.logger.error e.inspect
-      e.response
+      response = conn.send(http_method, handle_endpoint(endpoint:, endpoint_prefix:), data, headers)
+      if response.success?
+        Warb::Response.new(response.body)
+      else
+        Warb::ResponseErrorHandler.new(response.body, response.status).handle
+      end
+    rescue Faraday::Error => e
+      msg = e.response_body || e.message
+      raise RequestError, msg
     end
 
     private
@@ -29,7 +34,6 @@ module Warb
         conn.response(:json)
         conn.headers["Authorization"] = "Bearer #{@client.access_token}" unless @client.access_token.nil?
         conn.adapter(@client.adapter)
-        conn.response :raise_error
       end
     end
 

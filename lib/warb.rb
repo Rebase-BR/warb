@@ -7,6 +7,9 @@ require_relative "warb/language"
 require_relative "warb/configuration"
 require_relative "warb/dispatcher_concern"
 require_relative "warb/client"
+require_relative "warb/errors"
+require_relative "warb/response_error_handler"
+require_relative "warb/response"
 require_relative "warb/resources/resource"
 require_relative "warb/resources/text"
 require_relative "warb/resources/image"
@@ -41,9 +44,14 @@ require_relative "warb/components/action"
 module Warb
   MESSAGING_PRODUCT = "whatsapp"
   RECIPIENT_TYPE = "individual"
-
-  class Error < StandardError; end
-  # Your code goes here...
+  HTTP_ERRORS = {
+    400 => BadRequest,
+    401 => Unauthorized,
+    403 => Forbidden,
+    404 => NotFound,
+    500 => InternalServerError,
+    503 => ServiceUnavailable
+  }.freeze
 
   class << self
     include DispatcherConcern
