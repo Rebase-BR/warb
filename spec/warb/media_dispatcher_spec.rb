@@ -15,12 +15,19 @@ RSpec.describe Warb::MediaDispatcher do
     let(:file_type) { "text/plain" }
     let(:file) { Faraday::UploadIO.new(file_path, file_type) }
     let(:data) { { file:, messaging_product: "whatsapp" } }
-    let(:response) { instance_double("Net::HTTPOK", body: { id: "media_id" }) }
 
     before { allow(Faraday::UploadIO).to receive(:new).and_return(file) }
 
     it do
-      expect(client).to receive(:post).with("media", data, multipart: true).and_return(response)
+      faraday_ok = instance_double("Faraday::Response",
+                                   status: 200,
+                                   body: { "id" => "media_id" },
+                                   headers: {},
+                                   success?: true)
+
+      expect_any_instance_of(Faraday::Connection)
+        .to receive(:send).with("post", "/media", data, {})
+        .and_return(faraday_ok)
 
       subject.upload(file_path:, file_type:)
     end
@@ -47,28 +54,37 @@ RSpec.describe Warb::MediaDispatcher do
   end
 
   describe "#retrieve" do
-    let(:response) { instance_double("Faraday::Response", body: {}) }
-
     before do
-      allow_any_instance_of(Faraday::Connection).to receive(:get).and_return(response)
+      faraday_ok = instance_double("Faraday::Response",
+                                   status: 200,
+                                   body: {},
+                                   headers: {},
+                                   success?: true)
+
+      expect_any_instance_of(Faraday::Connection)
+        .to receive(:send).with("get", "media_id", {}, {})
+        .and_return(faraday_ok)
     end
 
     it do
       expect(client).to receive(:get).and_call_original
-
       subject.retrieve "media_id"
     end
   end
 
   describe "#delete" do
-    before do
-      allow_any_instance_of(Faraday::Connection).to receive(:delete).and_return(response)
-    end
-
     context "success" do
-      let(:response) { instance_double("Faraday::Response", body: { "success" => true }) }
-
       it do
+        faraday_ok = instance_double("Faraday::Response",
+                                     status: 200,
+                                     body: { "success" => true },
+                                     headers: {},
+                                     success?: true)
+
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).with("delete", "media_id", {}, {})
+          .and_return(faraday_ok)
+
         expect(client).to receive(:delete).and_call_original
 
         expect(subject.delete("media_id")).to eq true
@@ -76,9 +92,17 @@ RSpec.describe Warb::MediaDispatcher do
     end
 
     context "failure" do
-      let(:response) { instance_double("Faraday::Response", body: { "error" => { "message" => "Error message" } }) }
-
       it do
+        faraday_ok_with_error = instance_double("Faraday::Response",
+                                                status: 200,
+                                                body: { "error" => { "message" => "Error message" } },
+                                                headers: {},
+                                                success?: true)
+
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).with("delete", "media_id", {}, {})
+          .and_return(faraday_ok_with_error)
+
         expect(client).to receive(:delete).and_call_original
 
         expect(subject.delete("media_id")).to eq "Error message"

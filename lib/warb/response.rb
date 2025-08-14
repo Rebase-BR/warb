@@ -2,13 +2,13 @@
 
 module Warb
   class Response
-    attr_reader :input, :wa_id, :message_id, :raw
+    attr_reader :input, :wa_id, :message_id, :body
 
     def initialize(body)
-      @raw        = body || {}
-      @input      = @raw["contacts"]&.first&.dig("input")
-      @wa_id      = @raw["contacts"]&.first&.dig("wa_id")
-      @message_id = @raw["messages"]&.first&.dig("message_id")
+      @body        = body || {}
+      @input      = @body["contacts"]&.first&.dig("input")
+      @wa_id      = @body["contacts"]&.first&.dig("wa_id")
+      @message_id = @body["messages"]&.first&.dig("id")
     end
   end
 end

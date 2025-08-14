@@ -6,11 +6,13 @@ module Warb
     end
 
     def handle
-      code     = @body&.dig("error", "code")
-      message  = @body&.dig("error", "message")
-      details  = @body&.dig("error", "error_data", "details")
+      raise Warb::RequestError.new('invalid body') if @body.nil?
 
-      custom_class = Warb.configuration.handle_error[@status]&.dig(code)
+      code     = @body.dig("error", "code")
+      message  = @body.dig("error", "message")
+      details  = @body.dig("error", "error_data", "details")
+
+      custom_class = Warb.configuration.custom_errors[@status]&.dig(code)
       http_class   = Warb::HTTP_ERRORS[@status]
       error_class  = custom_class || http_class || Warb::RequestError
 

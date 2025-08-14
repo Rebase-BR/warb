@@ -14,15 +14,13 @@ module Warb
   class IntegrityError < Forbidden; end
   class InvalidBusinessNumber < BadRequest; end
 
-  class ErrorHandler
+  class CustomErrors
     def build
-      { 400 => bad_request }
-    end
-
-    private
-
-    def bad_request
-      { 33 => InvalidBusinessNumber }
+      {
+        400 => {
+          33 => InvalidBusinessNumber
+        }
+      }
     end
   end
 end

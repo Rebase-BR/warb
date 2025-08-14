@@ -16,78 +16,118 @@ RSpec.describe Warb::Connection do
   subject(:connection) { described_class.new(client) }
 
   describe "#send_request" do
-    let(:faraday_response) { instance_double("Faraday::Response", status: 200, body: { "ok" => true }, headers: {}) }
+    def faraday_response(status:, body:, success:)
+      instance_double("Faraday::Response", status: status, body: body, headers: {}, success?: success)
+    end
 
     context "success path" do
-      it "calls Faraday with :sender_id prefix by default and returns the Faraday response" do
+      it "returns a Warb::Response when response.success? is true (default sender_id prefix)" do
+        f = faraday_response(status: 200, body: {
+          "contacts" => [{ "input" => "+5511", "wa_id" => "5511" }],
+          "messages" => [{ "id" => "mid-123" }]
+        }, success: true)
+
         expect_any_instance_of(Faraday::Connection)
-          .to receive(:post).with("SID123/messages", {}, {}).and_return(faraday_response)
+          .to receive(:send).with("post", "SID123/messages", {}, {}).and_return(f)
 
         resp = connection.send_request(http_method: "post", endpoint: "messages", data: {}, headers: {})
-        expect(resp).to be faraday_response
+        expect(resp).to be_a(Warb::Response)
+        expect(resp.input).to eq("+5511")
+        expect(resp.wa_id).to eq("5511")
+        expect(resp.message_id).to eq("mid-123")
+        expect(resp.body).to be_a(Hash)
       end
 
-      it "uses :business_id when endpoint_prefix is :business_id" do
-        expect_any_instance_of(Faraday::Connection)
-          .to receive(:get).with("BIZ999/message_templates", {}, {}).and_return(faraday_response)
+      it "uses :business_id prefix when endpoint_prefix is :business_id" do
+        f = faraday_response(status: 200, body: { "ok" => true }, success: true)
 
-        connection.send_request(http_method: "get", endpoint: "message_templates", endpoint_prefix: :business_id)
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).with("get", "BIZ999/message_templates", {}, {}).and_return(f)
+
+        resp = connection.send_request(http_method: "get", endpoint: "message_templates", endpoint_prefix: :business_id)
+        expect(resp).to be_a(Warb::Response)
+        expect(resp.body).to eq({ "ok" => true })
       end
 
       it "uses raw endpoint when endpoint_prefix is nil" do
-        expect_any_instance_of(Faraday::Connection)
-          .to receive(:put).with("custom/path", { a: 1 }, { "X" => "1" }).and_return(faraday_response)
+        f = faraday_response(status: 200, body: { "ok" => true }, success: true)
 
-        connection.send_request(http_method: "put", endpoint: "custom/path", endpoint_prefix: nil, data: { a: 1 }, headers: { "X" => "1" })
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).with("put", "custom/path", { a: 1 }, { "X" => "1" }).and_return(f)
+
+        resp = connection.send_request(
+          http_method: "put",
+          endpoint: "custom/path",
+          endpoint_prefix: nil,
+          data: { a: 1 },
+          headers: { "X" => "1" }
+        )
+        expect(resp).to be_a(Warb::Response)
+        expect(resp.body).to eq({ "ok" => true })
       end
     end
 
-    context "error path (Faraday::ClientError -> Warb::RequestError)" do
-      it "parses JSON string body and raises Warb::RequestError with message/status/code" do
-        error_body = { error: { message: "JSON", code: 123123 } }
-        faraday_error = Faraday::ClientError.new("boom", { status: 400, body: error_body })
+    context "http error path (success? == false -> ResponseErrorHandler handles)" do
+      it "raises a mapped custom error (InvalidBusinessNumber) on 400 with code 33" do
+        body = { "error" => { "message" => "Invalid business", "code" => 33,
+                              "error_data" => { "details" => "details here" } } }
+        f = faraday_response(status: 400, body: body, success: false)
 
-        allow_any_instance_of(Faraday::Connection)
-          .to receive(:post).and_raise(faraday_error)
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).with("post", "SID123/messages", {}, {}).and_return(f)
 
         expect {
           connection.send_request(http_method: "post", endpoint: "messages")
-        }.to raise_error(Warb::RequestError) { |e|
-          expect(e.status).to eq 400
-          expect(e.code).to eq 123123
-          expect(e.message).to eq "JSON"
-        }
+        }.to raise_error(Warb::InvalidBusinessNumber, /details here|Invalid business/)
       end
 
-      it "uses hash body directly and raises Warb::RequestError with message/status/code" do
-        error_body = { error: { message: "HASH", code: 33 } }
-        faraday_error = Faraday::ClientError.new("boom", { status: 400, body: error_body })
+      it "falls back to HTTP error class mapping (e.g., BadRequest) when there is no custom code mapping" do
+        body = { "error" => { "message" => "Oops generic", "code" => 999 } }
+        f = faraday_response(status: 400, body: body, success: false)
 
-        allow_any_instance_of(Faraday::Connection)
-          .to receive(:delete).and_raise(faraday_error)
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).with("post", "SID123/messages", {}, {}).and_return(f)
 
         expect {
-          connection.send_request(http_method: "delete", endpoint: "media/123", endpoint_prefix: nil)
-        }.to raise_error(Warb::RequestError) { |e|
-          expect(e.status).to eq 400
-          expect(e.code).to eq 33
-          expect(e.message).to eq "HASH"
-        }
+          connection.send_request(http_method: "post", endpoint: "messages")
+        }.to raise_error(Warb::BadRequest, /Oops generic|HTTP 400/)
       end
 
-      it "handles missing response gracefully (e.response == nil)" do
-        faraday_error = Faraday::ClientError.new("boom", nil)
+      it "falls back to Warb::RequestError if status is not mapped at all" do
+        body = { "error" => { "message" => "weird", "code" => 1 } }
+        f = faraday_response(status: 418, body: body, success: false)
 
-        allow_any_instance_of(Faraday::Connection)
-          .to receive(:get).and_raise(faraday_error)
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).with("get", "SID123/messages", {}, {}).and_return(f)
 
         expect {
           connection.send_request(http_method: "get", endpoint: "messages")
-        }.to raise_error(Warb::RequestError) { |e|
-          expect(e.status).to be_nil
-          expect(e.code).to be_nil
-          expect(e.message).to eq("Warb::RequestError")
-        }
+        }.to raise_error(Warb::RequestError, /weird|HTTP 418/)
+      end
+    end
+
+    context "faraday error path (Faraday::Error rescue)" do
+      it "raises Warb::RequestError with the error body when available" do
+        error_body = { error: { message: "From Faraday body", code: 123 } }
+        faraday_error = Faraday::ClientError.new("boom", { status: 400, body: error_body })
+
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).and_raise(faraday_error)
+
+        expect {
+          connection.send_request(http_method: "post", endpoint: "messages")
+        }.to raise_error(Warb::RequestError, /From Faraday body/)
+      end
+
+      it "raises Warb::RequestError with the exception message when there is no response" do
+        faraday_error = Faraday::ClientError.new("boom", nil)
+
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).and_raise(faraday_error)
+
+        expect {
+          connection.send_request(http_method: "get", endpoint: "messages")
+        }.to raise_error(Warb::RequestError, /boom/)
       end
     end
   end

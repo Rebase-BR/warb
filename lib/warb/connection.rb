@@ -18,8 +18,7 @@ module Warb
         Warb::ResponseErrorHandler.new(response.body, response.status).handle
       end
     rescue Faraday::Error => e
-      body = e.respond_to?(:response) ? e.response&.dig(:body) : nil
-      msg  = body || e.message
+      msg = e.response_body || e.message
       raise RequestError, msg
     end
 
