@@ -1,34 +1,34 @@
 # frozen_string_literal: true
 
 RSpec.describe Warb::Components::Org do
-  describe "#to_h" do
-    let(:org) { described_class.new company: "Company", department: "Deparment", title: "Org" }
-
+  describe '#to_h' do
     subject { org.to_h }
 
-    context "built from given params" do
+    let(:org) { described_class.new company: 'Company', department: 'Deparment', title: 'Org' }
+
+    context 'built from given params' do
       it do
-        is_expected.to eq(
+        expect(subject).to eq(
           {
-            title: "Org",
-            company: "Company",
-            department: "Deparment"
+            title: 'Org',
+            company: 'Company',
+            department: 'Deparment'
           }
         )
       end
     end
 
-    context "overwriting some values" do
+    context 'overwriting some values' do
       before do
-        org.department = "Depart."
+        org.department = 'Depart.'
       end
 
       it do
-        is_expected.to eq(
+        expect(subject).to eq(
           {
-            title: "Org",
-            company: "Company",
-            department: "Depart."
+            title: 'Org',
+            company: 'Company',
+            department: 'Depart.'
           }
         )
       end

@@ -3,7 +3,7 @@
 module Warb
   module Components
     class VoiceCallButton < Button
-      BUTTON_TYPE = "voice_call"
+      BUTTON_TYPE = 'voice_call'
 
       private
 

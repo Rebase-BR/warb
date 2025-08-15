@@ -7,7 +7,7 @@ module Warb
 
       def build_payload
         {
-          type: "sticker",
+          type: 'sticker',
           sticker: {
             id: media_id || @params[:media_id],
             link: link || @params[:link]

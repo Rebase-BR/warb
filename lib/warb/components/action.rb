@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Warb
   module Components
     class Row
@@ -24,12 +26,12 @@ module Warb
         @rows = rows
       end
 
-      def add_row(**args, &block)
+      def add_row(**args, &)
         row = Row.new(**args)
 
         @rows << row
 
-        block_given? ? row.tap(&block) : row
+        block_given? ? row.tap(&) : row
       end
 
       def to_h
@@ -37,7 +39,7 @@ module Warb
           title: @title,
           rows: @rows.map.with_index do |row, index|
             row_title = row.title.slice(0, 10)
-            title = row_title.normalize.gsub(/\s/, "").downcase
+            title = row_title.normalize.gsub(/\s/, '').downcase
             id = "#{title}_#{index}"
 
             row.to_h.merge(id: id)
@@ -54,12 +56,12 @@ module Warb
         @sections = sections
       end
 
-      def add_section(**args, &block)
+      def add_section(**args, &)
         section = Section.new(**args)
 
         @sections << section
 
-        block_given? ? section.tap(&block) : section
+        block_given? ? section.tap(&) : section
       end
 
       def to_h
@@ -77,14 +79,15 @@ module Warb
         @buttons_texts = buttons_texts
       end
 
+      # rubocop:disable Metrics/MethodLength
       def to_h
         {
           buttons: @buttons_texts.map.with_index do |button_text, index|
-            text = button_text.normalize.gsub(/\s/, "").downcase
+            text = button_text.normalize.gsub(/\s/, '').downcase
             id = "#{text}_#{index}"
 
             {
-              type: "reply",
+              type: 'reply',
               reply: {
                 id: id,
                 title: button_text
@@ -93,6 +96,7 @@ module Warb
           end
         }
       end
+      # rubocop:enable Metrics/MethodLength
 
       def add_button_text(button_text)
         @buttons_texts << button_text
@@ -109,7 +113,7 @@ module Warb
 
       def to_h
         {
-          name: "cta_url",
+          name: 'cta_url',
           parameters: {
             display_text: @button_text,
             url: @url

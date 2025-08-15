@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Warb
   class Configuration
     attr_accessor :access_token, :sender_id, :business_id, :adapter, :logger, :custom_errors

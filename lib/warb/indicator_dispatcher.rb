@@ -7,15 +7,15 @@ module Warb
     end
 
     def send_typing_indicator(message_id)
-      data = common_indicator_params(message_id).merge(typing_indicator: { type: "text" })
+      data = common_indicator_params(message_id).merge(typing_indicator: { type: 'text' })
 
-      @client.post("messages", data)
+      @client.post('messages', data)
     end
 
     def mark_as_read(message_id)
       data = common_indicator_params(message_id)
 
-      @client.post("messages", data)
+      @client.post('messages', data)
     end
 
     private
@@ -24,7 +24,7 @@ module Warb
       {
         messaging_product: Warb::MESSAGING_PRODUCT,
         message_id: message_id,
-        status: "read"
+        status: 'read'
       }
     end
   end

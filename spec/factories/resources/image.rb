@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :image, class: Warb::Resources::Image do
-    media_id { Faker::Number.numerify "################" }
+    media_id { Faker::Number.numerify '################' }
     link { Faker::Internet.url }
     caption { Faker::Lorem.sentence }
 

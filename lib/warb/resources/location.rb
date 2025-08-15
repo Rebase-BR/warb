@@ -17,7 +17,7 @@ module Warb
 
       def common_location_params
         {
-          type: "location",
+          type: 'location',
           location: {
             latitude: latitude || @params[:latitude],
             longitude: longitude || @params[:longitude],

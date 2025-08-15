@@ -5,22 +5,23 @@ module Warb
     class Flow < Resource
       attr_accessor :flow_id, :screen
 
+      # rubocop:disable Metrics/MethodLength
       def build_payload
         {
-          type: "interactive",
+          type: 'interactive',
           interactive: {
-            type: "flow",
+            type: 'flow',
             body: {
-              text: "Not shown in draft mode"
+              text: 'Not shown in draft mode'
             },
             action: {
-              name: "flow",
+              name: 'flow',
               parameters: {
-                flow_message_version: "3",
-                flow_action: "navigate",
+                flow_message_version: '3',
+                flow_action: 'navigate',
                 flow_id: flow_id || @params[:flow_id],
-                flow_cta: "Not shown in draft mode",
-                mode: "draft",
+                flow_cta: 'Not shown in draft mode',
+                mode: 'draft',
                 flow_action_payload: {
                   screen: screen || @params[:screen]
                 }
@@ -29,6 +30,7 @@ module Warb
           }
         }
       end
+      # rubocop:enable Metrics/MethodLength
     end
   end
 end

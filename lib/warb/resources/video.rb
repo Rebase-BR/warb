@@ -19,7 +19,7 @@ module Warb
 
       def common_video_params
         {
-          type: "video",
+          type: 'video',
           video: {
             id: media_id || @params[:media_id],
             link: link || @params[:link]

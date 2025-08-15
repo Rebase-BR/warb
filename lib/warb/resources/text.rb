@@ -6,7 +6,7 @@ module Warb
       attr_accessor :content, :text, :message, :preview_url, :parameter_name
 
       def build_header
-        { type: "text", text: message_per_priority }.tap do |header|
+        { type: 'text', text: message_per_priority }.tap do |header|
           parameter_name ||= @params[:parameter_name]
           header[:parameter_name] = parameter_name unless parameter_name.nil?
         end
@@ -14,7 +14,7 @@ module Warb
 
       def build_payload
         {
-          type: "text",
+          type: 'text',
           text: {
             preview_url: preview_url || @params[:preview_url],
             body: message_per_priority
@@ -24,7 +24,7 @@ module Warb
 
       def build_template_named_parameter(parameter_name)
         {
-          type: "text",
+          type: 'text',
           text: message_per_priority,
           parameter_name: parameter_name
         }
@@ -32,7 +32,7 @@ module Warb
 
       def build_template_positional_parameter
         {
-          type: "text",
+          type: 'text',
           text: message_per_priority
         }
       end

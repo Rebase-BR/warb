@@ -1,32 +1,32 @@
 # frozen_string_literal: true
 
 RSpec.describe Warb::Components::URL do
-  describe "#to_h" do
-    let(:url) { described_class.new url: "url", type: "WORK" }
-
+  describe '#to_h' do
     subject { url.to_h }
 
-    context "built from given params" do
+    let(:url) { described_class.new url: 'url', type: 'WORK' }
+
+    context 'built from given params' do
       it do
-        is_expected.to eq(
+        expect(subject).to eq(
           {
-            type: "WORK",
-            url: "url"
+            type: 'WORK',
+            url: 'url'
           }
         )
       end
     end
 
-    context "overwriting some values" do
+    context 'overwriting some values' do
       before do
-        url.type = "HOME"
+        url.type = 'HOME'
       end
 
       it do
-        is_expected.to eq(
+        expect(subject).to eq(
           {
-            type: "HOME",
-            url: "url"
+            type: 'HOME',
+            url: 'url'
           }
         )
       end

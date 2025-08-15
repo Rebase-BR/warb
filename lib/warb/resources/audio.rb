@@ -7,7 +7,7 @@ module Warb
 
       def build_payload
         {
-          type: "audio",
+          type: 'audio',
           audio: {
             id: media_id || @params[:media_id],
             link: link || @params[:link]

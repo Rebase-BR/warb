@@ -11,7 +11,7 @@ module Warb
       resource = block_given? ? @klass.new(**args).tap(&block) : @klass.new(**args)
 
       data = resource.call(recipient_number, reply_to:)
-      @client.post("messages", data)
+      @client.post('messages', data)
     end
   end
 end

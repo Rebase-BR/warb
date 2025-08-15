@@ -16,4 +16,4 @@ module Warb
       attr_reader :params
     end
   end
-end 
+end

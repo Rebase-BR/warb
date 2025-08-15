@@ -1,33 +1,33 @@
 # frozen_string_literal: true
 
 RSpec.describe Warb::Components::ListAction do
-  describe "#add_section" do
+  describe '#add_section' do
     let(:list_action) { build :interactive_list_action }
 
-    context "sections count" do
+    context 'sections count' do
       it do
         expect { list_action.add_section }.to change(list_action.sections, :count).by(1)
       end
     end
 
-    context "added object class" do
+    context 'added object class' do
       subject { list_action.add_section }
 
       it { is_expected.to be_a Warb::Components::Section }
     end
 
-    context "initialized with" do
-      subject { list_action.add_section title: "Open Options" }
+    context 'initialized with' do
+      subject { list_action.add_section title: 'Open Options' }
 
-      it { expect(subject.title).to eq "Open Options" }
+      it { expect(subject.title).to eq 'Open Options' }
       it { expect(subject.rows).to eq [] }
     end
 
-    context "using a block" do
+    context 'using a block' do
       it do
-        section = list_action.add_section(title: "Added Section") do |section|
+        section = list_action.add_section(title: 'Added Section') do |section|
           expect(section).to be_a Warb::Components::Section
-          expect(section.title).to eq "Added Section"
+          expect(section.title).to eq 'Added Section'
         end
 
         expect(section).to eq list_action.sections.last
@@ -36,21 +36,21 @@ RSpec.describe Warb::Components::ListAction do
     end
   end
 
-  describe "#to_h" do
-    let(:section) { build :section, title: "Título" }
-    let(:list_action) { build :interactive_list_action, sections: [section] }
-
+  describe '#to_h' do
     subject { list_action.to_h }
 
-    context "button text" do
+    let(:section) { build :section, title: 'Título' }
+    let(:list_action) { build :interactive_list_action, sections: [section] }
+
+    context 'button text' do
       it { expect(subject[:button]).to eq list_action.button_text }
     end
 
-    context "sections count" do
+    context 'sections count' do
       it { expect(subject[:sections].count).to eq list_action.sections.count }
     end
 
-    context "serializations" do
+    context 'serializations' do
       before do
         allow(section).to receive(:to_h).and_call_original
         allow(list_action).to receive(:sections).and_call_original
