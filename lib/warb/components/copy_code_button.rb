@@ -3,7 +3,7 @@
 module Warb
   module Components
     class CopyCodeButton < Button
-      BUTTON_TYPE = "copy_code"
+      BUTTON_TYPE = 'copy_code'
 
       attr_accessor :coupon_code
 
@@ -12,9 +12,9 @@ module Warb
 
         if coupon_code || @params[:coupon_code]
           button_payload[:parameters] = Array.new(1, {
-            type: "coupon_code",
-            coupon_code: coupon_code || @params[:coupon_code]
-          })
+                                                    type: 'coupon_code',
+                                                    coupon_code: coupon_code || @params[:coupon_code]
+                                                  })
         end
 
         button_payload

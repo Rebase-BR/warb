@@ -19,7 +19,7 @@ module Warb
 
       def common_image_params
         {
-          type: "image",
+          type: 'image',
           image: {
             id: media_id || @params[:media_id],
             link: link || @params[:link]

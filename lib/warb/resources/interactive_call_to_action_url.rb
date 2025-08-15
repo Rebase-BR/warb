@@ -5,11 +5,12 @@ module Warb
     class InteractiveCallToActionUrl < Resource
       attr_accessor :header, :body, :footer, :action
 
+      # rubocop:disable Metrics/MethodLength
       def build_payload
         {
-          type: "interactive",
+          type: 'interactive',
           interactive: {
-            type: "cta_url",
+            type: 'cta_url',
             header: header || @params[:header]&.to_h,
             body: {
               text: body || @params[:body]
@@ -21,6 +22,7 @@ module Warb
           }
         }
       end
+      # rubocop:enable Metrics/MethodLength
 
       def set_text_header(text)
         @header = Warb::Resources::Text.new(text:).build_header
@@ -38,10 +40,10 @@ module Warb
         @header = Warb::Resources::Document.new(link:, filename:).build_header
       end
 
-      def build_action(**params, &block)
+      def build_action(**params, &)
         @action = Warb::Components::CTAAction.new(**params)
 
-        block_given? ? @action.tap(&block) : @action
+        block_given? ? @action.tap(&) : @action
       end
     end
   end

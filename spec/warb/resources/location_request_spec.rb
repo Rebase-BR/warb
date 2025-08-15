@@ -2,29 +2,29 @@
 
 RSpec.describe Warb::Resources::LocationRequest do
   let(:location_request_resource) do
-    build :location_request, body_text: "Share your location, please?"
+    build :location_request, body_text: 'Share your location, please?'
   end
 
-  describe "#build_header" do
+  describe '#build_header' do
     it do
       expect { location_request_resource.build_header }.to raise_error NotImplementedError
     end
   end
 
-  describe "#build_payload" do
+  describe '#build_payload' do
     subject { location_request_resource.build_payload }
 
     it do
-      is_expected.to eq(
+      expect(subject).to eq(
         {
-          type: "interactive",
+          type: 'interactive',
           interactive: {
-            type: "location_request_message",
+            type: 'location_request_message',
             body: {
-              text: "Share your location, please?"
+              text: 'Share your location, please?'
             },
             action: {
-              name: "send_location"
+              name: 'send_location'
             }
           }
         }
@@ -32,28 +32,28 @@ RSpec.describe Warb::Resources::LocationRequest do
     end
   end
 
-  context "priorities" do
+  context 'priorities' do
     subject { location_request_resource.build_payload }
 
     before do
       allow(location_request_resource).to receive_messages(
         {
-          body_text: "Send your location"
+          body_text: 'Send your location'
         }
       )
     end
 
     it do
-      is_expected.to eq(
+      expect(subject).to eq(
         {
-          type: "interactive",
+          type: 'interactive',
           interactive: {
-            type: "location_request_message",
+            type: 'location_request_message',
             body: {
-              text: "Send your location"
+              text: 'Send your location'
             },
             action: {
-              name: "send_location"
+              name: 'send_location'
             }
           }
         }

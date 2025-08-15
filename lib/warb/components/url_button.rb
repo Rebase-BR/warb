@@ -3,7 +3,7 @@
 module Warb
   module Components
     class UrlButton < Button
-      BUTTON_TYPE = "url"
+      BUTTON_TYPE = 'url'
 
       attr_accessor :text
 
@@ -12,9 +12,9 @@ module Warb
 
         if text || @params[:text]
           button_payload[:parameters] = Array.new(1, {
-            type: "text",
-            text: text || @params[:text]
-          })
+                                                    type: 'text',
+                                                    text: text || @params[:text]
+                                                  })
         end
 
         button_payload

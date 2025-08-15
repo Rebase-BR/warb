@@ -7,7 +7,7 @@ module Warb
 
       def build_payload
         {
-          type: "reaction",
+          type: 'reaction',
           reaction: {
             message_id: message_id || @params[:message_id],
             emoji: emoji || @params[:emoji]

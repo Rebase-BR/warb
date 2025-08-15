@@ -3,13 +3,13 @@
 module Warb
   module Resources
     class Currency < Resource
-      BRL = "BRL"
-      USD = "USD"
+      BRL = 'BRL'
+      USD = 'USD'
 
       attr_accessor :amount, :code, :fallback
 
       def initialize(**params)
-        super(**params)
+        super
 
         @code = params[:code]
         @amount = params[:amount]
@@ -26,9 +26,10 @@ module Warb
 
       private
 
+      # rubocop:disable Naming/VariableNumber
       def common_currency_params
         {
-          type: "currency",
+          type: 'currency',
           currency: {
             amount_1000: amount * 1000,
             code: code,
@@ -36,6 +37,7 @@ module Warb
           }
         }
       end
+      # rubocop:enable Naming/VariableNumber
 
       def default_fallback_value
         "#{amount} (#{code})"

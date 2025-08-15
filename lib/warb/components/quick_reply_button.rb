@@ -3,7 +3,7 @@
 module Warb
   module Components
     class QuickReplyButton < Button
-      BUTTON_TYPE = "quick_reply"
+      BUTTON_TYPE = 'quick_reply'
 
       private
 

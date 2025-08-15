@@ -19,7 +19,7 @@ module Warb
 
       def common_document_params
         {
-          type: "document",
+          type: 'document',
           document: {
             id: media_id || @params[:media_id],
             filename: filename || @params[:filename],

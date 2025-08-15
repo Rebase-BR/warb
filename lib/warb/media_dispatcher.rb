@@ -1,21 +1,21 @@
+# frozen_string_literal: true
+
 module Warb
   class MediaDispatcher < Dispatcher
-    def upload(file_path:, file_type: "text/plain")
+    def upload(file_path:, file_type: 'text/plain')
       file = Faraday::UploadIO.new(file_path, file_type)
 
       data = { file:, messaging_product: Warb::MESSAGING_PRODUCT }
 
-      @client.post("media", data, multipart: true).body["id"]
+      @client.post('media', data, multipart: true).body['id']
     end
 
     def download(file_path:, media_url: nil, media_id: nil)
-      media_url ||= retrieve(media_id)["url"]
+      media_url ||= retrieve(media_id)['url']
 
       resp = downloaded_media_response(media_url)
 
-      File.open(file_path, "wb") do |file|
-        file.write(resp.body)
-      end
+      File.binwrite(file_path, resp.body)
     end
 
     def retrieve(media_id)
@@ -25,9 +25,9 @@ module Warb
     def delete(media_id)
       response_body = @client.delete(media_id, endpoint_prefix: nil).body
 
-      return response_body["success"] if response_body["success"]
+      return response_body['success'] if response_body['success']
 
-      response_body["error"]["message"]
+      response_body['error']['message']
     end
 
     private
@@ -36,9 +36,9 @@ module Warb
       uri = URI(url)
 
       request = Net::HTTP::Get.new(uri)
-      request["Authorization"] = "Bearer #{@client.access_token}"
+      request['Authorization'] = "Bearer #{@client.access_token}"
 
-      Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == "https") do |http|
+      Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
         http.request(request)
       end
     end

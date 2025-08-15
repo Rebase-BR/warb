@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require "json"
+
+require 'json'
 
 module Warb
   class RequestError < StandardError; end

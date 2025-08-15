@@ -3,8 +3,8 @@
 RSpec.describe Warb::Resources::Template do
   subject { described_class.new }
 
-  describe "#add_currency_parameter" do
-    context "positional" do
+  describe '#add_currency_parameter' do
+    context 'positional' do
       it do
         expect do
           subject.add_currency_parameter
@@ -14,17 +14,17 @@ RSpec.describe Warb::Resources::Template do
       end
 
       it do
-        subject.add_currency_parameter(code: "USD") do |currency|
-          expect(currency.code).to eq "USD"
+        subject.add_currency_parameter(code: 'USD') do |currency|
+          expect(currency.code).to eq 'USD'
           expect(currency).to eq subject.resources.last
           expect(currency).to be_a Warb::Resources::Currency
         end
 
-        expect { subject.add_currency_parameter("useless_param_name") }.to change(subject.resources, :count).by(1)
+        expect { subject.add_currency_parameter('useless_param_name') }.to change(subject.resources, :count).by(1)
       end
     end
 
-    context "named" do
+    context 'named' do
       it do
         expect do
           subject.add_currency_parameter(:purchase_value)
@@ -37,8 +37,8 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe "#add_date_time_paramater" do
-    context "positional" do
+  describe '#add_date_time_paramater' do
+    context 'positional' do
       it do
         expect do
           subject.add_date_time_parameter
@@ -48,17 +48,17 @@ RSpec.describe Warb::Resources::Template do
       end
 
       it do
-        subject.add_date_time_parameter(date_time: "Jan, 1st") do |purchase_date|
-          expect(purchase_date.date_time).to eq "Jan, 1st"
+        subject.add_date_time_parameter(date_time: 'Jan, 1st') do |purchase_date|
+          expect(purchase_date.date_time).to eq 'Jan, 1st'
           expect(purchase_date).to eq subject.resources.last
           expect(purchase_date).to be_a Warb::Resources::DateTime
         end
 
-        expect { subject.add_date_time_parameter("useless_param_name") }.to change(subject.resources, :count).by(1)
+        expect { subject.add_date_time_parameter('useless_param_name') }.to change(subject.resources, :count).by(1)
       end
     end
 
-    context "named" do
+    context 'named' do
       it do
         expect do
           subject.add_date_time_parameter(:purchase_date)
@@ -71,8 +71,8 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe "#add_text_paramater" do
-    context "positional" do
+  describe '#add_text_paramater' do
+    context 'positional' do
       it do
         expect do
           subject.add_text_parameter
@@ -87,11 +87,11 @@ RSpec.describe Warb::Resources::Template do
           expect(text).to be_a Warb::Resources::Text
         end
 
-        expect { subject.add_text_parameter("useless_param_name") }.to change(subject.resources, :count).by(1)
+        expect { subject.add_text_parameter('useless_param_name') }.to change(subject.resources, :count).by(1)
       end
     end
 
-    context "named" do
+    context 'named' do
       it do
         expect do
           subject.add_text_parameter(:text)
@@ -104,19 +104,19 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe "#set_text_header" do
+  describe '#set_text_header' do
     it do
       expect do
-        subject.set_text_header(content: "John", parameter_name: "part_of_the_day")
+        subject.set_text_header(content: 'John', parameter_name: 'part_of_the_day')
       end.to change(subject, :header).from(NilClass).to(Warb::Resources::Text)
     end
   end
 
-  describe "#set_image_header" do
-    context "with id, using block" do
+  describe '#set_image_header' do
+    context 'with id, using block' do
       it do
         expect do
-          subject.set_image_header(media_id: "media_id") do |image|
+          subject.set_image_header(media_id: 'media_id') do |image|
             expect(image).to be_a Warb::Resources::Image
             expect(image).to eq subject.header
           end
@@ -124,10 +124,10 @@ RSpec.describe Warb::Resources::Template do
       end
     end
 
-    context "with link, without using block" do
+    context 'with link, without using block' do
       it do
         expect do
-          image = subject.set_image_header(link: "media_link")
+          image = subject.set_image_header(link: 'media_link')
 
           expect(image).to be_a Warb::Resources::Image
           expect(image).to eq subject.header
@@ -136,11 +136,11 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe "#set_document_header" do
-    context "with id, using block" do
+  describe '#set_document_header' do
+    context 'with id, using block' do
       it do
         expect do
-          subject.set_document_header(media_id: "media_id") do |document|
+          subject.set_document_header(media_id: 'media_id') do |document|
             expect(document).to be_a Warb::Resources::Document
             expect(document).to eq subject.header
           end
@@ -148,10 +148,10 @@ RSpec.describe Warb::Resources::Template do
       end
     end
 
-    context "with link, without using block" do
+    context 'with link, without using block' do
       it do
         expect do
-          document = subject.set_document_header(link: "media_link")
+          document = subject.set_document_header(link: 'media_link')
 
           expect(document).to be_a Warb::Resources::Document
           expect(document).to eq subject.header
@@ -160,11 +160,11 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe "#set_video_header" do
-    context "with id, using block" do
+  describe '#set_video_header' do
+    context 'with id, using block' do
       it do
         expect do
-          subject.set_video_header(media_id: "media_id") do |video|
+          subject.set_video_header(media_id: 'media_id') do |video|
             expect(video).to be_a Warb::Resources::Video
             expect(video).to eq subject.header
           end
@@ -172,10 +172,10 @@ RSpec.describe Warb::Resources::Template do
       end
     end
 
-    context "with link, without using block" do
+    context 'with link, without using block' do
       it do
         expect do
-          video = subject.set_video_header(link: "media_link")
+          video = subject.set_video_header(link: 'media_link')
 
           expect(video).to be_a Warb::Resources::Video
           expect(video).to eq subject.header
@@ -184,284 +184,284 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe "#add_quick_reply_button" do
-    context "with block" do
-      it "sets custom index when provided" do
+  describe '#add_quick_reply_button' do
+    context 'with block' do
+      it 'sets custom index when provided' do
         subject.add_quick_reply_button { |button| button.index = 1 }
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "quick_reply" })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'quick_reply' })
       end
 
-      it "uses default position when index not provided" do
+      it 'uses default position when index not provided' do
         subject.add_quick_reply_button { |button| }
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "quick_reply" })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'quick_reply' })
       end
     end
 
-    context "without using block" do
-      it "sets custom index when provided" do
+    context 'without using block' do
+      it 'sets custom index when provided' do
         subject.add_quick_reply_button(index: 1)
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "quick_reply" })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'quick_reply' })
       end
 
-      it "uses default position when index not provided" do
+      it 'uses default position when index not provided' do
         subject.add_quick_reply_button
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "quick_reply" })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'quick_reply' })
       end
 
-      it "increments position for multiple buttons" do
+      it 'increments position for multiple buttons' do
         subject.add_quick_reply_button
         subject.add_quick_reply_button
 
         buttons = subject.buttons
         expect(buttons.count).to eq 2
-        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "quick_reply" })
-        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "quick_reply" })
+        expect(buttons[0]).to match({ type: 'button', index: 0, sub_type: 'quick_reply' })
+        expect(buttons[1]).to match({ type: 'button', index: 1, sub_type: 'quick_reply' })
       end
     end
   end
 
-  describe "#add_dynamic_url_button" do
-    context "with block" do
-      it "sets custom index when provided" do
+  describe '#add_dynamic_url_button' do
+    context 'with block' do
+      it 'sets custom index when provided' do
         subject.add_dynamic_url_button do |button|
           button.index = 1
-          button.text = "url_suffix"
+          button.text = 'url_suffix'
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "url",
-                                        parameters: [{ type: "text", text: "url_suffix" }] })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'url',
+                                        parameters: [{ type: 'text', text: 'url_suffix' }] })
       end
 
-      it "uses default position when index not provided" do
+      it 'uses default position when index not provided' do
         subject.add_dynamic_url_button do |button|
-          button.text = "url_suffix"
+          button.text = 'url_suffix'
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "url",
-                                        parameters: [{ type: "text", text: "url_suffix" }] })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'url',
+                                        parameters: [{ type: 'text', text: 'url_suffix' }] })
       end
     end
 
-    context "without using block" do
-      it "sets custom index when provided" do
-        subject.add_dynamic_url_button(index: 1, text: "url_suffix")
+    context 'without using block' do
+      it 'sets custom index when provided' do
+        subject.add_dynamic_url_button(index: 1, text: 'url_suffix')
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "url",
-                                        parameters: [{ type: "text", text: "url_suffix" }] })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'url',
+                                        parameters: [{ type: 'text', text: 'url_suffix' }] })
       end
 
-      it "uses default position when index not provided" do
-        subject.add_dynamic_url_button(text: "url_suffix")
+      it 'uses default position when index not provided' do
+        subject.add_dynamic_url_button(text: 'url_suffix')
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "url",
-                                        parameters: [{ type: "text", text: "url_suffix" }] })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'url',
+                                        parameters: [{ type: 'text', text: 'url_suffix' }] })
       end
 
-      it "increments position for multiple buttons" do
-        subject.add_dynamic_url_button(text: "url1")
-        subject.add_dynamic_url_button(text: "url2")
+      it 'increments position for multiple buttons' do
+        subject.add_dynamic_url_button(text: 'url1')
+        subject.add_dynamic_url_button(text: 'url2')
 
         buttons = subject.buttons
         expect(buttons.count).to eq 2
-        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "url",
-                                      parameters: [{ type: "text", text: "url1" }] })
-        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "url",
-                                      parameters: [{ type: "text", text: "url2" }] })
+        expect(buttons[0]).to match({ type: 'button', index: 0, sub_type: 'url',
+                                      parameters: [{ type: 'text', text: 'url1' }] })
+        expect(buttons[1]).to match({ type: 'button', index: 1, sub_type: 'url',
+                                      parameters: [{ type: 'text', text: 'url2' }] })
       end
     end
   end
 
-  describe "#add_copy_code_button" do
-    context "with block" do
-      it "sets custom index when provided" do
+  describe '#add_copy_code_button' do
+    context 'with block' do
+      it 'sets custom index when provided' do
         subject.add_copy_code_button do |button|
           button.index = 1
-          button.coupon_code = "SAVE20"
+          button.coupon_code = 'SAVE20'
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "copy_code",
-                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'copy_code',
+                                        parameters: [{ type: 'coupon_code', coupon_code: 'SAVE20' }] })
       end
 
-      it "uses default position when index not provided" do
+      it 'uses default position when index not provided' do
         subject.add_copy_code_button do |button|
-          button.coupon_code = "SAVE20"
+          button.coupon_code = 'SAVE20'
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "copy_code",
-                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'copy_code',
+                                        parameters: [{ type: 'coupon_code', coupon_code: 'SAVE20' }] })
       end
     end
 
-    context "without using block" do
-      it "sets custom index when provided" do
-        subject.add_copy_code_button(index: 1, coupon_code: "SAVE20")
+    context 'without using block' do
+      it 'sets custom index when provided' do
+        subject.add_copy_code_button(index: 1, coupon_code: 'SAVE20')
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "copy_code",
-                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'copy_code',
+                                        parameters: [{ type: 'coupon_code', coupon_code: 'SAVE20' }] })
       end
 
-      it "uses default position when index not provided" do
-        subject.add_copy_code_button(coupon_code: "SAVE20")
+      it 'uses default position when index not provided' do
+        subject.add_copy_code_button(coupon_code: 'SAVE20')
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "copy_code",
-                                        parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'copy_code',
+                                        parameters: [{ type: 'coupon_code', coupon_code: 'SAVE20' }] })
       end
 
-      it "increments position for multiple buttons" do
-        subject.add_copy_code_button(coupon_code: "SAVE20")
-        subject.add_copy_code_button(coupon_code: "SAVE30")
+      it 'increments position for multiple buttons' do
+        subject.add_copy_code_button(coupon_code: 'SAVE20')
+        subject.add_copy_code_button(coupon_code: 'SAVE30')
 
         buttons = subject.buttons
         expect(buttons.count).to eq 2
-        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "copy_code",
-                                      parameters: [{ type: "coupon_code", coupon_code: "SAVE20" }] })
-        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "copy_code",
-                                      parameters: [{ type: "coupon_code", coupon_code: "SAVE30" }] })
+        expect(buttons[0]).to match({ type: 'button', index: 0, sub_type: 'copy_code',
+                                      parameters: [{ type: 'coupon_code', coupon_code: 'SAVE20' }] })
+        expect(buttons[1]).to match({ type: 'button', index: 1, sub_type: 'copy_code',
+                                      parameters: [{ type: 'coupon_code', coupon_code: 'SAVE30' }] })
       end
     end
   end
 
-  describe "#add_auth_code_button" do
-    context "with block" do
-      it "sets custom index when provided" do
+  describe '#add_auth_code_button' do
+    context 'with block' do
+      it 'sets custom index when provided' do
         subject.add_auth_code_button do |button|
           button.index = 1
-          button.text = "auth_url"
+          button.text = 'auth_url'
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "url",
-                                        parameters: [{ type: "text", text: "auth_url" }] })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'url',
+                                        parameters: [{ type: 'text', text: 'auth_url' }] })
       end
 
-      it "uses default position when index not provided" do
+      it 'uses default position when index not provided' do
         subject.add_auth_code_button do |button|
-          button.text = "auth_url"
+          button.text = 'auth_url'
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "url",
-                                        parameters: [{ type: "text", text: "auth_url" }] })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'url',
+                                        parameters: [{ type: 'text', text: 'auth_url' }] })
       end
     end
 
-    context "without using block" do
-      it "sets custom index when provided" do
-        subject.add_auth_code_button(index: 1, text: "auth_url")
+    context 'without using block' do
+      it 'sets custom index when provided' do
+        subject.add_auth_code_button(index: 1, text: 'auth_url')
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "url",
-                                        parameters: [{ type: "text", text: "auth_url" }] })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'url',
+                                        parameters: [{ type: 'text', text: 'auth_url' }] })
       end
 
-      it "uses default position when index not provided" do
-        subject.add_auth_code_button(text: "auth_url")
+      it 'uses default position when index not provided' do
+        subject.add_auth_code_button(text: 'auth_url')
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "url",
-                                        parameters: [{ type: "text", text: "auth_url" }] })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'url',
+                                        parameters: [{ type: 'text', text: 'auth_url' }] })
       end
 
-      it "increments position for multiple buttons" do
-        subject.add_auth_code_button(text: "auth1")
-        subject.add_auth_code_button(text: "auth2")
+      it 'increments position for multiple buttons' do
+        subject.add_auth_code_button(text: 'auth1')
+        subject.add_auth_code_button(text: 'auth2')
 
         buttons = subject.buttons
         expect(buttons.count).to eq 2
-        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "url",
-                                      parameters: [{ type: "text", text: "auth1" }] })
-        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "url",
-                                      parameters: [{ type: "text", text: "auth2" }] })
+        expect(buttons[0]).to match({ type: 'button', index: 0, sub_type: 'url',
+                                      parameters: [{ type: 'text', text: 'auth1' }] })
+        expect(buttons[1]).to match({ type: 'button', index: 1, sub_type: 'url',
+                                      parameters: [{ type: 'text', text: 'auth2' }] })
       end
     end
   end
 
-  describe "#add_voice_call_button" do
-    context "with block" do
-      it "sets custom index when provided" do
+  describe '#add_voice_call_button' do
+    context 'with block' do
+      it 'sets custom index when provided' do
         subject.add_voice_call_button do |button|
           button.index = 1
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "voice_call" })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'voice_call' })
       end
 
-      it "uses default position when index not provided" do
+      it 'uses default position when index not provided' do
         subject.add_voice_call_button do |button|
         end
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "voice_call" })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'voice_call' })
       end
     end
 
-    context "without using block" do
-      it "sets custom index when provided" do
+    context 'without using block' do
+      it 'sets custom index when provided' do
         subject.add_voice_call_button(index: 1)
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 1, sub_type: "voice_call" })
+        expect(buttons.last).to match({ type: 'button', index: 1, sub_type: 'voice_call' })
       end
 
-      it "uses default position when index not provided" do
+      it 'uses default position when index not provided' do
         subject.add_voice_call_button
 
         buttons = subject.buttons
         expect(buttons.count).to eq 1
-        expect(buttons.last).to match({ type: "button", index: 0, sub_type: "voice_call" })
+        expect(buttons.last).to match({ type: 'button', index: 0, sub_type: 'voice_call' })
       end
 
-      it "increments position for multiple buttons" do
+      it 'increments position for multiple buttons' do
         subject.add_voice_call_button
         subject.add_voice_call_button
 
         buttons = subject.buttons
         expect(buttons.count).to eq 2
-        expect(buttons[0]).to match({ type: "button", index: 0, sub_type: "voice_call" })
-        expect(buttons[1]).to match({ type: "button", index: 1, sub_type: "voice_call" })
+        expect(buttons[0]).to match({ type: 'button', index: 0, sub_type: 'voice_call' })
+        expect(buttons[1]).to match({ type: 'button', index: 1, sub_type: 'voice_call' })
       end
     end
   end
 
-  describe "#set_location_header" do
-    context "with id, using block" do
+  describe '#set_location_header' do
+    context 'with id, using block' do
       it do
         expect do
           subject.set_location_header do |location|
@@ -472,7 +472,7 @@ RSpec.describe Warb::Resources::Template do
       end
     end
 
-    context "with link, without using block" do
+    context 'with link, without using block' do
       it do
         expect do
           location = subject.set_location_header
@@ -484,8 +484,8 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe "#add_button" do
-    context "with block" do
+  describe '#add_button' do
+    context 'with block' do
       it do
         instance = Warb::Components::QuickReplyButton.new
         subject.add_button(instance) { |button| button.index = 0 }
@@ -495,7 +495,7 @@ RSpec.describe Warb::Resources::Template do
       end
     end
 
-    context "without using block" do
+    context 'without using block' do
       it do
         instance = Warb::Components::QuickReplyButton.new(index: 0)
         subject.add_button(instance)
@@ -506,11 +506,11 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe "#build_payload" do
-    context "with minimal template" do
+  describe '#build_payload' do
+    context 'with minimal template' do
       before do
         allow(subject).to receive_messages(
-          name: "template_name",
+          name: 'template_name',
           language: Warb::Language::ENGLISH_US,
           resources: nil,
           header: nil,
@@ -518,151 +518,151 @@ RSpec.describe Warb::Resources::Template do
         )
       end
 
-      it "builds basic template structure" do
+      it 'builds basic template structure' do
         expect(subject.build_payload).to eq({
-          type: "template",
-          template: {
-            name: "template_name",
-            language: {
-              code: Warb::Language::ENGLISH_US
-            },
-            components: []
-          }
-        })
+                                              type: 'template',
+                                              template: {
+                                                name: 'template_name',
+                                                language: {
+                                                  code: Warb::Language::ENGLISH_US
+                                                },
+                                                components: []
+                                              }
+                                            })
       end
     end
 
-    context "with header only" do
-      let(:text_header) { Warb::Resources::Text.new(content: "Header Text") }
+    context 'with header only' do
+      let(:text_header) { Warb::Resources::Text.new(content: 'Header Text') }
 
       before do
         allow(subject).to receive_messages(
-          name: "template_name",
+          name: 'template_name',
           language: Warb::Language::ENGLISH_US,
           resources: nil,
           header: text_header,
           buttons: []
         )
         allow(text_header).to receive(:build_header).and_return({
-          type: "text",
-          text: "Header Text"
-        })
+                                                                  type: 'text',
+                                                                  text: 'Header Text'
+                                                                })
       end
 
-      it "includes header component" do
+      it 'includes header component' do
         expect(subject.build_payload).to eq({
-          type: "template",
-          template: {
-            name: "template_name",
-            language: {
-              code: Warb::Language::ENGLISH_US
-            },
-            components: [
-              {
-                type: "header",
-                parameters: [
-                  {
-                    type: "text",
-                    text: "Header Text"
-                  }
-                ]
-              }
-            ]
-          }
-        })
+                                              type: 'template',
+                                              template: {
+                                                name: 'template_name',
+                                                language: {
+                                                  code: Warb::Language::ENGLISH_US
+                                                },
+                                                components: [
+                                                  {
+                                                    type: 'header',
+                                                    parameters: [
+                                                      {
+                                                        type: 'text',
+                                                        text: 'Header Text'
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            })
       end
     end
 
-    context "with body parameters only" do
-      let(:text_param) { Warb::Resources::Text.new(content: "Body Text") }
+    context 'with body parameters only' do
+      let(:text_param) { Warb::Resources::Text.new(content: 'Body Text') }
 
       before do
         allow(subject).to receive_messages(
-          name: "template_name",
+          name: 'template_name',
           language: Warb::Language::ENGLISH_US,
           resources: [text_param],
           header: nil,
           buttons: []
         )
         allow(text_param).to receive(:build_template_positional_parameter).and_return({
-          type: "text",
-          text: "Body Text"
-        })
+                                                                                        type: 'text',
+                                                                                        text: 'Body Text'
+                                                                                      })
       end
 
-      it "includes body component with positional parameters" do
+      it 'includes body component with positional parameters' do
         expect(subject.build_payload).to eq({
-          type: "template",
-          template: {
-            name: "template_name",
-            language: {
-              code: Warb::Language::ENGLISH_US
-            },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  {
-                    type: "text",
-                    text: "Body Text"
-                  }
-                ]
-              }
-            ]
-          }
-        })
+                                              type: 'template',
+                                              template: {
+                                                name: 'template_name',
+                                                language: {
+                                                  code: Warb::Language::ENGLISH_US
+                                                },
+                                                components: [
+                                                  {
+                                                    type: 'body',
+                                                    parameters: [
+                                                      {
+                                                        type: 'text',
+                                                        text: 'Body Text'
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            })
       end
     end
 
-    context "with named body parameters" do
-      let(:text_param) { Warb::Resources::Text.new(content: "Body Text") }
+    context 'with named body parameters' do
+      let(:text_param) { Warb::Resources::Text.new(content: 'Body Text') }
 
       before do
         allow(subject).to receive_messages(
-          name: "template_name",
+          name: 'template_name',
           language: Warb::Language::ENGLISH_US,
-          resources: { "param_name" => text_param },
+          resources: { 'param_name' => text_param },
           header: nil,
           buttons: []
         )
-        allow(text_param).to receive(:build_template_named_parameter).with("param_name").and_return({
-          type: "text",
-          parameter_name: "param_name",
-          text: "Body Text"
-        })
+        allow(text_param).to receive(:build_template_named_parameter).with('param_name').and_return({
+                                                                                                      type: 'text',
+                                                                                                      parameter_name: 'param_name',
+                                                                                                      text: 'Body Text'
+                                                                                                    })
       end
 
-      it "includes body component with named parameters" do
+      it 'includes body component with named parameters' do
         expect(subject.build_payload).to eq({
-          type: "template",
-          template: {
-            name: "template_name",
-            language: {
-              code: Warb::Language::ENGLISH_US
-            },
-            components: [
-              {
-                type: "body",
-                parameters: [
-                  {
-                    type: "text",
-                    parameter_name: "param_name",
-                    text: "Body Text"
-                  }
-                ]
-              }
-            ]
-          }
-        })
+                                              type: 'template',
+                                              template: {
+                                                name: 'template_name',
+                                                language: {
+                                                  code: Warb::Language::ENGLISH_US
+                                                },
+                                                components: [
+                                                  {
+                                                    type: 'body',
+                                                    parameters: [
+                                                      {
+                                                        type: 'text',
+                                                        parameter_name: 'param_name',
+                                                        text: 'Body Text'
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            })
       end
     end
 
-    context "with buttons only" do
-      let(:button_payload) { { type: "button", index: 0, sub_type: "quick_reply" } }
+    context 'with buttons only' do
+      let(:button_payload) { { type: 'button', index: 0, sub_type: 'quick_reply' } }
 
       before do
         allow(subject).to receive_messages(
-          name: "template_name",
+          name: 'template_name',
           language: Warb::Language::ENGLISH_US,
           resources: nil,
           header: nil,
@@ -670,23 +670,23 @@ RSpec.describe Warb::Resources::Template do
         )
       end
 
-      it "includes button components" do
+      it 'includes button components' do
         expect(subject.build_payload).to eq({
-          type: "template",
-          template: {
-            name: "template_name",
-            language: {
-              code: Warb::Language::ENGLISH_US
-            },
-            components: [
-              {
-                type: "button",
-                index: 0,
-                sub_type: "quick_reply"
-              }
-            ]
-          }
-        })
+                                              type: 'template',
+                                              template: {
+                                                name: 'template_name',
+                                                language: {
+                                                  code: Warb::Language::ENGLISH_US
+                                                },
+                                                components: [
+                                                  {
+                                                    type: 'button',
+                                                    index: 0,
+                                                    sub_type: 'quick_reply'
+                                                  }
+                                                ]
+                                              }
+                                            })
       end
     end
   end
