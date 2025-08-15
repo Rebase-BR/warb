@@ -1,35 +1,36 @@
 # frozen_string_literal: true
 
 RSpec.describe Warb::MediaDispatcher do
-  subject { described_class.new MediaResource, client }
+  class MediaResource < Warb::Resources::Resource; end
 
-  let(:resource) { double('MediaResource', call: {}) }
+  subject { service }
+
   let(:client) { Warb.client }
-
-  before do
-    stub_const('MediaResource', new: resource)
-  end
+  let(:service) { described_class.new(MediaResource, client) }
 
   describe '#upload' do
+    subject { service.upload(file_path:, file_type:) }
+
     let(:file_path) { 'spec/warb/media_dispatcher_spec.rb' }
     let(:file_type) { 'text/plain' }
-    let(:file) { Faraday::UploadIO.new(file_path, file_type) }
-    let(:data) { { file:, messaging_product: 'whatsapp' } }
+    let(:file) { double('Faraday::UploadIO') }
 
-    before { allow(Faraday::UploadIO).to receive(:new).and_return(file) }
+    let(:data) do
+      { file:, messaging_product: 'whatsapp' }
+    end
+
+    let(:mock_response) { double('response', body: { 'id' => 'media_123456' }) }
+
+    before do
+      allow(Faraday::UploadIO).to receive(:new).and_return(file)
+    end
 
     it do
-      faraday_ok = instance_double(Faraday::Response,
-                                   status: 200,
-                                   body: { 'id' => 'media_id' },
-                                   headers: {},
-                                   success?: true)
+      expect(client).to receive(:post)
+        .with('media', data, multipart: true)
+        .and_return(mock_response)
 
-      expect_any_instance_of(Faraday::Connection)
-        .to receive(:send).with('post', '/media', data, {})
-        .and_return(faraday_ok)
-
-      subject.upload(file_path:, file_type:)
+      expect(subject).to eq 'media_123456'
     end
   end
 
