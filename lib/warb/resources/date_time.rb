@@ -23,7 +23,7 @@ module Warb
 
       def common_date_time_params
         {
-          type: "date_time",
+          type: 'date_time',
           date_time: {
             fallback_value: date_time
           }

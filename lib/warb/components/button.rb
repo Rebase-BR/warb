@@ -8,12 +8,12 @@ module Warb
       def initialize(**params)
         params[:sub_type] = button_type unless params[:sub_type]
 
-        super(**params)
+        super
       end
 
       def to_h
         {
-          type: "button",
+          type: 'button',
           sub_type: sub_type || @params[:sub_type],
           index: index || @params[:index]
         }
