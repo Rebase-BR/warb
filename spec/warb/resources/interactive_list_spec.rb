@@ -40,23 +40,23 @@ RSpec.describe Warb::Resources::InteractiveList do
   context 'headers' do
     subject { described_class.new }
 
-    describe '#set_text_header' do
+    describe '#add_text_header' do
       it do
-        expect { subject.set_text_header('Header') }.to change(subject, :header)
+        expect { subject.add_text_header('Header') }.to change(subject, :header)
           .from(nil).to({ type: 'text', text: 'Header' })
       end
     end
 
-    describe '#set_image_header' do
-      it { expect { subject.set_image_header }.to raise_error NotImplementedError }
+    describe '#add_image_header' do
+      it { expect { subject.add_image_header }.to raise_error NotImplementedError }
     end
 
-    describe '#set_video_header' do
-      it { expect { subject.set_video_header }.to raise_error NotImplementedError }
+    describe '#add_video_header' do
+      it { expect { subject.add_video_header }.to raise_error NotImplementedError }
     end
 
-    describe '#set_document_header' do
-      it { expect { subject.set_document_header }.to raise_error NotImplementedError }
+    describe '#add_document_header' do
+      it { expect { subject.add_document_header }.to raise_error NotImplementedError }
     end
   end
 

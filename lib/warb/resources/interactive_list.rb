@@ -24,7 +24,7 @@ module Warb
       end
       # rubocop:enable Metrics/MethodLength
 
-      def set_text_header(text)
+      def add_text_header(text)
         @header = Warb::Resources::Text.new(text:).build_header
       end
 

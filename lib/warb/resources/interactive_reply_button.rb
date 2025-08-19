@@ -24,19 +24,19 @@ module Warb
       end
       # rubocop:enable Metrics/MethodLength
 
-      def set_text_header(text)
+      def add_text_header(text)
         @header = Warb::Resources::Text.new(text:).build_header
       end
 
-      def set_image_header(media_id: nil, link: nil)
+      def add_image_header(media_id: nil, link: nil)
         @header = Warb::Resources::Image.new(media_id:, link:).build_header
       end
 
-      def set_video_header(media_id: nil, link: nil)
+      def add_video_header(media_id: nil, link: nil)
         @header = Warb::Resources::Video.new(media_id:, link:).build_header
       end
 
-      def set_document_header(media_id: nil, link: nil, filename: nil)
+      def add_document_header(media_id: nil, link: nil, filename: nil)
         @header = Warb::Resources::Document.new(media_id:, link:, filename:).build_header
       end
 

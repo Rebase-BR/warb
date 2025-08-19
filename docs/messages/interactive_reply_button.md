@@ -23,7 +23,7 @@ Or you can use the block building strategy to simplify the process:
 
 ```ruby
 Warb.interactive_reply_button.dispatch(recipient_number) do |message|
-  message.set_image_header(media_id: "1341834336894773")
+  message.add_image_header(media_id: "1341834336894773")
 
   message.body = "Select a Language:"
   message.footer = nil
@@ -38,23 +38,23 @@ or you can build the action with the buttons texts directly, passing them to the
 
 ```ruby
 Warb.interactive_reply_button.dispatch(recipient_number, action: action) do |message|
-  message.set_text_header(content: "Options")
+  message.add_text_header(content: "Options")
   message.body = "Select a Language:"
   message.footer = nil
   message.build_action(buttons_texts: ["Português", "English", "Español"])
 end
 ```
 
-Aside from text and image headers, you can also set a video or document as header using the respective methods, `set_video_header` and `set_document_header`.
+Aside from text and image headers, you can also set a video or document as header using the respective methods, `add_video_header` and `add_document_header`.
 
-For text header, `set_text_header` receives a string, while for image, video, and document headers, you can pass a `media_id` or a `link` to the media file.
+For text header, `add_text_header` receives a string, while for image, video, and document headers, you can pass a `media_id` or a `link` to the media file.
 For header, as seen above, you can set it using the following instance methods:
 | Method                | Named Parameters               | Positional Parameters  | Respective Resource Class   |
 |-----------------------|--------------------------------|------------------------|-----------------------------|
-| `set_text_header`     | -                              | the content header     | `Warb::Resources::Text`     |
-| `set_image_header`    | `link`, `media_id`             | -                      | `Warb::Resources::Image`    |
-| `set_video_header`    | `link`, `media_id`             | -                      | `Warb::Resources::Video`    |
-| `set_document_header` | `link`, `media_id`, `filename` | -                      | `Warb::Resources::Document` |
+| `add_text_header`     | -                              | the content header     | `Warb::Resources::Text`     |
+| `add_image_header`    | `link`, `media_id`             | -                      | `Warb::Resources::Image`    |
+| `add_video_header`    | `link`, `media_id`             | -                      | `Warb::Resources::Video`    |
+| `add_document_header` | `link`, `media_id`, `filename` | -                      | `Warb::Resources::Document` |
 
 Either `link` or `media_id` can be used, but not both at the same time.
 
