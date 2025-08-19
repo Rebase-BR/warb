@@ -49,27 +49,27 @@ RSpec.describe Warb::Resources::Resource do
     end
   end
 
-  describe '#set_text_header' do
+  describe '#add_text_header' do
     it do
-      expect { subject.set_text_header }.to raise_error NotImplementedError
+      expect { subject.add_text_header }.to raise_error NotImplementedError
     end
   end
 
-  describe '#set_image_header' do
+  describe '#add_image_header' do
     it do
-      expect { subject.set_image_header }.to raise_error NotImplementedError
+      expect { subject.add_image_header }.to raise_error NotImplementedError
     end
   end
 
-  describe '#set_video_header' do
+  describe '#add_video_header' do
     it do
-      expect { subject.set_video_header }.to raise_error NotImplementedError
+      expect { subject.add_video_header }.to raise_error NotImplementedError
     end
   end
 
-  describe '#set_document_header' do
+  describe '#add_document_header' do
     it do
-      expect { subject.set_document_header }.to raise_error NotImplementedError
+      expect { subject.add_document_header }.to raise_error NotImplementedError
     end
   end
 end

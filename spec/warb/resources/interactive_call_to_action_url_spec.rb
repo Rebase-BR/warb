@@ -40,31 +40,31 @@ RSpec.describe Warb::Resources::InteractiveCallToActionUrl do
   context 'headers' do
     subject { described_class.new }
 
-    describe '#set_text_header' do
+    describe '#add_text_header' do
       it do
-        expect { subject.set_text_header('Header') }.to change(subject, :header)
+        expect { subject.add_text_header('Header') }.to change(subject, :header)
           .from(nil).to({ type: 'text', text: 'Header' })
       end
     end
 
-    describe '#set_image_header' do
+    describe '#add_image_header' do
       it do
-        expect { subject.set_image_header(link: 'link_to_image') }.to change(subject, :header)
+        expect { subject.add_image_header(link: 'link_to_image') }.to change(subject, :header)
           .from(nil).to({ type: 'image', image: { link: 'link_to_image', id: nil } })
       end
     end
 
-    describe '#set_video_header' do
+    describe '#add_video_header' do
       it do
-        expect { subject.set_video_header(link: 'link_to_video') }.to change(subject, :header)
+        expect { subject.add_video_header(link: 'link_to_video') }.to change(subject, :header)
           .from(nil).to({ type: 'video', video: { link: 'link_to_video', id: nil } })
       end
     end
 
-    describe '#set_document_header' do
+    describe '#add_document_header' do
       it do
         expect do
-          subject.set_document_header(link: 'link_to_document', filename: 'document.pdf')
+          subject.add_document_header(link: 'link_to_document', filename: 'document.pdf')
         end.to change(subject, :header)
           .from(nil).to({ type: 'document', document: { link: 'link_to_document', id: nil, filename: 'document.pdf' } })
       end

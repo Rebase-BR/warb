@@ -104,19 +104,19 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe '#set_text_header' do
+  describe '#add_text_header' do
     it do
       expect do
-        subject.set_text_header(content: 'John', parameter_name: 'part_of_the_day')
+        subject.add_text_header(content: 'John', parameter_name: 'part_of_the_day')
       end.to change(subject, :header).from(NilClass).to(Warb::Resources::Text)
     end
   end
 
-  describe '#set_image_header' do
+  describe '#add_image_header' do
     context 'with id, using block' do
       it do
         expect do
-          subject.set_image_header(media_id: 'media_id') do |image|
+          subject.add_image_header(media_id: 'media_id') do |image|
             expect(image).to be_a Warb::Resources::Image
             expect(image).to eq subject.header
           end
@@ -127,7 +127,7 @@ RSpec.describe Warb::Resources::Template do
     context 'with link, without using block' do
       it do
         expect do
-          image = subject.set_image_header(link: 'media_link')
+          image = subject.add_image_header(link: 'media_link')
 
           expect(image).to be_a Warb::Resources::Image
           expect(image).to eq subject.header
@@ -136,11 +136,11 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe '#set_document_header' do
+  describe '#add_document_header' do
     context 'with id, using block' do
       it do
         expect do
-          subject.set_document_header(media_id: 'media_id') do |document|
+          subject.add_document_header(media_id: 'media_id') do |document|
             expect(document).to be_a Warb::Resources::Document
             expect(document).to eq subject.header
           end
@@ -151,7 +151,7 @@ RSpec.describe Warb::Resources::Template do
     context 'with link, without using block' do
       it do
         expect do
-          document = subject.set_document_header(link: 'media_link')
+          document = subject.add_document_header(link: 'media_link')
 
           expect(document).to be_a Warb::Resources::Document
           expect(document).to eq subject.header
@@ -160,11 +160,11 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe '#set_video_header' do
+  describe '#add_video_header' do
     context 'with id, using block' do
       it do
         expect do
-          subject.set_video_header(media_id: 'media_id') do |video|
+          subject.add_video_header(media_id: 'media_id') do |video|
             expect(video).to be_a Warb::Resources::Video
             expect(video).to eq subject.header
           end
@@ -175,7 +175,7 @@ RSpec.describe Warb::Resources::Template do
     context 'with link, without using block' do
       it do
         expect do
-          video = subject.set_video_header(link: 'media_link')
+          video = subject.add_video_header(link: 'media_link')
 
           expect(video).to be_a Warb::Resources::Video
           expect(video).to eq subject.header
@@ -460,11 +460,11 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
-  describe '#set_location_header' do
+  describe '#add_location_header' do
     context 'with id, using block' do
       it do
         expect do
-          subject.set_location_header do |location|
+          subject.add_location_header do |location|
             expect(location).to be_a Warb::Resources::Location
             expect(location).to eq subject.header
           end
@@ -475,7 +475,7 @@ RSpec.describe Warb::Resources::Template do
     context 'with link, without using block' do
       it do
         expect do
-          location = subject.set_location_header
+          location = subject.add_location_header
 
           expect(location).to be_a Warb::Resources::Location
           expect(location).to eq subject.header

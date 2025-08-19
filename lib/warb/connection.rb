@@ -11,7 +11,7 @@ module Warb
     # rubocop:disable Metrics/ParameterLists
     def send_request(http_method:, endpoint:, url: nil, data: {}, headers: {}, multipart: false,
                      endpoint_prefix: :sender_id)
-      conn = set_connection(url:, multipart:)
+      conn = connection(url:, multipart:)
       response = conn.send(http_method, handle_endpoint(endpoint:, endpoint_prefix:), data, headers)
       if response.success?
         Warb::Response.new(response.body)
@@ -26,7 +26,7 @@ module Warb
 
     private
 
-    def set_connection(url:, multipart:)
+    def connection(url:, multipart:)
       url ||= 'https://graph.facebook.com/v22.0'
 
       Faraday.new(url) do |conn|

@@ -216,18 +216,18 @@ end
 If your template has any media header, you can set it as follow:
 | Header Type    | Template Instance Method    | Params                                         |
 |----------------|-----------------------------|------------------------------------------------|
-| `image`        | `set_image_header`          | `media_id` or `link`                           |
-| `video`        | `set_video_header`          | `media_id` or `link`                           |
-| `document`     | `set_document_header`       | `media_id` or `link`, `filename`               |
-| `location`     | `set_location_header`       | `latitude`, `longitude`, `name`, and `address` |
-| `text`         | `set_text_header`           | `content`, `parameter_name`                    |
+| `image`        | `add_image_header`          | `media_id` or `link`                           |
+| `video`        | `add_video_header`          | `media_id` or `link`                           |
+| `document`     | `add_document_header`       | `media_id` or `link`, `filename`               |
+| `location`     | `add_location_header`       | `latitude`, `longitude`, `name`, and `address` |
+| `text`         | `add_text_header`           | `content`, `parameter_name`                    |
 
-Every time a call is made to any `set_header` method, a new header will be set, overwriting the previous one.
+Every time a call is made to any `add_header` method, a new header will be set, overwriting the previous one.
 
-If you just want to change one attribute or another, `set_header` methods return the related resource, so it is possible to set the values if you keep a hold of such instance
+If you just want to change one attribute or another, `add_header` methods return the related resource, so it is possible to set the values if you keep a hold of such instance
 ```ruby
 Warb.template.dispatch(recipient_number) do |template|
-  header = template.set_image_header(media_id: "wrong_media_id")
+  header = template.add_image_header(media_id: "wrong_media_id")
 
   header.media_id = "correct_media_id"
 end
@@ -243,18 +243,18 @@ For the `document` header, `filename` is important because its extension will de
 
 For the `location` header, at least `latitude` and `longitude` must be provided.
 
-`set_header` methods will simply instatiate the corresponding resource class with the given parameters, and then, set it as the header attribute.
+`add_header` methods will simply instatiate the corresponding resource class with the given parameters, and then, set it as the header attribute.
 
 For `text` header, note that, due to how the WhatsApp Business Platform works, you can't set the entire content for it (the same that happens with the body of the message).
 
-In this case, `set_text_header`, will simply use whatever was given to it as parameter to build the final header in the WhatsApp Business Platform.
+In this case, `add_text_header`, will simply use whatever was given to it as parameter to build the final header in the WhatsApp Business Platform.
 
-So, for example, if your tamplate header was created with `Hello, {{1}}!`, then the text passed to `set_text_header` will simply be substituted in that `{{1}}`.
+So, for example, if your tamplate header was created with `Hello, {{1}}!`, then the text passed to `add_text_header` will simply be substituted in that `{{1}}`.
 
-If your template was defined using named parameters instead (something like `Hello, {{customer_name}}!`), then you must pass the name of the paramter to `set_text_header` as follow:
+If your template was defined using named parameters instead (something like `Hello, {{customer_name}}!`), then you must pass the name of the paramter to `add_text_header` as follow:
 ```ruby
 Warb.template.dispatch(recipient_number) do |template|
-  template.set_text_header(content: "John", parameter_name: "customer_name")
+  template.add_text_header(content: "John", parameter_name: "customer_name")
 end
 ```
 

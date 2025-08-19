@@ -57,13 +57,13 @@ warb_from_setup.interactive_list.dispatch(
 warb_from_setup.interactive_list.dispatch(recipient_number) do |builder|
   # OPTIONAL Headers: you can choose between text, image, or video headers.
 
-  builder.set_text_header('Text Header')
+  builder.add_text_header('Text Header')
 
   # If you want to use an image header, uncomment the line below and provide a valid or Media ID or Link.
-  # builder.set_image_header(media_id: image_id) # or builder.set_image_header(link: image_link)
+  # builder.add_image_header(media_id: image_id) # or builder.add_image_header(link: image_link)
 
   # If you want to use a video header, uncomment the line below and provide a valid Media ID or Link.
-  # builder.set_video_header(media_id: video_id) # or builder.set_video_header(link: video_link)
+  # builder.add_video_header(media_id: video_id) # or builder.add_video_header(link: video_link)
 
   builder.body = 'body'
   builder.footer = 'footer'
@@ -119,13 +119,13 @@ warb_from_new.interactive_list.dispatch(
 warb_from_new.interactive_list.dispatch(recipient_number) do |builder|
   # OPTIONAL Headers: you can choose between text, image, or video headers.
 
-  builder.set_text_header('Text Header')
+  builder.add_text_header('Text Header')
 
   # If you want to use an image header, uncomment the line below and provide a valid or Media ID or Link.
-  # builder.set_image_header(media_id: image_id) # or builder.set_image_header(link: image_link)
+  # builder.add_image_header(media_id: image_id) # or builder.add_image_header(link: image_link)
 
   # If you want to use a video header, uncomment the line below and provide a valid Media ID or Link.
-  # builder.set_video_header(media_id: video_id) # or builder.set_video_header(link: video_link)
+  # builder.add_video_header(media_id: video_id) # or builder.add_video_header(link: video_link)
 
   builder.body = 'body'
   builder.footer = 'footer'
@@ -175,13 +175,13 @@ Warb.interactive_list.dispatch(
 Warb.interactive_list.dispatch(recipient_number) do |builder|
   # OPTIONAL Headers: you can choose between text, image, or video headers.
 
-  builder.set_text_header('Text Header')
+  builder.add_text_header('Text Header')
 
   # If you want to use an image header, uncomment the line below and provide a valid or Media ID or Link.
-  # builder.set_image_header(media_id: image_id) # or builder.set_image_header(link: image_link)
+  # builder.add_image_header(media_id: image_id) # or builder.add_image_header(link: image_link)
 
   # If you want to use a video header, uncomment the line below and provide a valid Media ID or Link.
-  # builder.set_video_header(media_id: video_id) # or builder.set_video_header(link: video_link)
+  # builder.add_video_header(media_id: video_id) # or builder.add_video_header(link: video_link)
 
   builder.body = 'body'
   builder.footer = 'footer'
