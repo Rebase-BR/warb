@@ -28,7 +28,7 @@ Warb.interactive_call_to_action_url.dispatch(recipient_number) do |message|
   message.footer = "footer"
 
   # for header, there's a helper method to create a text header
-  message.set_text_header("Check this out!")
+  message.add_text_header("Check this out!")
 
   # and for action, you can use the build_action method to create a CTA action`
   message.build_action(button_text: "Click Here") do |action|
@@ -37,7 +37,7 @@ Warb.interactive_call_to_action_url.dispatch(recipient_number) do |message|
 end
 ```
 
-Aside from the text header, you can also set an image, video, or document as header using the respective methods, `set_image_header`, `set_video_header`, and `set_document_header`.
+Aside from the text header, you can also set an image, video, or document as header using the respective methods, `add_image_header`, `add_video_header`, and `add_document_header`.
 
 Here is an example of using an image as header:
 
@@ -47,7 +47,7 @@ Warb.interactive_call_to_action_url.dispatch(recipient_number) do |message|
   message.footer = "footer"
 
   # set an image as header
-  message.set_image_header(link: "https://example.com/image.jpg")
+  message.add_image_header(link: "https://example.com/image.jpg")
 
   # the build_action method also returns the built action
   action = message.build_action do |action|
@@ -68,7 +68,7 @@ Warb.interactive_call_to_action_url.dispatch(recipient_number) do |message|
 
   # set a document as header
   # for documents, you can also pass a filename. its extension will be used to determine the MIME type
-  message.set_document_header(link: "https://example.com/document.pdf", filename: "document.pdf")
+  message.add_document_header(link: "https://example.com/document.pdf", filename: "document.pdf")
 
   message.build_action(url: "https://example.com", button_text: "Click here")
 end
@@ -86,10 +86,10 @@ Here is a summary of the fields you can set in the `dispatch` method of the `int
 For header, as seen above, you can set it using the following instance methods:
 | Method                | Named Parameters   | Positional Parameters  | Respective Resource Class   |
 |-----------------------|--------------------|------------------------|-----------------------------|
-| `set_text_header`     | -                  | the content header     | `Warb::Resources::Text`     |
-| `set_image_header`    | `link`             | -                      | `Warb::Resources::Image`    |
-| `set_video_header`    | `link`             | -                      | `Warb::Resources::Video`    |
-| `set_document_header` | `link`, `filename` | -                      | `Warb::Resources::Document` |
+| `add_text_header`     | -                  | the content header     | `Warb::Resources::Text`     |
+| `add_image_header`    | `link`             | -                      | `Warb::Resources::Image`    |
+| `add_video_header`    | `link`             | -                      | `Warb::Resources::Video`    |
+| `add_document_header` | `link`, `filename` | -                      | `Warb::Resources::Document` |
 
 Under the hood, the set header methods will create the respective resource object and call its `build_header` method to prepare the header for sending.
 

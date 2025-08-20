@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "factory_bot"
+require 'factory_bot'
 
-FactoryBot.definition_file_paths = ["spec/factories"]
+FactoryBot.definition_file_paths = ['spec/factories']
 FactoryBot.find_definitions
 
 RSpec.configure do |config|

@@ -10,7 +10,7 @@ This is useful for sending messages that have a predefined structure, such as no
 
 List available templates:
 ```ruby
-# List templates (coming soon)
+Warb.template.list
 ```
 
 Sending template messages:
@@ -20,7 +20,60 @@ Warb.template.dispatch(recipient_number, **params)
 
 #### Listing Templates
 
-Coming soon
+**Prerequisites**: In order to view templates, you need to have them available in your business account. For more details, refer to the [Meta documentation](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates/template-library). Template creation via API will be covered later in this documentation (coming soon).
+
+You can retrieve all available message templates:
+
+```ruby
+Warb.template.list
+```
+
+##### Optional Parameters
+
+You can optionally filter templates using various parameters:
+
+Limit the number of results:
+```ruby
+Warb.template.list(limit: 10)
+```
+
+Specify which template fields to return:
+```ruby
+Warb.template.list(fields: ["name", "status", "category"])
+```
+
+For a complete list of available fields, refer to the [Meta documentation](https://developers.facebook.com/docs/graph-api/reference/whats-app-business-hsm/#fields).
+
+##### Example Response
+
+```ruby
+{
+  "data" => [
+    {
+      "name" => "hello_world",
+      "status" => "APPROVED",
+      "category" => "UTILITY",
+      "language" => "en_US",
+      "components" => [ ... ],
+      "id" => "1282952826730729"
+    },
+    {
+      "name" => "other_template_001",
+      "status" => "APPROVED",
+      "category" => "MARKETING",
+      "language" => "pt_BR",
+      "components" => [ ... ],
+      "id" => "1948352829250167"
+    }
+  ],
+  "paging" => {
+    "cursors" => {
+      "before" => "...",
+      "after" => "..."
+    }
+  }
+}
+```
 
 #### Sending Template Messages
 
@@ -163,18 +216,18 @@ end
 If your template has any media header, you can set it as follow:
 | Header Type    | Template Instance Method    | Params                                         |
 |----------------|-----------------------------|------------------------------------------------|
-| `image`        | `set_image_header`          | `media_id` or `link`                           |
-| `video`        | `set_video_header`          | `media_id` or `link`                           |
-| `document`     | `set_document_header`       | `media_id` or `link`, `filename`               |
-| `location`     | `set_location_header`       | `latitude`, `longitude`, `name`, and `address` |
-| `text`         | `set_text_header`           | `content`, `parameter_name`                    |
+| `image`        | `add_image_header`          | `media_id` or `link`                           |
+| `video`        | `add_video_header`          | `media_id` or `link`                           |
+| `document`     | `add_document_header`       | `media_id` or `link`, `filename`               |
+| `location`     | `add_location_header`       | `latitude`, `longitude`, `name`, and `address` |
+| `text`         | `add_text_header`           | `content`, `parameter_name`                    |
 
-Every time a call is made to any `set_header` method, a new header will be set, overwriting the previous one.
+Every time a call is made to any `add_header` method, a new header will be set, overwriting the previous one.
 
-If you just want to change one attribute or another, `set_header` methods return the related resource, so it is possible to set the values if you keep a hold of such instance
+If you just want to change one attribute or another, `add_header` methods return the related resource, so it is possible to set the values if you keep a hold of such instance
 ```ruby
 Warb.template.dispatch(recipient_number) do |template|
-  header = template.set_image_header(media_id: "wrong_media_id")
+  header = template.add_image_header(media_id: "wrong_media_id")
 
   header.media_id = "correct_media_id"
 end
@@ -190,22 +243,89 @@ For the `document` header, `filename` is important because its extension will de
 
 For the `location` header, at least `latitude` and `longitude` must be provided.
 
-`set_header` methods will simply instatiate the corresponding resource class with the given parameters, and then, set it as the header attribute.
+`add_header` methods will simply instatiate the corresponding resource class with the given parameters, and then, set it as the header attribute.
 
 For `text` header, note that, due to how the WhatsApp Business Platform works, you can't set the entire content for it (the same that happens with the body of the message).
 
-In this case, `set_text_header`, will simply use whatever was given to it as parameter to build the final header in the WhatsApp Business Platform.
+In this case, `add_text_header`, will simply use whatever was given to it as parameter to build the final header in the WhatsApp Business Platform.
 
-So, for example, if your tamplate header was created with `Hello, {{1}}!`, then the text passed to `set_text_header` will simply be substituted in that `{{1}}`.
+So, for example, if your tamplate header was created with `Hello, {{1}}!`, then the text passed to `add_text_header` will simply be substituted in that `{{1}}`.
 
-If your template was defined using named parameters instead (something like `Hello, {{customer_name}}!`), then you must pass the name of the paramter to `set_text_header` as follow:
+If your template was defined using named parameters instead (something like `Hello, {{customer_name}}!`), then you must pass the name of the paramter to `add_text_header` as follow:
 ```ruby
 Warb.template.dispatch(recipient_number) do |template|
-  template.set_text_header(content: "John", parameter_name: "customer_name")
+  template.add_text_header(content: "John", parameter_name: "customer_name")
 end
 ```
 
 When the template instance's `build_payload` method is called (which happens when the message is about to be dispatched), the header param will be created using the `header`'s `build_header` method.
+
+#### Adding Buttons
+
+If your template supports buttons, you can add them using the following methods:
+
+| Button Type        | Template Instance Method      | Params                                    |
+|--------------------|-------------------------------|-------------------------------------------|
+| `quick_reply`      | `add_quick_reply_button`      | `index`                                   |
+| `url`              | `add_dynamic_url_button`      | `index`, `text`                           |
+| `url`              | `add_auth_code_button`        | `index`, `text`                           |
+| `copy_code`        | `add_copy_code_button`        | `index`, `coupon_code`                    |
+| `voice_call`       | `add_voice_call_button`       | `index`                                   |
+| `doesn't apply`    | `add_button`                  | `instance`, `&block`                      |
+
+You can either use the keyword parameters or set the attributes using a block:
+
+```ruby
+Warb.template.dispatch(recipient_number) do |template|
+  template.name = "order_confirmation"
+  template.language = Warb::Language::ENGLISH_US
+
+  # Add a quick reply button
+  template.add_quick_reply_button
+
+  # Add a dynamic URL button
+  template.add_dynamic_url_button do |button|
+    button.text = "dynamic-url-suffix"
+  end
+
+  # Add a copy auth code button
+  template.add_auth_code_button do |button|
+    button.text = "4UTHC0D3"
+  end
+
+  # Add a copy code button
+  template.add_copy_code_button(index: 2) do |button|
+    button.coupon_code = "SAVE20"
+  end
+
+  # Add a voice call button
+  template.add_voice_call_button
+end
+```
+
+or if you'd rather to, you can add buttons using it's component and the `add_button` method:
+
+```ruby
+quick_reply_btn = Warb::Components::QuickReplyButton.new
+
+Warb.template.dispatch(recipient_number) do |template|
+  template.name = "order_confirmation"
+  template.language = Warb::Language::ENGLISH_US
+
+  # Add a quick reply button
+  template.add_button(quick_reply_btn)
+
+ # Add a quick reply button, passing a block.
+  template.add_button(quick_reply_btn) { |button| button.index = 1 }
+end
+```
+
+**Note**: The `index` parameter determines the order of the buttons in the template. Make sure the
+indices match the button positions defined in your template. The `index` is automaticaly set if you
+don't do it manually, but it is done based on the number of buttons added with the methods above,
+so if your template has a button that doesn't need configuration like the static url button you'll
+have provide the position of the other buttons.
+
 
 #### Creating Templates
 

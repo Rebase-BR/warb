@@ -27,19 +27,19 @@ module Warb
         raise NotImplementedError
       end
 
-      def set_text_header
+      def add_text_header
         raise NotImplementedError
       end
 
-      def set_image_header
+      def add_image_header
         raise NotImplementedError
       end
 
-      def set_video_header
+      def add_video_header
         raise NotImplementedError
       end
 
-      def set_document_header
+      def add_document_header
         raise NotImplementedError
       end
 

@@ -1,33 +1,33 @@
 # frozen_string_literal: true
 
 RSpec.describe Warb::Components::Section do
-  describe "#add_row" do
+  describe '#add_row' do
     let(:section) { build :section }
 
-    context "rows count" do
+    context 'rows count' do
       it do
         expect { section.add_row }.to change(section.rows, :count).by(1)
       end
     end
 
-    context "added object class" do
+    context 'added object class' do
       subject { section.add_row }
 
       it { is_expected.to be_a Warb::Components::Row }
     end
 
-    context "initialized with" do
-      subject { section.add_row title: "Title", description: "Description" }
+    context 'initialized with' do
+      subject { section.add_row title: 'Title', description: 'Description' }
 
-      it { expect(subject.title).to eq "Title" }
-      it { expect(subject.description).to eq "Description" }
+      it { expect(subject.title).to eq 'Title' }
+      it { expect(subject.description).to eq 'Description' }
     end
 
-    context "using a block" do
+    context 'using a block' do
       it do
-        row = section.add_row(title: "Added Row") do |row|
+        row = section.add_row(title: 'Added Row') do |row|
           expect(row).to be_a Warb::Components::Row
-          expect(row.title).to eq "Added Row"
+          expect(row.title).to eq 'Added Row'
         end
 
         expect(row).to be_a Warb::Components::Row
@@ -36,26 +36,26 @@ RSpec.describe Warb::Components::Section do
     end
   end
 
-  describe "#to_h" do
-    let(:row) { build :row, title: "Título" }
-    let(:section) { build :section, rows: [row] }
-
+  describe '#to_h' do
     subject { section.to_h }
 
-    context "title" do
+    let(:row) { build :row, title: 'Título' }
+    let(:section) { build :section, rows: [row] }
+
+    context 'title' do
       it { expect(subject[:title]).to eq section.title }
     end
 
-    context "rows" do
-      context "count" do
+    context 'rows' do
+      context 'count' do
         it { expect(subject[:rows].count).to eq section.rows.count }
       end
 
-      context "first row" do
+      context 'first row' do
         it do
           expect(subject[:rows].first).to eq(
             {
-              id: "titulo_0",
+              id: 'titulo_0',
               title: row.title,
               description: row.description
             }
@@ -64,7 +64,7 @@ RSpec.describe Warb::Components::Section do
       end
     end
 
-    context "serializations" do
+    context 'serializations' do
       before do
         allow(section).to receive(:to_h).and_call_original
         allow(section.rows).to receive(:map).and_call_original

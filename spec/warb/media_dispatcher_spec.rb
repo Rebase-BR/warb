@@ -1,86 +1,112 @@
 # frozen_string_literal: true
 
 RSpec.describe Warb::MediaDispatcher do
-  let(:resource) { double("MediaResource", call: {}) }
+  class MediaResource < Warb::Resources::Resource; end
+
+  subject { service }
+
   let(:client) { Warb.client }
+  let(:service) { described_class.new(MediaResource, client) }
 
-  before do
-    stub_const("MediaResource", new: resource)
-  end
+  describe '#upload' do
+    subject { service.upload(file_path:, file_type:) }
 
-  subject { described_class.new MediaResource, client }
+    let(:file_path) { 'spec/warb/media_dispatcher_spec.rb' }
+    let(:file_type) { 'text/plain' }
+    let(:file) { double('Faraday::UploadIO') }
 
-  describe "#upload" do
-    let(:file_path) { "spec/warb/media_dispatcher_spec.rb" }
-    let(:file_type) { "text/plain" }
-    let(:file) { Faraday::UploadIO.new(file_path, file_type) }
-    let(:data) { { file:, messaging_product: "whatsapp" } }
-    let(:response) { instance_double("Net::HTTPOK", body: { id: "media_id" }) }
-
-    before { allow(Faraday::UploadIO).to receive(:new).and_return(file) }
-
-    it do
-      expect(client).to receive(:post).with("media", data, multipart: true).and_return(response)
-
-      subject.upload(file_path:, file_type:)
+    let(:data) do
+      { file:, messaging_product: 'whatsapp' }
     end
-  end
 
-  describe "#download" do
-    let(:response) { instance_double(Net::HTTPOK, body: "file binary data") }
+    let(:mock_response) { double('response', body: { 'id' => 'media_123456' }) }
 
     before do
-      allow_any_instance_of(Net::HTTP).to receive(:request).and_return(response)
+      allow(Faraday::UploadIO).to receive(:new).and_return(file)
     end
 
-    after { File.unlink("downloaded_file") }
-
     it do
-      expect(File).not_to exist("downloaded_file")
+      expect(client).to receive(:post)
+        .with('media', data, multipart: true)
+        .and_return(mock_response)
 
-      subject.download file_path: "downloaded_file", media_url: "http://example.com/file.bin"
-
-      expect(File).to exist("downloaded_file")
-      expect(File.read("downloaded_file")).to eq "file binary data"
+      expect(subject).to eq 'media_123456'
     end
   end
 
-  describe "#retrieve" do
-    let(:response) { instance_double("Faraday::Response", body: {}) }
+  describe '#download' do
+    let(:response) { instance_double(Net::HTTPOK, body: 'file binary data') }
 
     before do
-      allow_any_instance_of(Faraday::Connection).to receive(:get).and_return(response)
+      http = instance_double(Net::HTTP, request: response)
+      allow(Net::HTTP).to receive(:start).and_yield(http)
+    end
+
+    after { FileUtils.rm_f('downloaded_file') }
+
+    it do
+      expect(File).not_to exist('downloaded_file')
+
+      subject.download file_path: 'downloaded_file', media_url: 'http://example.com/file.bin'
+
+      expect(File).to exist('downloaded_file')
+      expect(File.read('downloaded_file')).to eq 'file binary data'
+    end
+  end
+
+  describe '#retrieve' do
+    before do
+      faraday_ok = instance_double(Faraday::Response,
+                                   status: 200,
+                                   body: {},
+                                   headers: {},
+                                   success?: true)
+
+      expect_any_instance_of(Faraday::Connection)
+        .to receive(:send).with('get', 'media_id', {}, {})
+        .and_return(faraday_ok)
     end
 
     it do
       expect(client).to receive(:get).and_call_original
-
-      subject.retrieve "media_id"
+      subject.retrieve 'media_id'
     end
   end
 
-  describe "#delete" do
-    before do
-      allow_any_instance_of(Faraday::Connection).to receive(:delete).and_return(response)
-    end
-
-    context "success" do
-      let(:response) { instance_double("Faraday::Response", body: { "success" => true }) }
-
+  describe '#delete' do
+    context 'success' do
       it do
+        faraday_ok = instance_double(Faraday::Response,
+                                     status: 200,
+                                     body: { 'success' => true },
+                                     headers: {},
+                                     success?: true)
+
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).with('delete', 'media_id', {}, {})
+          .and_return(faraday_ok)
+
         expect(client).to receive(:delete).and_call_original
 
-        expect(subject.delete("media_id")).to eq true
+        expect(subject.delete('media_id')).to be true
       end
     end
 
-    context "failure" do
-      let(:response) { instance_double("Faraday::Response", body: { "error" => { "message" => "Error message" } }) }
-
+    context 'failure' do
       it do
+        faraday_ok_with_error = instance_double(Faraday::Response,
+                                                status: 200,
+                                                body: { 'error' => { 'message' => 'Error message' } },
+                                                headers: {},
+                                                success?: true)
+
+        expect_any_instance_of(Faraday::Connection)
+          .to receive(:send).with('delete', 'media_id', {}, {})
+          .and_return(faraday_ok_with_error)
+
         expect(client).to receive(:delete).and_call_original
 
-        expect(subject.delete("media_id")).to eq "Error message"
+        expect(subject.delete('media_id')).to eq 'Error message'
       end
     end
   end

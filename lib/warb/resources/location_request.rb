@@ -5,20 +5,22 @@ module Warb
     class LocationRequest < Resource
       attr_accessor :body_text
 
+      # rubocop:disable Metrics/MethodLength
       def build_payload
         {
-          type: "interactive",
+          type: 'interactive',
           interactive: {
-            type: "location_request_message",
+            type: 'location_request_message',
             body: {
               text: body_text || @params[:body_text]
             },
             action: {
-              name: "send_location"
+              name: 'send_location'
             }
           }
         }
       end
+      # rubocop:enable Metrics/MethodLength
     end
   end
 end

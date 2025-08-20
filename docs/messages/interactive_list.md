@@ -77,7 +77,7 @@ Warb.interactive_list.dispatch(recipient_number) do |message|
   message.body = "Choose your preferred language"
   message.footer = "You can change it later"
 
-  message.set_text_header("Language Selection")
+  message.add_text_header("Language Selection")
 
   message.build_action(button_text: "Select") do |action|
     section = action.add_section(title: nil)
@@ -108,7 +108,7 @@ Warb.interactive_list.dispatch(recipient_number) do |message|
   message.body = "Choose your preferred language"
   message.footer = "You can change it later"
 
-  message.set_text_header("Language Selection")
+  message.add_text_header("Language Selection")
 
   message.build_action(button_text: "Select") do |action|
     action.add_section(title: "American Languages") do |american_section|

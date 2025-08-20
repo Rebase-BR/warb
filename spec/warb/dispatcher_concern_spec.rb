@@ -4,8 +4,8 @@ RSpec.describe Warb::DispatcherConcern do
   let(:global_client) { Warb.client }
   let(:local_client_dispatcher) { Warb::Client.new }
 
-  describe "#message" do
-    context "without a previous call, from within a client instance" do
+  describe '#message' do
+    context 'without a previous call, from within a client instance' do
       it do
         expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::Text, local_client_dispatcher)
         expect(Warb).not_to receive(:client)
@@ -14,7 +14,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within Warb module" do
+    context 'with a previous call, from within Warb module' do
       before { global_client.message }
 
       it do
@@ -26,8 +26,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#image" do
-    context "without a previous call, from within Warb module" do
+  describe '#image' do
+    context 'without a previous call, from within Warb module' do
       it do
         expect(Warb).to receive(:client).and_call_original
         expect(Warb::MediaDispatcher).to receive(:new).with(Warb::Resources::Image, global_client)
@@ -36,7 +36,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within a client instance" do
+    context 'with a previous call, from within a client instance' do
       before { local_client_dispatcher.image }
 
       it do
@@ -48,8 +48,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#video" do
-    context "without a previous call, from within a client instance" do
+  describe '#video' do
+    context 'without a previous call, from within a client instance' do
       it do
         expect(Warb).not_to receive(:client)
         expect(Warb::MediaDispatcher).to receive(:new).with(Warb::Resources::Video, local_client_dispatcher)
@@ -58,7 +58,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from withing Warb module" do
+    context 'with a previous call, from withing Warb module' do
       before { global_client.video }
 
       it do
@@ -70,8 +70,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#audio" do
-    context "without a previous call, from within Warb module" do
+  describe '#audio' do
+    context 'without a previous call, from within Warb module' do
       it do
         expect(Warb).to receive(:client).and_call_original
         expect(Warb::MediaDispatcher).to receive(:new).with(Warb::Resources::Audio, global_client)
@@ -80,7 +80,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within a client instance" do
+    context 'with a previous call, from within a client instance' do
       before { local_client_dispatcher.audio }
 
       it do
@@ -92,8 +92,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#document" do
-    context "without a previous call, from within a client instance" do
+  describe '#document' do
+    context 'without a previous call, from within a client instance' do
       it do
         expect(Warb::MediaDispatcher).to receive(:new).with(Warb::Resources::Document, local_client_dispatcher)
         expect(Warb).not_to receive(:client)
@@ -102,7 +102,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within Warb module" do
+    context 'with a previous call, from within Warb module' do
       before { global_client.document }
 
       it do
@@ -114,8 +114,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#location" do
-    context "without a previous call, from within Warb module" do
+  describe '#location' do
+    context 'without a previous call, from within Warb module' do
       it do
         expect(Warb).to receive(:client).and_call_original
         expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::Location, global_client)
@@ -124,7 +124,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within a client instance" do
+    context 'with a previous call, from within a client instance' do
       before { local_client_dispatcher.location }
 
       it do
@@ -136,8 +136,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#location_request" do
-    context "without a previous call, from within a client instance" do
+  describe '#location_request' do
+    context 'without a previous call, from within a client instance' do
       it do
         expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::LocationRequest, local_client_dispatcher)
         expect(Warb).not_to receive(:client)
@@ -146,7 +146,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within Warb module" do
+    context 'with a previous call, from within Warb module' do
       before { global_client.location_request }
 
       it do
@@ -158,8 +158,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#interactive_reply_button" do
-    context "without a previous call, from within Warb module" do
+  describe '#interactive_reply_button' do
+    context 'without a previous call, from within Warb module' do
       it do
         expect(Warb).to receive(:client).and_call_original
         expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::InteractiveReplyButton, global_client)
@@ -168,7 +168,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within a client instance" do
+    context 'with a previous call, from within a client instance' do
       before { local_client_dispatcher.interactive_reply_button }
 
       it do
@@ -180,8 +180,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#interactive_list" do
-    context "without a previous call, from within a client instance" do
+  describe '#interactive_list' do
+    context 'without a previous call, from within a client instance' do
       it do
         expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::InteractiveList, local_client_dispatcher)
         expect(Warb).not_to receive(:client)
@@ -190,7 +190,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within Warb module" do
+    context 'with a previous call, from within Warb module' do
       before { global_client.interactive_list }
 
       it do
@@ -202,8 +202,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#interactive_call_to_action_url" do
-    context "without a previous call, from within Warb module" do
+  describe '#interactive_call_to_action_url' do
+    context 'without a previous call, from within Warb module' do
       it do
         expect(Warb).to receive(:client).and_call_original
         expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::InteractiveCallToActionUrl, global_client)
@@ -212,7 +212,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within a client instance" do
+    context 'with a previous call, from within a client instance' do
       before { local_client_dispatcher.interactive_call_to_action_url }
 
       it do
@@ -224,8 +224,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#sticker" do
-    context "without a previous call, from within Warb module" do
+  describe '#sticker' do
+    context 'without a previous call, from within Warb module' do
       it do
         expect(Warb).to receive(:client).and_call_original
         expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::Sticker, global_client)
@@ -234,7 +234,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within a client instance" do
+    context 'with a previous call, from within a client instance' do
       before { local_client_dispatcher.sticker }
 
       it do
@@ -246,8 +246,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#reaction" do
-    context "without a previous call, from within Warb module" do
+  describe '#reaction' do
+    context 'without a previous call, from within Warb module' do
       it do
         expect(Warb).to receive(:client).and_call_original
         expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::Reaction, global_client)
@@ -256,7 +256,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within a client instance" do
+    context 'with a previous call, from within a client instance' do
       before { local_client_dispatcher.reaction }
 
       it do
@@ -268,8 +268,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#indicator" do
-    context "without a previous call, from within a client instance" do
+  describe '#indicator' do
+    context 'without a previous call, from within a client instance' do
       it do
         expect(Warb).not_to receive(:client)
         expect(Warb::IndicatorDispatcher).to receive(:new)
@@ -278,7 +278,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within Warb instance" do
+    context 'with a previous call, from within Warb instance' do
       before { global_client.indicator }
 
       it do
@@ -290,8 +290,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#contact" do
-    context "without a previous call, from within Warb module" do
+  describe '#contact' do
+    context 'without a previous call, from within Warb module' do
       it do
         expect(Warb).to receive(:client).and_call_original
         expect(Warb::Dispatcher).to receive(:new)
@@ -300,7 +300,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within a client instance" do
+    context 'with a previous call, from within a client instance' do
       before { local_client_dispatcher.contact }
 
       it do
@@ -312,8 +312,8 @@ RSpec.describe Warb::DispatcherConcern do
     end
   end
 
-  describe "#template" do
-    context "without a previous call, from within a client instance" do
+  describe '#template' do
+    context 'without a previous call, from within a client instance' do
       it do
         expect(Warb).not_to receive(:client)
         expect(Warb::TemplateDispatcher).to receive(:new).with(Warb::Resources::Template, local_client_dispatcher)
@@ -322,7 +322,7 @@ RSpec.describe Warb::DispatcherConcern do
       end
     end
 
-    context "with a previous call, from within Warb module" do
+    context 'with a previous call, from within Warb module' do
       before { global_client.template }
 
       it do
@@ -330,6 +330,28 @@ RSpec.describe Warb::DispatcherConcern do
         expect(Warb::TemplateDispatcher).not_to receive(:new)
 
         global_client.template
+      end
+    end
+  end
+
+  describe '#flow' do
+    context 'without a previous call, from within a client instance' do
+      it do
+        expect(Warb).not_to receive(:client)
+        expect(Warb::Dispatcher).to receive(:new).with(Warb::Resources::Flow, local_client_dispatcher)
+
+        puts local_client_dispatcher.flow.inspect
+      end
+    end
+
+    context 'with a previous call, from within Warb module' do
+      before { global_client.flow }
+
+      it do
+        expect(Warb).not_to receive(:client)
+        expect(Warb::Dispatcher).not_to receive(:new).with(Warb::Resources::Flow, global_client)
+
+        global_client.flow
       end
     end
   end

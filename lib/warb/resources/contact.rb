@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "../components/address"
-require_relative "../components/name"
-require_relative "../components/email"
-require_relative "../components/org"
-require_relative "../components/phone"
-require_relative "../components/url"
+require_relative '../components/address'
+require_relative '../components/name'
+require_relative '../components/email'
+require_relative '../components/org'
+require_relative '../components/phone'
+require_relative '../components/url'
 
 module Warb
   module Resources
@@ -13,7 +13,7 @@ module Warb
       attr_accessor :addresses, :emails, :phones, :urls, :name, :org, :birthday
 
       def initialize(**params)
-        super(**params)
+        super
 
         @org = @params[:org]
         @name = @params[:name]
@@ -24,9 +24,10 @@ module Warb
         @urls = @params.fetch(:urls, [])
       end
 
+      # rubocop:disable Metrics/MethodLength
       def build_payload
         {
-          type: "contacts",
+          type: 'contacts',
           contacts: [
             {
               birthday: birthday,
@@ -40,49 +41,50 @@ module Warb
           ]
         }
       end
+      # rubocop:enable Metrics/MethodLength
 
-      def add_address(**params, &block)
+      def add_address(**params, &)
         address = Components::Address.new(**params)
 
         @addresses << address
 
-        block_given? ? address.tap(&block) : address
+        block_given? ? address.tap(&) : address
       end
 
-      def add_email(**params, &block)
+      def add_email(**params, &)
         email = Components::Email.new(**params)
 
         @emails << email
 
-        block_given? ? email.tap(&block) : email
+        block_given? ? email.tap(&) : email
       end
 
-      def add_phone(**params, &block)
+      def add_phone(**params, &)
         phone = Components::Phone.new(**params)
 
         @phones << phone
 
-        block_given? ? phone.tap(&block) : phone
+        block_given? ? phone.tap(&) : phone
       end
 
-      def add_url(**params, &block)
+      def add_url(**params, &)
         url = Components::URL.new(**params)
 
         @urls << url
 
-        block_given? ? url.tap(&block) : url
+        block_given? ? url.tap(&) : url
       end
 
-      def build_name(**params, &block)
+      def build_name(**params, &)
         @name = Warb::Components::Name.new(**params)
 
-        block_given? ? @name.tap(&block) : @name
+        block_given? ? @name.tap(&) : @name
       end
 
-      def build_org(**params, &block)
+      def build_org(**params, &)
         @org = Warb::Components::Org.new(**params)
 
-        block_given? ? @org.tap(&block) : @org
+        block_given? ? @org.tap(&) : @org
       end
     end
   end

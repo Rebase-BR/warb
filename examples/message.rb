@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "../lib/warb"
+require_relative '../lib/warb'
 
 # Configure your variables here
 
-access_token = ""
-business_id = ""
-sender_id = ""
-recipient_number = ""
+access_token = ''
+business_id = ''
+sender_id = ''
+recipient_number = ''
 
 # We recommend testing one section at a time, as it can be overwhelming to see all the messages at once.
 # So you can comment out the sections you don't want to test.
@@ -27,7 +27,7 @@ warb_from_setup.message.dispatch(recipient_number, message: 'Hello from warb! Me
 warb_from_setup.message.dispatch(recipient_number, text: 'Hello from warb! Message sent with "text" key')
 
 warb_from_setup.message.dispatch(recipient_number) do |builder|
-  builder.content = "Hello from warb! Message sent with block builder"
+  builder.content = 'Hello from warb! Message sent with block builder'
 end
 
 # ############################################ #
@@ -45,7 +45,7 @@ warb_from_new.message.dispatch(recipient_number, message: 'Hello from warb! Mess
 warb_from_new.message.dispatch(recipient_number, text: 'Hello from warb! Message sent with "text" key')
 
 warb_from_new.message.dispatch(recipient_number) do |builder|
-  builder.content = "Hello from warb! Message sent with block builder"
+  builder.content = 'Hello from warb! Message sent with block builder'
 end
 
 # ################################################# #
@@ -57,5 +57,5 @@ Warb.message.dispatch(recipient_number, message: 'Hello from warb! Message sent 
 Warb.message.dispatch(recipient_number, text: 'Hello from warb! Message sent with "text" key')
 
 Warb.message.dispatch(recipient_number) do |builder|
-  builder.content = "Hello from warb! Message sent with block builder"
+  builder.content = 'Hello from warb! Message sent with block builder'
 end
