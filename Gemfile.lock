@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    warb (0.1.1)
+    warb (0.1.2)
       faraday (~> 2.13)
       faraday-multipart (~> 1.1)
 
