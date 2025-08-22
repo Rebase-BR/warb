@@ -38,10 +38,10 @@ module Warb
       end
 
       def build_template_example_parameter
-        { type: "body", text: message_per_priority }.tap do |param|
+        { type: 'body', text: message_per_priority }.tap do |param|
           examples ||= @params[:examples]
 
-          next unless [Array].include?(examples.class)
+          next unless examples.is_a?(Array)
 
           param[:example] = { body_text: [examples] }
         end

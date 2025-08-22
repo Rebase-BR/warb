@@ -19,4 +19,3 @@ module Warb
     end
   end
 end
-

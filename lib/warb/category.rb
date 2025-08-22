@@ -2,7 +2,7 @@
 
 module Warb
   module Category
-    MARKETING = "MARKETING"
-    UTILITY = "UTILITY"
+    MARKETING = 'MARKETING'
+    UTILITY = 'UTILITY'
   end
 end

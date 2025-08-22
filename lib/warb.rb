@@ -10,7 +10,7 @@ require_relative 'warb/configuration'
 require_relative 'warb/dispatcher_concern'
 require_relative 'warb/client'
 
-# Stack de erros/respostas
+# Error/response stack
 require_relative 'warb/errors'
 require_relative 'warb/response_error_handler'
 require_relative 'warb/response'
@@ -41,7 +41,7 @@ require_relative 'warb/media_dispatcher'
 require_relative 'warb/template_dispatcher'
 require_relative 'warb/indicator_dispatcher'
 
-# Utils e componentes
+# Utils and components
 require_relative 'warb/utils'
 require_relative 'warb/components/component'
 require_relative 'warb/components/button'
