@@ -316,7 +316,7 @@ RSpec.describe Warb::DispatcherConcern do
     context 'without a previous call, from within a client instance' do
       it do
         expect(Warb).not_to receive(:client)
-        expect(Warb::Dispatcher).to receive(:new)
+        expect(Warb::TemplateDispatcher).to receive(:new).with(Warb::Resources::Template, local_client_dispatcher)
 
         local_client_dispatcher.template
       end
@@ -327,7 +327,7 @@ RSpec.describe Warb::DispatcherConcern do
 
       it do
         expect(Warb).not_to receive(:client)
-        expect(Warb::Dispatcher).not_to receive(:new)
+        expect(Warb::TemplateDispatcher).not_to receive(:new)
 
         global_client.template
       end

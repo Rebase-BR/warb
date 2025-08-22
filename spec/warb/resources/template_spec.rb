@@ -690,4 +690,40 @@ RSpec.describe Warb::Resources::Template do
       end
     end
   end
+
+  describe "#build_creation_payload" do
+    context "with positional parameters" do
+      before do
+        allow(subject).to receive_messages(
+          name: "template_name",
+          language: Warb::Language::ENGLISH_US,
+          category: Warb::Category::UTILITY,
+          body: Warb::Resources::Text.new(content: "Hello, {{1}}", examples: ["John"])
+        )
+      end
+
+      it do
+        expect(subject.creation_payload).to eq(
+          {
+            name: "template_name",
+            language: "en_US",
+            category: "UTILITY",
+            components: [
+              {
+                type: "body",
+                text: "Hello, {{1}}",
+                example: {
+                  body_text: [
+                    [
+                      "John"
+                    ]
+                  ]
+                }
+              }
+            ]
+          }
+        )
+      end
+    end
+  end
 end

@@ -3,7 +3,7 @@
 module Warb
   module Resources
     class Template < Resource
-      attr_accessor :name, :language, :resources, :header, :buttons
+      attr_accessor :name, :language, :resources, :header, :category, :body, :buttons
 
       def initialize(**params)
         super
@@ -11,6 +11,8 @@ module Warb
         @name = params[:name]
         @language = params[:language]
         @resources = params[:resources]
+        @category = params[:category]
+        @body = params[:body]
         @buttons = []
       end
 
@@ -32,6 +34,17 @@ module Warb
         }
       end
       # rubocop:enable Metrics/MethodLength
+
+      def creation_payload
+        {
+          name: name,
+          language: language,
+          category: category,
+          components: [
+            body&.build_template_example_parameter
+          ].compact
+        }
+      end
 
       def add_currency_parameter(parameter_name = nil, **params, &)
         add_parameter(parameter_name, Currency.new(**params), &)
