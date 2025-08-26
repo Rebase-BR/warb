@@ -1,14 +1,13 @@
 # frozen_string_literal: true
-require 'byebug'
 
 RSpec.describe Warb::Resources::Flow do
-
   let(:flow_resource) { build :flow }
 
   describe '#build_payload' do
     context 'complete structure' do
-      let(:flow_resource) { build :flow, :complete_structure }
       subject { flow_resource.build_payload }
+
+      let(:flow_resource) { build :flow, :complete_structure }
 
       it 'with correct types of data' do
         expect(subject).to include(:type, :interactive)
@@ -21,10 +20,10 @@ RSpec.describe Warb::Resources::Flow do
 
         header = interactive[:header]
         case header[:type]
-          when "text" then expect(header[:text]).to be_a(String)
-          when "image" then expect(header[:image]).to include(:id).or include(:link)
-          when "video" then expect(header[:video]).to include(:id).or include(:link)
-          when "document" then expect(header[:document]).to include(:id).or include(:link)
+        when 'text' then expect(header[:text]).to be_a(String)
+        when 'image' then expect(header[:image]).to include(:id).or include(:link)
+        when 'video' then expect(header[:video]).to include(:id).or include(:link)
+        when 'document' then expect(header[:document]).to include(:id).or include(:link)
         end
         expect(interactive[:body][:text]).to be_a(String)
         expect(interactive[:footer][:text]).to be_a(String)
@@ -43,6 +42,8 @@ RSpec.describe Warb::Resources::Flow do
     context 'with necessary values' do
       subject { flow_resource.build_payload }
 
+      let(:flow_resource) { build :flow, :with_initial_data }
+
       it 'and default parameters' do
         params = subject[:interactive][:action][:parameters]
         expect(params[:flow_message_version]).to eq('3')
@@ -51,8 +52,6 @@ RSpec.describe Warb::Resources::Flow do
         expect(params[:mode]).to eq('published')
         expect(params[:flow_action_payload][:screen]).to be_a(String)
       end
-
-      let(:flow_resource) { build :flow, :with_initial_data }
 
       it 'and initial data' do
         payload = subject[:interactive][:action][:parameters][:flow_action_payload]
@@ -63,8 +62,9 @@ RSpec.describe Warb::Resources::Flow do
     end
 
     context 'dynamic flow' do
-      let(:flow_resource) { build :flow, :dynamic }
       subject { flow_resource.build_payload }
+
+      let(:flow_resource) { build :flow, :dynamic }
 
       it 'does not include flow_action_payload with screen or data' do
         payload = subject[:interactive][:action][:parameters]

@@ -10,7 +10,7 @@ module Warb
         validate!
 
         {
-          type: "interactive",
+          type: 'interactive',
           interactive: build_interactive
         }
       end
@@ -19,9 +19,9 @@ module Warb
 
       def build_interactive
         interactive = {
-          type: "flow",
+          type: 'flow',
           action: {
-            name: "flow",
+            name: 'flow',
             parameters: build_action_parameters
           }
         }
@@ -39,11 +39,11 @@ module Warb
       end
 
       def build_action_parameters
-        action = resolve(:flow_action, "navigate").to_s
-        mode    = resolve(:mode, "published").to_s
+        action = resolve(:flow_action, 'navigate').to_s
+        mode = resolve(:mode, 'published').to_s
 
         params = {
-          flow_message_version: "3",
+          flow_message_version: '3',
           flow_id: resolve(:flow_id),
           flow_action: action,
           mode: mode
@@ -55,7 +55,7 @@ module Warb
         token = resolve(:flow_token)
         params[:flow_token] = token unless blank?(token)
 
-        if action == "navigate"
+        if action == 'navigate'
           payload = { screen: resolve(:screen) }
           initial = resolve(:data)
           payload[:data] = initial unless blank?(initial)
@@ -66,12 +66,12 @@ module Warb
       end
 
       def validate!
-        raise ArgumentError, "flow_id is required" if blank?(resolve(:flow_id))
-        raise ArgumentError, "body is required for flow message" if blank?(resolve(:body))
+        raise ArgumentError, 'flow_id is required' if blank?(resolve(:flow_id))
+        raise ArgumentError, 'body is required for flow message' if blank?(resolve(:body))
 
-        if resolve(:flow_action, "navigate").to_s == "navigate" && blank?(resolve(:screen))
-          raise ArgumentError, "screen is required for flow_action=navigate"
-        end
+        return unless resolve(:flow_action, 'navigate').to_s == 'navigate' && blank?(resolve(:screen))
+
+        raise ArgumentError, 'screen is required for flow_action=navigate'
       end
 
       def resolve(name, default = nil)

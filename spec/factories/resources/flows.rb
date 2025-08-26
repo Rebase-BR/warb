@@ -14,7 +14,7 @@ FactoryBot.define do
       data do
         {
           prefill: {
-            name:  Faker::Name.name,
+            name: Faker::Name.name,
             email: Faker::Internet.email
           }
         }
@@ -30,22 +30,22 @@ FactoryBot.define do
       header do
         case header_type
         when :text
-          { type: "text", text: Faker::Lorem.sentence }
+          { type: 'text', text: Faker::Lorem.sentence }
 
         when :image
           media = use_id ? { id: Faker::Number.number(digits: 16).to_s } : { link: Faker::Internet.url }
-          { type: "image", image: media }
+          { type: 'image', image: media }
 
         when :video
           media = use_id ? { id: Faker::Number.number(digits: 16).to_s } : { link: Faker::Internet.url }
-          { type: "video", video: media }
+          { type: 'video', video: media }
 
         when :document
           if use_id
-            { type: "document", document: { id: Faker::Number.number(digits: 16).to_s } }
+            { type: 'document', document: { id: Faker::Number.number(digits: 16).to_s } }
           else
             filename = "doc_#{SecureRandom.hex(4)}.pdf"
-            { type: "document", document: { link: Faker::Internet.url, filename: filename } }
+            { type: 'document', document: { link: Faker::Internet.url, filename: filename } }
           end
         end
       end
