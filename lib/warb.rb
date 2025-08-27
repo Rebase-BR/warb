@@ -2,14 +2,20 @@
 
 require 'faraday'
 require 'faraday/multipart'
+
 require_relative 'warb/version'
 require_relative 'warb/language'
+require_relative 'warb/category'
 require_relative 'warb/configuration'
 require_relative 'warb/dispatcher_concern'
 require_relative 'warb/client'
+
+# Error/response stack
 require_relative 'warb/errors'
 require_relative 'warb/response_error_handler'
 require_relative 'warb/response'
+
+# Resources
 require_relative 'warb/resources/resource'
 require_relative 'warb/resources/text'
 require_relative 'warb/resources/image'
@@ -28,10 +34,14 @@ require_relative 'warb/resources/template'
 require_relative 'warb/resources/currency'
 require_relative 'warb/resources/date_time'
 require_relative 'warb/resources/flow'
+
+# Dispatchers
 require_relative 'warb/dispatcher'
 require_relative 'warb/media_dispatcher'
 require_relative 'warb/template_dispatcher'
 require_relative 'warb/indicator_dispatcher'
+
+# Utils and components
 require_relative 'warb/utils'
 require_relative 'warb/components/component'
 require_relative 'warb/components/button'

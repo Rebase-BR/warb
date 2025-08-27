@@ -325,3 +325,42 @@ indices match the button positions defined in your template. The `index` is auto
 don't do it manually, but it is done based on the number of buttons added with the methods above,
 so if your template has a button that doesn't need configuration like the static url button you'll
 have provide the position of the other buttons.
+
+
+#### Creating Templates
+
+To create a template, you need to provide the template name, language, category and the body (components).
+
+```ruby
+Warb.template.create(
+  name: "my_template_001",
+  language: Warb::Language::ENGLISH_US,
+  category: Warb::Category::MARKETING,
+  body: Warb::Resources::Text.new(
+    text: "Hello {{1}}, welcome to our service!",
+    examples: ["John"]
+  )
+)
+```
+
+**Required Parameters:**
+| Parameter  | Type     | Description                                  |
+|------------|----------|----------------------------------------------|
+| `name`     | `String` | Unique template name (snake_case)            |
+| `language` | `String` | The language to use for the template         |
+| `category` | `String` | Template category (MARKETING, UTILITY, etc.) |
+
+**Template Categories:**
+- `Warb::Category::MARKETING` - Promotional content
+- `Warb::Category::UTILITY` - Transactional messages
+- `Warb::Category::AUTHENTICATION` - Security codes
+
+**Note**: Currently, the creation only supports body text, more resource types are coming soon.
+
+#### Deleting Templates
+
+To delete a template, you need to provide the template name.
+
+```ruby
+Warb.template.delete("my_template_001")
+```

@@ -24,7 +24,7 @@ module Warb
     end
 
     def message_from_error
-      details || message || "HTTP #{@status}"
+      details ? "(##{code}) #{details}" : message
     end
 
     def code

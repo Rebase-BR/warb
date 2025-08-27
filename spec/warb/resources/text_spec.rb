@@ -54,6 +54,22 @@ RSpec.describe Warb::Resources::Text do
     end
   end
 
+  describe '#build_template_example_parameter' do
+    let(:text_resource) { build :text, content: 'Hello {{1}} and {{2}}', examples: %w[World Friend] }
+
+    it do
+      expect(text_resource.build_template_example_parameter).to eq(
+        {
+          type: 'body',
+          text: 'Hello {{1}} and {{2}}',
+          example: {
+            body_text: [%w[World Friend]]
+          }
+        }
+      )
+    end
+  end
+
   describe '#message_per_priority' do
     subject { text_resource.build_header[:text] }
 

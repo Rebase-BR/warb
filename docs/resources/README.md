@@ -1,6 +1,6 @@
 # Resources
 
-Most of the resources can be sent as message. Check the [messages](../messages/index.md) for detailed info.
+Most of the resources can be sent as message. Check the [messages](../messages/README.md) for detailed info.
 
 But there are some resources which act more like a component, not being used alone by themself.
 
