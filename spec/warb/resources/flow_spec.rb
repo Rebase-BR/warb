@@ -27,15 +27,19 @@ RSpec.describe Warb::Resources::Flow do
         end
         expect(interactive[:body][:text]).to be_a(String)
         expect(interactive[:footer][:text]).to be_a(String)
+        expect(interactive[:action][:parameters][:flow_cta]).to be_a(String)
+        expect(interactive[:action][:parameters][:flow_token]).to be_a(String)
       end
     end
 
-    context 'with optional fields' do
+    context 'when optional fields are blank' do
       subject { flow_resource.build_payload }
 
-      it 'omits header/footer when blank' do
+      it 'omits the fields' do
         expect(subject[:interactive]).not_to have_key(:header)
         expect(subject[:interactive]).not_to have_key(:footer)
+        expect(subject[:interactive][:action][:parameters]).not_to have_key(:footer)
+        expect(subject[:interactive][:action][:parameters]).not_to have_key(:footer)
       end
     end
 

@@ -54,6 +54,8 @@ FactoryBot.define do
     trait :complete_structure do
       with_header
       footer { Faker::Lorem.sentence }
+      flow_cta { Faker::Lorem.word }
+      flow_token { Faker::Alphanumeric.alphanumeric }
     end
   end
 end

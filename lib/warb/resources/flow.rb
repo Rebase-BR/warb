@@ -26,14 +26,14 @@ module Warb
           }
         }
 
-        header = resolve(:header)
-        interactive[:header] = header if header.is_a?(Hash)
+        resolve(:header)
+          .then { |header| interactive[:header] = header if header.is_a?(Hash) }
 
-        body = resolve(:body)
-        interactive[:body] = { text: body }
+        resolve(:body)
+          .then { |body| interactive[:body] = { text: body } }
 
-        footer = resolve(:footer)
-        interactive[:footer] = { text: footer } unless blank?(footer)
+        resolve(:footer)
+          .then { |footer| interactive[:footer] = { text: footer } unless blank?(footer) }
 
         interactive
       end
@@ -49,11 +49,11 @@ module Warb
           mode: mode
         }
 
-        label = resolve(:flow_cta)
-        params[:flow_cta] = label unless blank?(label)
+        resolve(:flow_cta)
+          .then { |label| params[:flow_cta] = label unless blank?(label) }
 
-        token = resolve(:flow_token)
-        params[:flow_token] = token unless blank?(token)
+        resolve(:flow_token)
+          .then { |token| params[:flow_token] = token unless blank?(token) }
 
         if action == 'navigate'
           payload = { screen: resolve(:screen) }
