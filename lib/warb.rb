@@ -16,6 +16,7 @@ require_relative 'warb/response_error_handler'
 require_relative 'warb/response'
 
 # Resources
+require_relative 'warb/resources/helpers/header'
 require_relative 'warb/resources/resource'
 require_relative 'warb/resources/text'
 require_relative 'warb/resources/image'
