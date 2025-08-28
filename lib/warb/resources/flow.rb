@@ -66,23 +66,12 @@ module Warb
       end
 
       def validate!
-        raise ArgumentError, 'flow_id is required' if blank?(resolve(:flow_id))
-        raise ArgumentError, 'body is required for flow message' if blank?(resolve(:body))
+        validates :flow_id, required: true
+        validates :body,    required: true
 
-        return unless resolve(:flow_action, 'navigate').to_s == 'navigate' && blank?(resolve(:screen))
-
-        raise ArgumentError, 'screen is required for flow_action=navigate'
-      end
-
-      def resolve(name, default = nil)
-        val = send(name)
-        val = @params[name] if blank?(val) && @params&.key?(name)
-        val = default if blank?(val) && !default.nil?
-        val
-      end
-
-      def blank?(val)
-        val.respond_to?(:empty?) ? val.empty? : !val
+        validates :screen,
+                 required: -> { resolve(:flow_action, 'navigate').to_s == 'navigate' },
+                 message:  'screen is required for flow_action=navigate'
       end
     end
   end
