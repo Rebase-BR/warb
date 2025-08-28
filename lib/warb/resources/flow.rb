@@ -4,7 +4,8 @@ module Warb
   module Resources
     class Flow < Resource
       attr_accessor :flow_id, :screen, :flow_action, :mode,
-                    :flow_cta, :flow_token, :body, :header, :footer, :data
+                    :flow_cta, :flow_token, :body, :header, :footer, :data,
+                    :draft, :data_exchange
 
       def build_payload
         validate!
@@ -39,14 +40,11 @@ module Warb
       end
 
       def build_action_parameters
-        action = resolve(:flow_action, 'navigate').to_s
-        mode = resolve(:mode, 'published').to_s
-
         params = {
           flow_message_version: '3',
           flow_id: resolve(:flow_id),
-          flow_action: action,
-          mode: mode
+          flow_action: final_action,
+          mode: final_mode
         }
 
         resolve(:flow_cta)
@@ -55,7 +53,7 @@ module Warb
         resolve(:flow_token)
           .then { |token| params[:flow_token] = token unless blank?(token) }
 
-        if action == 'navigate'
+        if final_action == 'navigate'
           payload = { screen: resolve(:screen) }
           initial = resolve(:data)
           payload[:data] = initial unless blank?(initial)
@@ -65,12 +63,24 @@ module Warb
         params
       end
 
+      def final_action
+        explicit = raw_value(:flow_action)
+        return explicit.to_s unless blank?(explicit)
+        resolve(:data_exchange) ? 'data_exchange' : 'navigate'
+      end
+
+      def final_mode
+        explicit = raw_value(:mode)
+        return explicit.to_s unless blank?(explicit)
+        resolve(:draft) ? 'draft' : 'published'
+      end
+
       def validate!
         validates :flow_id, required: true
         validates :body,    required: true
 
         validates :screen,
-                 required: -> { resolve(:flow_action, 'navigate').to_s == 'navigate' },
+                 required: -> { final_action == 'navigate' },
                  message:  'screen is required for flow_action=navigate'
       end
     end

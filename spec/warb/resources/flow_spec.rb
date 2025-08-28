@@ -65,15 +65,28 @@ RSpec.describe Warb::Resources::Flow do
       end
     end
 
-    context 'dynamic flow' do
-      subject { flow_resource.build_payload }
+    context 'boolean flags' do
+      subject { build(:flow, draft: true, data_exchange: true).build_payload }
 
-      let(:flow_resource) { build :flow, :dynamic }
+      it 'sets mode to draft and action to data_exchange' do
+        params = subject[:interactive][:action][:parameters]
+        expect(params[:mode]).to eq('draft')
+        expect(params[:flow_action]).to eq('data_exchange')
+        expect(params).not_to have_key(:flow_action_payload)
+      end
+    end
 
-      it 'does not include flow_action_payload with screen or data' do
-        payload = subject[:interactive][:action][:parameters]
-        expect(payload[:flow_action]).to eq('data_exchange')
-        expect(payload).not_to have_key(:flow_action_payload)
+    context 'explicit overrides flags' do
+      subject do
+        build(:flow, data_exchange: true, screen: 'FIRST', flow_action: 'navigate',
+              draft: true, mode: 'published').build_payload
+      end
+
+      it 'uses the explicit flow_action and keeps payload with screen' do
+        params = subject[:interactive][:action][:parameters]
+        expect(params[:flow_action]).to eq('navigate')
+        expect(params[:flow_action_payload]).to include(:screen)
+        expect(params[:mode]).to eq('published')
       end
     end
 

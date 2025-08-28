@@ -6,10 +6,6 @@ FactoryBot.define do
     screen  { Faker::App.name }
     body    { Faker::Lorem.sentence }
 
-    trait :dynamic do
-      flow_action { 'data_exchange' }
-    end
-
     trait :with_initial_data do
       data do
         {

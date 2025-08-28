@@ -7,8 +7,12 @@ module Warb
         val.respond_to?(:empty?) ? val.empty? : !val
       end
 
+      def raw_value(field)
+        respond_to?(field) ? public_send(field) : nil
+      end
+
       def resolve(field, default = nil)
-        val = respond_to?(field) ? public_send(field) : nil
+        val = raw_value(field)
         val = @params[field] if blank?(val) && defined?(@params) && @params&.key?(field)
         val = default if blank?(val) && !default.nil?
         val
