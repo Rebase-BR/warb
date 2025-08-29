@@ -23,25 +23,33 @@ FactoryBot.define do
         use_id      { [true, false].sample }
       end
 
-      header do
-        case header_type
+      after(:build) do |flow, evaluator|
+        case evaluator.header_type
         when :text
-          { type: 'text', text: Faker::Lorem.sentence }
+          flow.add_text_header(text: Faker::Lorem.sentence)
 
         when :image
-          media = use_id ? { id: Faker::Number.number(digits: 16).to_s } : { link: Faker::Internet.url }
-          { type: 'image', image: media }
+          if evaluator.use_id
+            flow.add_image_header(media_id: Faker::Number.number(digits: 16).to_s)
+          else
+            flow.add_image_header(link: Faker::Internet.url)
+          end
 
         when :video
-          media = use_id ? { id: Faker::Number.number(digits: 16).to_s } : { link: Faker::Internet.url }
-          { type: 'video', video: media }
+          if evaluator.use_id
+            flow.add_video_header(media_id: Faker::Number.number(digits: 16).to_s)
+          else
+            flow.add_video_header(link: Faker::Internet.url)
+          end
 
         when :document
-          if use_id
-            { type: 'document', document: { id: Faker::Number.number(digits: 16).to_s } }
+          if evaluator.use_id
+            flow.add_document_header(media_id: Faker::Number.number(digits: 16).to_s, filename: nil)
           else
-            filename = "doc_#{SecureRandom.hex(4)}.pdf"
-            { type: 'document', document: { link: Faker::Internet.url, filename: filename } }
+            flow.add_document_header(
+              link: Faker::Internet.url,
+              filename: "doc_#{SecureRandom.hex(4)}.pdf"
+            )
           end
         end
       end

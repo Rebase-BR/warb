@@ -3,6 +3,8 @@
 module Warb
   module Resources
     class Flow < Resource
+      include Helpers::Header
+
       attr_accessor :flow_id, :screen, :flow_action, :mode,
                     :flow_cta, :flow_token, :body, :header, :footer, :data,
                     :draft, :data_exchange
@@ -27,8 +29,12 @@ module Warb
           }
         }
 
-        resolve(:header)
-          .then { |header| interactive[:header] = header if header.is_a?(Hash) }
+        header = resolve(:header)
+        if header.is_a?(Hash)
+          interactive[:header] = header
+        elsif header.respond_to?(:build_header)
+          interactive[:header] = header.build_header
+        end
 
         resolve(:body)
           .then { |body| interactive[:body] = { text: body } }

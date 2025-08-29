@@ -120,4 +120,114 @@ RSpec.describe Warb::Resources::Flow do
       end
     end
   end
+
+  describe 'headers via helpers (factory)' do
+    context 'text header' do
+      it 'embeds text header' do
+        flow = build(:flow)
+        flow.add_text_header(text: 'Hello!')
+        header = flow.build_payload[:interactive][:header]
+
+        expect(header[:type]).to eq('text')
+        expect(header[:text]).to eq('Hello!')
+      end
+    end
+
+    context 'image header' do
+      it 'with id' do
+        flow = build(:flow)
+        flow.add_image_header(media_id: 'IMG123')
+
+        header = flow.build_payload[:interactive][:header]
+        expect(header[:type]).to eq('image')
+        expect(header[:image][:id]).to eq('IMG123')
+        expect(header[:image][:link]).to be_nil
+      end
+
+      it 'with link' do
+        flow = build(:flow)
+        link = 'https://example.com/img.jpg'
+        flow.add_image_header(link:)
+
+        header = flow.build_payload[:interactive][:header]
+        expect(header[:type]).to eq('image')
+        expect(header[:image][:link]).to eq(link)
+        expect(header[:image][:id]).to be_nil
+      end
+    end
+
+    context 'video header' do
+      it 'with id' do
+        flow = build(:flow)
+        flow.add_video_header(media_id: 'VID123')
+
+        header = flow.build_payload[:interactive][:header]
+        expect(header[:type]).to eq('video')
+        expect(header[:video][:id]).to eq('VID123')
+        expect(header[:video][:link]).to be_nil
+      end
+
+      it 'with link' do
+        flow = build(:flow)
+        link = 'https://example.com/vid.mp4'
+        flow.add_video_header(link:)
+
+        header = flow.build_payload[:interactive][:header]
+        expect(header[:type]).to eq('video')
+        expect(header[:video][:link]).to eq(link)
+        expect(header[:video][:id]).to be_nil
+      end
+    end
+
+    context 'document header' do
+      it 'with id' do
+        flow = build(:flow)
+        flow.add_document_header(media_id: 'DOC999')
+
+        header = flow.build_payload[:interactive][:header]
+        expect(header[:type]).to eq('document')
+        expect(header[:document][:id]).to eq('DOC999')
+        expect(header[:document][:link]).to be_nil
+      end
+
+      it 'with link (requires filename)' do
+        flow = build(:flow)
+        link = 'https://example.com/contract.pdf'
+        flow.add_document_header(link:, filename: 'contract.pdf')
+
+        header = flow.build_payload[:interactive][:header]
+        expect(header[:type]).to eq('document')
+        expect(header[:document][:link]).to eq(link)
+        expect(header[:document][:filename]).to eq('contract.pdf')
+        expect(header[:document][:id]).to be_nil
+      end
+    end
+
+    context 'factory :with_header (random type)' do
+      it 'includes a valid header in payload regardless of sampled type' do
+        flow = build(:flow, :with_header)
+        header = flow.build_payload[:interactive][:header]
+
+        expect(header).to be_a(Hash)
+        expect(%w[text image video document]).to include(header[:type])
+
+        case header[:type]
+        when 'text'
+          expect(header[:text]).to be_a(String)
+        when 'image'
+          expect(header[:image][:id]).to be_a(String).or be_nil
+          expect(header[:image][:link]).to be_a(String).or be_nil
+          expect([header[:image][:id], header[:image][:link]].compact).not_to be_empty
+        when 'video'
+          expect(header[:video][:id]).to be_a(String).or be_nil
+          expect(header[:video][:link]).to be_a(String).or be_nil
+          expect([header[:video][:id], header[:video][:link]].compact).not_to be_empty
+        when 'document'
+          expect(header[:document][:id]).to be_a(String).or be_nil
+          expect(header[:document][:link]).to be_a(String).or be_nil
+          expect([header[:document][:id], header[:document][:link]].compact).not_to be_empty
+        end
+      end
+    end
+  end
 end
