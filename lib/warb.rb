@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'byebug'
 
 require 'faraday'
 require 'faraday/multipart'
@@ -84,6 +85,10 @@ module Warb
       yield(configuration)
 
       client
+    end
+
+    def list_phone_numbers
+      client.get('phone_numbers', endpoint_prefix: :business_id).body['data']
     end
   end
 end
