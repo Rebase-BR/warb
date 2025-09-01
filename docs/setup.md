@@ -44,3 +44,47 @@ end
 ```
 
 Also, note that calling `Warb.setup` multiple times **WILL NOT** override the previous configuration, so you can use it to change the global configuration at any time.
+
+## Phone numbers (quality monitoring)
+
+You can fetch all phone numbers attached to your WhatsApp Business Account (WABA) and their quality/operational signals.
+
+Requirements: make sure you have configured a business_id in your global setup (this method uses the business context, not the sender/phone context).
+```ruby
+Warb.setup do |config|
+  config.access_token = "ACCESS_TOKEN"
+  config.business_id  = "BUSINESS_ID"      # <-- required here
+  config.sender_id    = "SENDER_ID"    # still used for message dispatch
+end
+```
+
+#### Global usage
+```ruby
+phones = Warb.list_phone_numbers
+```
+
+#### Sample response (unwrapped data array):
+```ruby
+=> [
+  {
+    "verified_name"            => "Test",
+    "code_verification_status" => "NOT_VERIFIED",
+    "display_phone_number"     => "00000000000",
+    "quality_rating"           => "GREEN",
+    "platform_type"            => "CLOUD_API",
+    "throughput"               => { "level" => "STANDARD" },
+    "webhook_configuration"    => { "application" => "https://example.com/" },
+    "id"                       => "(phone_number_id)"
+  }
+]
+```
+
+#### Notes
+
+This method returns the data array directly. If you need paging cursors, call the raw client:
+```ruby
+raw = Warb.client.get("phone_numbers", {}, endpoint_prefix: :business_id)
+raw.body # => { "data" => [...], "paging" => { "cursors" => {...} } }
+```
+
+Non-2xx responses raise Warb::RequestError (or subclasses), so you can rescue them in your app.

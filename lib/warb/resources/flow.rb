@@ -72,12 +72,14 @@ module Warb
       def final_action
         explicit = raw_value(:flow_action)
         return explicit.to_s unless blank?(explicit)
+
         resolve(:data_exchange) ? 'data_exchange' : 'navigate'
       end
 
       def final_mode
         explicit = raw_value(:mode)
         return explicit.to_s unless blank?(explicit)
+
         resolve(:draft) ? 'draft' : 'published'
       end
 
@@ -86,8 +88,8 @@ module Warb
         validates :body,    required: true
 
         validates :screen,
-                 required: -> { final_action == 'navigate' },
-                 message:  'screen is required for flow_action=navigate'
+                  required: -> { final_action == 'navigate' },
+                  message: 'screen is required for flow_action=navigate'
       end
     end
   end
