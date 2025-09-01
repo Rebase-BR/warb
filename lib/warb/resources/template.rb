@@ -3,6 +3,8 @@
 module Warb
   module Resources
     class Template < Resource
+      include Helpers::Header
+
       attr_accessor :name, :language, :resources, :header, :category, :body, :buttons
 
       def initialize(**params)
@@ -58,26 +60,6 @@ module Warb
         add_parameter(parameter_name, Text.new(**params), &)
       end
 
-      def add_text_header(content: nil, message: nil, text: nil, parameter_name: nil, &block)
-        add_header(Text.new(content:, message:, text:, parameter_name:), &block)
-      end
-
-      def add_image_header(media_id: nil, link: nil, &block)
-        add_header(Image.new(media_id:, link:), &block)
-      end
-
-      def add_document_header(media_id: nil, link: nil, filename: nil, &block)
-        add_header(Document.new(media_id:, link:, filename:), &block)
-      end
-
-      def add_video_header(media_id: nil, link: nil, &block)
-        add_header(Video.new(media_id:, link:), &block)
-      end
-
-      def add_location_header(latitude: nil, longitude: nil, address: nil, name: nil, &block)
-        add_header(Location.new(latitude:, longitude:, address:, name:), &block)
-      end
-
       def add_quick_reply_button(index: position, &block)
         add_button(Warb::Components::QuickReplyButton.new(index:), &block)
       end
@@ -103,12 +85,6 @@ module Warb
       end
 
       private
-
-      def add_header(instance, &)
-        @header = instance
-
-        block_given? ? @header.tap(&) : @header
-      end
 
       def component_header
         return unless header.is_a? Resource

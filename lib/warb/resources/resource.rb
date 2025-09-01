@@ -3,6 +3,8 @@
 module Warb
   module Resources
     class Resource
+      include Validation
+
       def initialize(**params)
         @params = params
       end
