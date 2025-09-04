@@ -85,5 +85,9 @@ module Warb
 
       client
     end
+
+    def list_phone_numbers
+      client.get('phone_numbers', endpoint_prefix: :business_id).body['data']
+    end
   end
 end

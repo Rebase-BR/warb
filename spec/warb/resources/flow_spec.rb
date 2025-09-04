@@ -79,7 +79,7 @@ RSpec.describe Warb::Resources::Flow do
     context 'explicit overrides flags' do
       subject do
         build(:flow, data_exchange: true, screen: 'FIRST', flow_action: 'navigate',
-              draft: true, mode: 'published').build_payload
+                     draft: true, mode: 'published').build_payload
       end
 
       it 'uses the explicit flow_action and keeps payload with screen' do

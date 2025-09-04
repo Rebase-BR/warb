@@ -95,4 +95,28 @@ RSpec.describe Warb do
       end
     end
   end
+
+  describe '.list_phone_numbers' do
+    let(:client)   { instance_double(Warb::Client) }
+    let(:response) { instance_double(Warb::Response, body: { 'data' => [{ 'id' => '375420581369195' }] }) }
+
+    before do
+      allow(described_class).to receive(:client).and_return(client)
+    end
+
+    it 'GET /{business_id}/phone_numbers' do
+      expect(client)
+        .to receive(:get)
+        .with('phone_numbers', endpoint_prefix: :business_id)
+        .and_return(response)
+
+      expect(described_class.list_phone_numbers).to eq([{ 'id' => '375420581369195' }])
+    end
+
+    it 'raise errors' do
+      allow(client).to receive(:get).and_raise(Warb::BadRequest.new('bad'))
+
+      expect { described_class.list_phone_numbers }.to raise_error(Warb::BadRequest)
+    end
+  end
 end
