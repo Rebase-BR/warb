@@ -1,17 +1,54 @@
 # frozen_string_literal: true
 
+require_relative '../lib/warb'
 require 'sinatra/base'
 require 'faraday'
+require 'openssl'
 
 class Webhook < Sinatra::Base
+
+  # APP_SECRET = ''
+  # sender = ''
+  # business = ''
+  # token = ''
+
+  Warb.setup do |config|
+    config.access_token = token
+    config.business_id = business
+    config.sender_id = sender
+  end
+
   configure do
     set :bind, '0.0.0.0'
     set :port, 3000
     set :host_authorization, { permitted_hosts: [] }
   end
 
+  helpers do
+    def verify_signature!(raw_body)
+      header = request.env['HTTP_X_HUB_SIGNATURE_256']
+
+      halt 400, 'Missing X-Hub-Signature-256' if APP_SECRET && (!header || header.empty?)
+
+      received = header.sub('sha256=', '')
+      expected = OpenSSL::HMAC.hexdigest('SHA256', APP_SECRET, raw_body)
+
+      unless Rack::Utils.secure_compare(received, expected)
+        puts "⚠️  Invalid webhook signature."
+        halt 403, 'Invalid signature'
+      end
+
+      true
+    end
+  end
+
   post '/webhook' do
-    request_body = JSON.parse(request.body.read)
+    request.body.rewind
+    raw_body = request.body.read
+
+    verify_signature!(raw_body)
+
+    request_body = JSON.parse(raw_body)
 
     puts "\n🪝 Incoming webhook message: #{request_body}"
 
