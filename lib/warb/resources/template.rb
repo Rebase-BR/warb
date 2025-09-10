@@ -78,6 +78,13 @@ module Warb
         add_button(Warb::Components::VoiceCallButton.new(index:), &block)
       end
 
+      def add_flow_button(index: position, flow_token: nil, flow_action_data: nil, &block)
+        add_button(
+          Warb::Components::FlowButton.new(index: index, flow_token: flow_token,
+                                           flow_action_data: flow_action_data), &block
+        )
+      end
+
       def add_button(instance, &)
         return @buttons << instance.to_h unless block_given?
 
