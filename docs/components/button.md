@@ -11,12 +11,13 @@ It represents a generic button, which can be set with the following attributes:
 | `sub_type`   | `String`  |   Yes    | A more specific classification for the button |
 
 ## Common Button Types
-| Button Type   | Template Instance Method     | Params                  |
-|---------------|------------------------------|-------------------------|
-| `quick_reply` | `add_quick_reply_button`     | `index`                 |
-| `voice_call`  | `add_voice_call_button`      | `index`                 |
-| `url`         | `add_dynamic_url_button`     | `index`, `text`         |
-| `copy_code`   | `add_copy_code_button`       | `index`, `coupon_code`  |
+| Button Type   | Template Instance Method     | Params                                   |
+|---------------|------------------------------|------------------------------------------|
+| `quick_reply` | `add_quick_reply_button`     | `index`                                  |
+| `voice_call`  | `add_voice_call_button`      | `index`                                  |
+| `url`         | `add_dynamic_url_button`     | `index`, `text`                          |
+| `copy_code`   | `add_copy_code_button`       | `index`, `coupon_code`                   |
+| `flow`        | `add_flow_button`            | `index`, `flow_token`, `flow_action_data`|
 
 Please, refer to our [templates messaging documentation](../messages/template.md) for more info. You can check the methods to insert a button in the "Adding Buttons" section.
 

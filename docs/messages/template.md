@@ -271,6 +271,7 @@ If your template supports buttons, you can add them using the following methods:
 | `url`              | `add_auth_code_button`        | `index`, `text`                           |
 | `copy_code`        | `add_copy_code_button`        | `index`, `coupon_code`                    |
 | `voice_call`       | `add_voice_call_button`       | `index`                                   |
+| `flow`             | `add_flow_button`             | `index`, `flow_token`, `flow_action_data` |
 | `doesn't apply`    | `add_button`                  | `instance`, `&block`                      |
 
 You can either use the keyword parameters or set the attributes using a block:
@@ -300,6 +301,12 @@ Warb.template.dispatch(recipient_number) do |template|
 
   # Add a voice call button
   template.add_voice_call_button
+
+  # Add a flow button
+  template.add_flow_button do |button|
+    button.flow_token = 'FLOWTOKEN'
+    button.flow_action_data = { name: 'John' }
+  end
 end
 ```
 
