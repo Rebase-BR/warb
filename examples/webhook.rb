@@ -7,11 +7,6 @@ require 'openssl'
 
 class Webhook < Sinatra::Base
 
-  # APP_SECRET = ''
-  # sender = ''
-  # business = ''
-  # token = ''
-
   Warb.setup do |config|
     config.access_token = token
     config.business_id = business
