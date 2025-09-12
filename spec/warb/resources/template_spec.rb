@@ -384,6 +384,153 @@ RSpec.describe Warb::Resources::Template do
     end
   end
 
+  describe '#add_flow_button' do
+    context 'with block' do
+      it 'sets custom index when provided and custom flow_token' do
+        subject.add_flow_button do |button|
+          button.index = 1
+          button.flow_token = 'TOKEN_123'
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({
+                                        type: 'button',
+                                        index: 1,
+                                        sub_type: 'flow',
+                                        parameters: [
+                                          {
+                                            type: 'action',
+                                            action: { flow_token: 'TOKEN_123' }
+                                          }
+                                        ]
+                                      })
+      end
+
+      it 'uses default position when index and flow token are not provided' do
+        subject.add_flow_button do |button|
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({
+                                        type: 'button',
+                                        index: 0,
+                                        sub_type: 'flow',
+                                        parameters: [
+                                          {
+                                            type: 'action',
+                                            action: {}
+                                          }
+                                        ]
+                                      })
+      end
+
+      it 'includes flow_action_data when provided' do
+        subject.add_flow_button do |button|
+          button.index = 0
+          button.flow_action_data = { nome: 'Ana', cpf: '11122233344' }
+        end
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({
+                                        type: 'button',
+                                        index: 0,
+                                        sub_type: 'flow',
+                                        parameters: [
+                                          {
+                                            type: 'action',
+                                            action: {
+                                              flow_action_data: { nome: 'Ana', cpf: '11122233344' }
+                                            }
+                                          }
+                                        ]
+                                      })
+      end
+    end
+
+    context 'without using block' do
+      it 'sets custom index when provided' do
+        subject.add_flow_button(index: 1, flow_token: 'TOKEN_123')
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({
+                                        type: 'button',
+                                        index: 1,
+                                        sub_type: 'flow',
+                                        parameters: [
+                                          {
+                                            type: 'action',
+                                            action: { flow_token: 'TOKEN_123' }
+                                          }
+                                        ]
+                                      })
+      end
+
+      it 'uses default position when index not provided and default flow_token "unused"' do
+        subject.add_flow_button
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({
+                                        type: 'button',
+                                        index: 0,
+                                        sub_type: 'flow',
+                                        parameters: [
+                                          {
+                                            type: 'action',
+                                            action: {}
+                                          }
+                                        ]
+                                      })
+      end
+
+      it 'increments position for multiple buttons' do
+        subject.add_flow_button(flow_token: 'A')
+        subject.add_flow_button(flow_token: 'B')
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 2
+        expect(buttons[0]).to match({
+                                      type: 'button',
+                                      index: 0,
+                                      sub_type: 'flow',
+                                      parameters: [
+                                        { type: 'action', action: { flow_token: 'A' } }
+                                      ]
+                                    })
+        expect(buttons[1]).to match({
+                                      type: 'button',
+                                      index: 1,
+                                      sub_type: 'flow',
+                                      parameters: [
+                                        { type: 'action', action: { flow_token: 'B' } }
+                                      ]
+                                    })
+      end
+
+      it 'includes flow_action_data when provided via args' do
+        subject.add_flow_button(index: 0, flow_action_data: { foo: 'bar' })
+
+        buttons = subject.buttons
+        expect(buttons.count).to eq 1
+        expect(buttons.last).to match({
+                                        type: 'button',
+                                        index: 0,
+                                        sub_type: 'flow',
+                                        parameters: [
+                                          {
+                                            type: 'action',
+                                            action: { flow_action_data: { foo: 'bar' } }
+                                          }
+                                        ]
+                                      })
+      end
+    end
+  end
+
   describe '#add_button' do
     context 'with block' do
       it do
@@ -583,6 +730,43 @@ RSpec.describe Warb::Resources::Template do
                                                     type: 'button',
                                                     index: 0,
                                                     sub_type: 'quick_reply'
+                                                  }
+                                                ]
+                                              }
+                                            })
+      end
+    end
+
+    context 'with flow button only' do
+      before do
+        allow(subject).to receive_messages(
+          name: 'template_name',
+          language: Warb::Language::ENGLISH_US,
+          resources: nil,
+          header: nil
+        )
+        subject.add_flow_button(index: 0)
+      end
+
+      it 'includes flow button component' do
+        expect(subject.build_payload).to eq({
+                                              type: 'template',
+                                              template: {
+                                                name: 'template_name',
+                                                language: {
+                                                  code: Warb::Language::ENGLISH_US
+                                                },
+                                                components: [
+                                                  {
+                                                    type: 'button',
+                                                    index: 0,
+                                                    sub_type: 'flow',
+                                                    parameters: [
+                                                      {
+                                                        type: 'action',
+                                                        action: {}
+                                                      }
+                                                    ]
                                                   }
                                                 ]
                                               }
