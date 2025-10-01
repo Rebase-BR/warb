@@ -36,6 +36,8 @@ require_relative 'warb/resources/template'
 require_relative 'warb/resources/currency'
 require_relative 'warb/resources/date_time'
 require_relative 'warb/resources/flow'
+require_relative 'warb/resources/order_details'
+require_relative 'warb/resources/order_status'
 
 # Dispatchers
 require_relative 'warb/dispatcher'

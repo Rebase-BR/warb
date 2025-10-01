@@ -66,6 +66,14 @@ module Warb
       @flow ||= Dispatcher.new Resources::Flow, dispatcher
     end
 
+    def order_details
+      @order_details ||= Dispatcher.new Resources::OrderDetails, dispatcher
+    end
+
+    def order_status
+      @order_status ||= Dispatcher.new Resources::OrderStatus, dispatcher
+    end
+
     private
 
     def dispatcher
